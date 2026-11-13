@@ -338,6 +338,31 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
 @media(prefers-reduced-motion:reduce){#deco .df,#deco .dt,#deco .dr,.card::after,h2::after{animation:none}}
 </style>
 
+<style id="v3">
+.shrine .gate{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin:-4px 0 6px}
+.shrine .tor{width:110px;height:auto;filter:hue-rotate(185deg) saturate(.8) brightness(1.12) drop-shadow(0 4px 6px rgba(91,139,224,.3));animation:float 4s ease-in-out infinite}
+.shrine .ln{width:38px;height:auto;filter:hue-rotate(185deg) saturate(.75) brightness(1.15);transform-origin:50% 0;animation:swing 3.4s ease-in-out infinite}
+.shrine .ln.r{animation-delay:-1.7s}
+@keyframes swing{50%{transform:rotate(7deg)}}
+.shrine .welcome{margin:0 0 8px;text-align:center;font-weight:700;color:var(--blue);font-size:16px;letter-spacing:.04em}
+.mytitle em{display:block;font-style:normal;font-size:34px;line-height:1.2}
+.mytitle p{margin:6px 0 0;font-size:13px;color:#6f8db8}
+.rkwrap{margin-top:10px;background:#eaf4ff;border-radius:20px;padding:14px 10px 10px}
+.rkh{margin:0;text-align:center;font-weight:800;letter-spacing:.04em;color:#4a86d0;font-size:21px}
+.rks{margin:2px 0 10px;text-align:center;font-size:12px;color:#7aa3d6;letter-spacing:.06em}
+.rk{display:grid;grid-template-columns:2.2em 1.8em 1fr;column-gap:8px;align-items:center;background:#fff;border-radius:16px;padding:10px 12px;margin-top:8px;position:relative}
+.rk .no{font-weight:800;color:#8fb0da;font-size:17px}
+.rk .ic{font-size:22px;text-align:center}
+.rk b{display:block;font-size:15px;color:var(--ink)}
+.rk small{color:#8fb0da;font-size:11px;letter-spacing:.04em}
+.rk p{grid-column:1/-1;margin:4px 0 0;font-size:12px;color:#7d9bc4;line-height:1.6}
+.rk em{position:absolute;right:10px;top:10px;font-style:normal;font-size:11px;background:#dff3e6;color:#2a7a4a;border-radius:999px;padding:3px 9px}
+.rk.now{box-shadow:0 0 0 2px #7fb6ee,0 4px 12px rgba(91,139,224,.25)}
+.rk.done .no{color:#5b8be0}
+#lvup .lvn b{font-size:19px}
+#lvup .lvm{display:block;margin-top:6px;font-size:14px;font-weight:400;color:var(--ink)}
+@media(prefers-reduced-motion:reduce){.shrine .tor,.shrine .ln{animation:none}}
+</style>
 </head>
 <body>
 <div id="deco" aria-hidden="true"></div>
@@ -420,7 +445,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
       <a class="mt" href="#songs"><b>歌える曲</b><span>リクエストもどうぞ🎵</span></a>
       <a class="mt" href="#rules"><b>お願いごと</b><span>みんなで楽しく🩵</span></a>
       <a class="mt" href="#message"><b>匿名メッセージ</b><span>名前なしで送れるよ🫧</span></a>
-      <a class="mt" href="#omikuji"><b>おみくじ</b><span>大吉でスタンプ+1🐻</span></a>
+      <a class="mt" href="#omikuji"><b>おみくじ</b><span>みちゃﾏﾙ神社⛩ 大吉でスタンプ+1</span></a>
       <a class="mt" href="#stamp"><b>スタンプカード</b><span>あつめてレベルUP✨</span></a>
       <a class="mt" href="#secret"><b>ひみつの部屋</b><span>あつめた人だけ🔒</span></a>
       <a class="mt" href="#contact"><b>お問い合わせ</b><span>ご連絡はこちら☁️</span></a>
@@ -510,8 +535,10 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   </section>
 
   <section id="pg-omikuji" class="page">
-    <h2>おみくじ</h2>
-    <div class="card omikuji">
+    <h2>みちゃﾏﾙ神社</h2>
+    <div class="card omikuji shrine">
+      <div class="gate" aria-hidden="true"><img class="ln l" src="assets/lantern.svg" alt=""><img class="tor" src="assets/torii.svg" alt=""><img class="ln r" src="assets/lantern.svg" alt=""></div>
+      <p class="welcome">みちゃﾏﾙ神社へようこそ🩵</p>
       <p style="margin:0"><span class="ph">1日1回、</span><span class="ph">おみくじをひけるよ🎴</span><span class="ph">大吉(とレア)が出たら、</span><span class="ph">スタンプが+1個もらえるよ🐻</span></p>
       <div class="result" id="omiResult" aria-live="polite">
         <img class="ted" src="assets/teddy.svg" alt="">
@@ -541,9 +568,9 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     <div class="card" style="margin-top:16px">
       <b style="color:var(--blue)">スタンプのたまりかた✨</b>
       <ul class="how"><li>配信に来て「配信コード」を入れる → +1個</li><li>おみくじで大吉(とレア)が出る → +1個</li><li>20個たまったらレベルUP!次のカードへ🩵</li></ul>
-      <b style="color:var(--blue);display:block;margin-top:14px">称号の一覧🐻</b>
-      <ol class="ttl" id="ttlList"></ol>
-      <p class="note">カードが1枚そろうたびに、あなたの称号が変わっていくよ。(称号の名前は仮だよ。みちゃが決めてね)</p>
+      <b style="color:var(--blue);display:block;margin-top:14px">ランクの一覧🐻</b>
+      <div class="rkwrap"><p class="rkh">MICHAMARU RANK</p><p class="rks">20 STAMPS TO LEVEL UP 🩵</p><div id="ttlList"></div></div>
+      <p class="note">カードが1枚そろうたびに、あなたのランクが上がっていくよ✨</p>
       <p class="note">この試作では、スタンプはこの端末の中にだけ保存されるよ。</p>
     </div>
   </section>
@@ -747,8 +774,10 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   var count=parseInt(store(KEY)||'0',10)||0; if(count>=CARD) count=0;
   var cards=parseInt(store('mcm_cards')||'0',10)||0;
   var nick=store('mcm_nick')||'';
-  var TITLES=['はじめましてのみちゃっこ','なかよしみちゃっこ','みちゃっこ隊員','みちゃっこ隊長','みちゃの親友','みちゃﾏﾙの相棒','みちゃっこ殿堂入り'];
-  function titleOf(n){ return TITLES[Math.min(n,TITLES.length-1)]; }
+  var RANK=[['🔍','みちゃ発見隊','あ!みちゃマルを見つけちゃった!'],['☁️','みちゃ探検隊','もっとみちゃのことを知りたいな♡'],['🎀','みちゃ見習い','みちゃの世界に一歩踏み出したよ!'],['🩵','みちゃっこ','今日から正式にみちゃっこの仲間入り!'],['💗','みちゃだいすき隊','みちゃへの大好きが育ってきたね♡'],['🫧','みちゃ沼住人','もうすっかりみちゃの世界の住人!'],['🪽','みちゃ専属天使','みちゃのそばにいてくれる天使さん♡'],['⭐','みちゃの相棒','一緒に笑って、一緒に夢を追いかけよう!'],['👑','みちゃの守り神','みちゃマル王国を支えてくれる大切な存在!'],['💎','みちゃマルの宝物','ここまで一緒にいてくれてありがとう。君はみちゃの大切な宝物♡']];
+  var BASE=['🐻','はじめましてのみちゃっこ','スタンプ20個で、最初のランクに上がれるよ!'];
+  function rk(n){ return n<1 ? BASE : RANK[Math.min(n,RANK.length)-1]; }
+  function titleOf(n){ return rk(n)[1]; }
   function today(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
   var SEC=['ここまで来てくれてありがとう🩵 みちゃ、めっちゃうれしい!これからも一緒に楽しもうね☁️','2枚目クリアおめでとう✨ いつも配信に来てくれてほんとにありがとう🐻','3枚目!もうみちゃの大事な仲間だよ🩵 ここだけの話、みちゃのひみつがここに入るよ(仮)','4枚目もすごい!みちゃっこ隊長だね🫧 いつも元気もらってるよ✨','5枚目まで来てくれてありがとう🩵 みちゃのいちばんの味方だよ!'];
   function drawStamps(newOne){
@@ -759,11 +788,11 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     }
     $('#stamps').innerHTML=h;
     $('#cardNo').innerHTML='<b>'+(cards+1)+'枚目</b>のカード <small>('+count+' / '+CARD+')</small>';
-    $('#prize').textContent='あと'+(CARD-count)+'個で、みちゃレベルUP✨ 称号が「'+titleOf(cards+1)+'」になるよ🩵';
+    $('#prize').textContent='あと'+(CARD-count)+'個で、みちゃレベルUP✨ ランクが「'+titleOf(cards+1)+'」になるよ🩵';
   }
   function renderTitle(){
-    $('#myTitle').innerHTML='<small>いまの称号</small><b>【'+esc(titleOf(cards))+'】</b><span>'+(nick?esc(nick):'ニックネームを入れてね🐻')+'</span>';
-    $('#ttlList').innerHTML=TITLES.map(function(t,i){return '<li'+(i===Math.min(cards,TITLES.length-1)?' class="now"':'')+'>'+esc(t)+(i===0?'':'<small>('+i+'枚目クリア)</small>')+'</li>';}).join('');
+    var r=rk(cards); $('#myTitle').innerHTML='<small>いまのランク</small><em>'+r[0]+'</em><b>【'+esc(r[1])+'】</b><span>'+(nick?esc(nick):'ニックネームを入れてね🐻')+'</span><p>'+esc(r[2])+'</p>';
+    $('#ttlList').innerHTML=RANK.map(function(t,i){ var st=cards>i+1?'done':(cards===i+1?'now':''); return '<div class="rk '+st+'"><span class="no">'+String(i+1).padStart(2,'0')+'</span><span class="ic">'+t[0]+'</span><div><b>'+esc(t[1])+'</b><small>'+((i+1)*20)+' STAMP</small></div><p>'+esc(t[2])+'</p>'+(i===RANK.length-1?'<em>最終ランク</em>':'')+'</div>'; }).join('');
   }
   function renderSecret(){
     var b=$('#secretBody');
@@ -793,7 +822,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   }
   function levelUp(){
     $('#lvSub').textContent='スタンプカード '+cards+'枚目クリア!';
-    $('#lvName').textContent='称号が「'+titleOf(cards)+'」になったよ🩵';
+    var r=rk(cards); $('#lvName').innerHTML='ランクが<b>'+r[0]+' 「'+esc(r[1])+'」</b>になったよ🩵<br><span class="lvm">'+esc(r[2])+'</span>';
     $('#lvUnlock').textContent= cards===1 ? 'ひみつの部屋が開いたよ🔓✨ のぞいてみてね!' : cards<=SEC.length ? 'ひみつの部屋に、新しいメッセージが届いたよ💌' : '';
     $('#lvup').classList.add('open'); rain(36);
     burst(innerWidth/2,innerHeight*.4,26,150);
