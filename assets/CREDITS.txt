@@ -1,3 +1,3 @@
-Ribbon, cloud and teddy bear graphics (assets/ribbon.svg, cloud.svg, teddy.svg, moon.svg): Noto Emoji by Google, licensed under the Apache License 2.0.
+Cloud, teddy bear, bear, sparkle, bubble and heart graphics (assets/cloud.svg, teddy.svg, bear.svg, sparkle.svg, bubble.svg, heart.svg): Noto Emoji by Google, licensed under the Apache License 2.0.
 https://github.com/googlefonts/noto-emoji
 Extracted via the npm package @svgmoji/noto (MIT).

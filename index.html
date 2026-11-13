@@ -278,8 +278,69 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
   .bubbles{display:none}
 }
 </style>
+<style id="v2">
+#deco{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+#deco img{position:absolute;filter:drop-shadow(0 2px 4px rgba(91,139,224,.22))}
+#deco .df{animation:dfl var(--d,8s) ease-in-out var(--dl,0s) infinite}
+#deco .dt{animation:dtw var(--d,3s) ease-in-out var(--dl,0s) infinite}
+#deco .dr{bottom:-60px;animation:drs var(--d,18s) linear var(--dl,0s) infinite}
+@keyframes dfl{50%{transform:translateY(-16px) rotate(7deg)}}
+@keyframes dtw{0%,100%{transform:scale(.7) rotate(0);opacity:.35}50%{transform:scale(1.15) rotate(18deg);opacity:1}}
+@keyframes drs{from{transform:translateY(0) translateX(0)}50%{transform:translateY(-55vh) translateX(18px)}to{transform:translateY(-120vh) translateX(-10px)}}
+.greet{text-align:center;margin-bottom:18px;background:linear-gradient(180deg,#fff,#eef7ff)}
+.greet .hello{margin:0;font-weight:700;color:var(--blue);font-size:16px;letter-spacing:.04em}
+.greet .hito{margin:10px 0 4px;font-size:15px;line-height:1.7;min-height:3.4em;display:flex;align-items:center;justify-content:center}
+.greet small{font-size:11px;color:#8ab0d2;letter-spacing:.14em}
+.fadeh{animation:fh .7s ease both}
+@keyframes fh{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.mt::after{content:"";position:absolute;right:9px;top:9px;width:24px;height:24px;background:var(--ic) center/contain no-repeat}
+.mt:nth-child(5n+1){--ic:url(assets/bear.svg)}.mt:nth-child(5n+2){--ic:url(assets/heart.svg)}.mt:nth-child(5n+3){--ic:url(assets/sparkle.svg)}.mt:nth-child(5n+4){--ic:url(assets/bubble.svg)}.mt:nth-child(5n){--ic:url(assets/cloud.svg)}
+h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) center/contain no-repeat;animation:dtw 3s ease-in-out infinite}
+.card::after{content:"";position:absolute;right:10px;top:-12px;width:26px;height:26px;background:url(assets/sparkle.svg) center/contain no-repeat;animation:dtw 4s ease-in-out infinite;pointer-events:none}
+.mytitle{text-align:center;background:linear-gradient(135deg,#eef7ff,#fff);border-radius:16px;padding:12px 8px;border:1px solid #d8ecf8}
+.mytitle small{display:block;font-size:11px;letter-spacing:.14em;color:#8ab0d2}
+.mytitle b{display:block;color:var(--blue);font-size:17px;margin:2px 0}
+.mytitle span{font-size:15px}
+.cardno{margin:14px 0 0;text-align:center;color:var(--blue)}
+.cardno small{color:#8ab0d2}
+.stamp.on i{background-size:contain;background-position:center;background-repeat:no-repeat}
+.stamp.new{animation:stp .9s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes stp{from{transform:scale(0) rotate(-40deg)}60%{transform:scale(1.35) rotate(8deg)}to{transform:scale(1) rotate(0)}}
+.coderow{display:flex;gap:8px;margin-top:10px}
+.coderow input{flex:1;min-width:0}
+.how{margin:8px 0 0;padding-left:1.2em;font-size:14px;line-height:1.8}
+.ttl{margin:8px 0 0;padding-left:1.6em;font-size:14px;line-height:1.9}
+.ttl li small{color:#8ab0d2;margin-left:6px;font-size:11px}
+.ttl li.now{color:var(--blue);font-weight:700}
+.lock{text-align:center}
+.lock img{width:64px;height:64px;animation:float 3.4s ease-in-out infinite}
+.lock p{margin:6px 0;line-height:1.7}
+.lock .btn{display:inline-block;margin-top:8px;text-decoration:none}
+.secmsg{margin-top:12px;padding:14px;border-radius:16px;background:linear-gradient(135deg,#fff,#eef7ff);border:1px solid #cfe6fb}
+.secmsg small{color:#7aa3d6;letter-spacing:.08em;font-size:11px}
+.secmsg p{margin:6px 0 0;line-height:1.8;font-size:14px}
+.secmsg.lockd{background:#f1f6fb;border-style:dashed;color:#9ab4cf;text-align:center}
+#lvup{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.96),rgba(154,212,242,.96));overflow:hidden}
+#lvup.open{display:flex;animation:lvin .5s ease both}
+@keyframes lvin{from{opacity:0}to{opacity:1}}
+#lvup .lvbox{text-align:center;padding:24px;position:relative;z-index:2}
+#lvup .lvbear{width:120px;height:120px;animation:lvb 1.4s cubic-bezier(.3,1.5,.5,1) both,float 3s ease-in-out 1.4s infinite}
+@keyframes lvb{from{transform:scale(0) rotate(-30deg)}to{transform:none}}
+#lvup .lvk{margin:10px 0 0;font-size:18px;font-weight:700;color:var(--blue);letter-spacing:.1em;animation:rise2 .7s ease .4s both}
+#lvup .lvt{margin:4px 0 8px;font-size:34px;font-weight:800;line-height:1.2;background:linear-gradient(90deg,#5b8be0,#8fd0f5,#ffb6d3,#5b8be0);background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise2 .7s ease .7s both,shine 2.4s linear infinite}
+@keyframes shine{to{background-position:200% 0}}
+#lvup .lvs{margin:0;font-size:16px;animation:rise2 .7s ease 1s both}
+#lvup .lvn{margin:8px 0 0;font-size:16px;font-weight:700;color:var(--blue);animation:rise2 .7s ease 1.3s both}
+#lvup .lvu{margin:8px 0 16px;font-size:14px;animation:rise2 .7s ease 1.6s both}
+#lvup .btn{animation:rise2 .7s ease 1.9s both}
+#lvup .rain{position:absolute;top:-50px;z-index:1;animation:rainf linear both}
+@keyframes rainf{to{transform:translateY(115vh) rotate(260deg)}}
+@media(prefers-reduced-motion:reduce){#deco .df,#deco .dt,#deco .dr,.card::after,h2::after{animation:none}}
+</style>
+
 </head>
 <body>
+<div id="deco" aria-hidden="true"></div>
 
 <div id="opening" role="button" tabindex="0" aria-label="オープニング。タップでスキップ">
   <span class="sp" style="--s:20px;left:12%;top:18%"></span>
@@ -319,7 +380,7 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
     <h1 class="vh">みちゃﾏﾙの雲のおへや</h1>
     <img class="logo" src="assets/logo.png" alt="みちゃﾏﾙ micha maru">
     <p class="catch"><span class="ph">友達感覚で、</span><span class="ph">すぐ仲良くなれちゃう!</span></p>
-    <p class="lead"><span class="ph">初めましてでも</span><span class="ph">気軽におしゃべりできる枠です。</span><br><span class="ph">活動をのぞきに</span><span class="ph">来てくれて</span><span class="ph">うれしいです。</span></p>
+    <p class="lead"><span class="ph">初めましてでも</span><span class="ph">気軽におしゃべりできる枠だよ‼️</span><br><span class="ph">活動を覗きに来て、</span><span class="ph">君もみちゃっこの</span><span class="ph">仲間入りになろ？🩵</span></p>
     <div class="chips"><span class="chip">配信者・VTuber / 歌い手</span></div>
   </div>
 </header>
@@ -337,6 +398,8 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
     <a href="#rules">お願いごと</a>
     <a href="#message">メッセージ</a>
     <a href="#omikuji">おみくじ</a>
+    <a href="#stamp">スタンプ</a>
+    <a href="#secret">ひみつの部屋</a>
     <a href="#contact">お問い合わせ</a>
   </div>
 </nav>
@@ -344,16 +407,23 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
 <main class="wrap">
 
   <section id="pg-home" class="page">
+    <div class="card greet">
+      <p class="hello">今日もみちゃﾏﾙのお部屋へようこそ🩵</p>
+      <p class="hito" id="hito"></p>
+      <small>みちゃからのひとこと</small>
+    </div>
     <h2>メニュー</h2>
     <div class="menu">
-      <a class="mt" href="#profile"><b>プロフィール</b><span>みちゃﾏﾙってどんな人?</span></a>
-      <a class="mt" href="#news"><b>お知らせ</b><span>最新のニュース</span></a>
-      <a class="mt" href="#schedule"><b>今週の配信</b><span>配信スケジュール</span></a>
-      <a class="mt" href="#songs"><b>歌える曲</b><span>リクエストもどうぞ</span></a>
-      <a class="mt" href="#rules"><b>お願いごと</b><span>みんなで気持ちよく</span></a>
-      <a class="mt" href="#message"><b>匿名メッセージ</b><span>名前なしで送れるよ</span></a>
-      <a class="mt" href="#omikuji"><b>おみくじ</b><span>スタンプを集めよう</span></a>
-      <a class="mt" href="#contact"><b>お問い合わせ</b><span>ご連絡はこちら</span></a>
+      <a class="mt" href="#profile"><b>プロフィール</b><span>みちゃのこと知ってね🐻</span></a>
+      <a class="mt" href="#news"><b>お知らせ</b><span>最新のニュースだよ✨</span></a>
+      <a class="mt" href="#schedule"><b>今週の配信</b><span>遊びに来てね☁️</span></a>
+      <a class="mt" href="#songs"><b>歌える曲</b><span>リクエストもどうぞ🎵</span></a>
+      <a class="mt" href="#rules"><b>お願いごと</b><span>みんなで楽しく🩵</span></a>
+      <a class="mt" href="#message"><b>匿名メッセージ</b><span>名前なしで送れるよ🫧</span></a>
+      <a class="mt" href="#omikuji"><b>おみくじ</b><span>大吉でスタンプ+1🐻</span></a>
+      <a class="mt" href="#stamp"><b>スタンプカード</b><span>あつめてレベルUP✨</span></a>
+      <a class="mt" href="#secret"><b>ひみつの部屋</b><span>あつめた人だけ🔒</span></a>
+      <a class="mt" href="#contact"><b>お問い合わせ</b><span>ご連絡はこちら☁️</span></a>
     </div>
     <div class="home-news">
       <h2>最新のお知らせ</h2>
@@ -365,17 +435,22 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
   <section id="pg-profile" class="page">
     <h2>プロフィール</h2>
     <div class="card">
-      <p style="margin:0"><span class="ph">みちゃﾏﾙの枠は、</span><span class="ph">友達感覚で</span><span class="ph">すぐ仲良くなれるのが</span><span class="ph">いいところ。</span><span class="ph">初めてでも、</span><span class="ph">ROMでも、</span><span class="ph">気軽に</span><span class="ph">遊びに来てね。</span><span class="ph">リスナーさんが</span><span class="ph">楽しめる場所に</span><span class="ph">していきます。</span></p>
+      <p style="margin:0"><span class="ph">みちゃﾏﾙの枠は、</span><span class="ph">友達感覚で</span><span class="ph">すぐ仲良くなれるのが</span><span class="ph">いいところだよ☁️</span><span class="ph">初めてでも、</span><span class="ph">ROMでも、</span><span class="ph">気軽に遊びに来てね🩵</span><span class="ph">みんなが楽しめる場所に</span><span class="ph">していくよ✨</span></p>
       <dl class="facts">
         <dt>活動名</dt><dd>みちゃﾏﾙ</dd>
         <dt>活動場所</dt><dd>X / TikTok / Mirrativ</dd>
+        <dt>誕生日</dt><dd>5月23日🎂</dd>
+        <dt>合言葉</dt><dd>みちゃしかみちゃだめ</dd>
+        <dt>推しマ</dt><dd>🐻🩵</dd>
+        <dt>FN</dt><dd>ﾏﾙ</dd>
+        <dt>Xタグ</dt><dd><a href="https://x.com/search?q=%23%E3%81%BF%E3%81%A1%E3%82%83%E3%81%97%E3%81%8B%E3%81%BF%E3%81%A1%E3%82%83%E3%81%A0%E3%82%81" target="_blank" rel="noopener">#みちゃしかみちゃだめ</a></dd>
         <dt>好きなもの</dt><dd>BTS、Nissy、オムライス</dd>
       </dl>
       <div class="sns">
-        <a href="https://www.mirrativ.com/user/154242098" target="_blank" rel="noopener"><span>Mirrativ</span><small>配信はこちら</small></a>
+        <a href="https://www.mirrativ.com/user/154242098" target="_blank" rel="noopener"><span>Mirrativ</span><small>配信はこっち🩵</small></a>
         <a href="https://x.com/mitya2305" target="_blank" rel="noopener"><span>X</span><small>@mitya2305</small></a>
-        <a href="https://marshmallow-qa.com/67tfnamlmr8nw5h" target="_blank" rel="noopener"><span>マシュマロ</span><small>質問・メッセージ</small></a>
-        <a href="#" data-pending><span>TikTok</span><small>リンク準備中</small></a>
+        <a href="https://marshmallow-qa.com/67tfnamlmr8nw5h" target="_blank" rel="noopener"><span>マシュマロ</span><small>質問・メッセージ待ってるよ</small></a>
+        <a href="#" data-pending><span>TikTok</span><small>リンク準備中だよ</small></a>
       </div>
     </div>
   </section>
@@ -384,7 +459,7 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
     <h2>お知らせ <span class="sample">サンプル</span></h2>
     <div class="card">
       <ul class="list" id="newsList"></ul>
-      <p class="note"><span class="ph">公開後は、</span><span class="ph">専用の更新ページから</span><span class="ph">ご自身で追加・編集できます。</span></p>
+      <p class="note"><span class="ph">公開後は、</span><span class="ph">専用の更新ページから</span><span class="ph">みちゃ自身で追加・編集できるよ✨</span></p>
     </div>
   </section>
 
@@ -399,54 +474,83 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
     <h2>歌える曲リスト <span class="sample">サンプル</span></h2>
     <div class="card">
       <label for="q" style="margin-top:0">曲名・アーティストで探す</label>
-      <input class="search" id="q" type="text" placeholder="例:曲名を入れてね">
+      <input class="search" id="q" type="text" placeholder="曲名を入れてね🎵">
       <ul class="songs" id="songList"></ul>
       <div class="toast" id="reqToast" role="status"></div>
-      <p class="note"><span class="ph">「リクエスト」を押すと、</span><span class="ph">配信のコメント欄に</span><span class="ph">貼れる文章が</span><span class="ph">コピーされます。</span></p>
+      <p class="note"><span class="ph">「リクエスト」を押すと、</span><span class="ph">配信のコメント欄に</span><span class="ph">貼れる文章が</span><span class="ph">コピーされるよ🎵</span></p>
     </div>
   </section>
 
   <section id="pg-rules" class="page">
     <h2>お願いごと <span class="sample">サンプル</span></h2>
     <div class="card">
-      <p style="margin:0 0 4px"><span class="ph">みんなで気持ちよく</span><span class="ph">過ごすためのお願いです。</span><span class="ph">タップで開きます。</span></p>
-      <details><summary>配信について</summary><p>初見さんもROMさんも大歓迎です。気軽にコメントしてね。(本文はみちゃﾏﾙさんの言葉に差し替えます)</p></details>
-      <details><summary>Xでの反応について</summary><p>いいねやリプライはとてもうれしいです。(本文はあとで差し替えます)</p></details>
-      <details><summary>プレゼントについて</summary><p>お気持ちだけで十分です。(本文はあとで差し替えます)</p></details>
-      <details><summary>お休みについて</summary><p>お休みの日は、お知らせでお伝えします。(本文はあとで差し替えます)</p></details>
-      <details><summary>少しだけ大切なお願い</summary><p>ほかの人が嫌な気持ちになることは控えてね。(本文はあとで差し替えます)</p></details>
-      <p class="note">項目と文章は、みちゃﾏﾙさんと相談して決めます。</p>
+      <p style="margin:0 0 4px"><span class="ph">みんなで気持ちよく</span><span class="ph">過ごすためのお願いだよ🩵</span><span class="ph">タップで開くよ☁️</span></p>
+      <details><summary>配信について</summary><p>初見さんもROMさんも大歓迎だよ🩵 気軽にコメントしてね✨(本文はみちゃの言葉に差し替えるよ)</p></details>
+      <details><summary>Xでの反応について</summary><p>いいねやリプライはとってもうれしいよ🩵(本文はあとで差し替えるよ)</p></details>
+      <details><summary>プレゼントについて</summary><p>お気持ちだけで十分だよ☁️(本文はあとで差し替えるよ)</p></details>
+      <details><summary>お休みについて</summary><p>お休みの日は、お知らせで伝えるね🐻(本文はあとで差し替えるよ)</p></details>
+      <details><summary>少しだけ大切なお願い</summary><p>ほかの人が嫌な気持ちになることは控えてね🫧(本文はあとで差し替えるよ)</p></details>
+      <p class="note">項目と文章は、みちゃと相談して決めていくよ✨</p>
     </div>
   </section>
 
   <section id="pg-message" class="page">
     <h2>匿名メッセージ</h2>
     <div class="card">
-      <p style="margin:0 0 4px"><span class="ph">名前なしで、</span><span class="ph">みちゃﾏﾙに</span><span class="ph">メッセージを送れます。</span><span class="ph">配信で読まれるかもしれません。</span></p>
+      <p style="margin:0 0 4px"><span class="ph">名前なしで、</span><span class="ph">みちゃﾏﾙに</span><span class="ph">メッセージを送れるよ🫧</span><span class="ph">配信で読まれるかも✨</span></p>
       <label for="msg">メッセージ</label>
-      <textarea id="msg" maxlength="300" placeholder="応援のひとこと、聞いてみたいこと、なんでも。"></textarea>
+      <textarea id="msg" maxlength="300" placeholder="応援のひとこと、聞いてみたいこと、なんでもどうぞ☁️"></textarea>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px">
         <span class="note" style="margin:0"><span id="cnt">0</span> / 300</span>
         <button class="btn pink" id="sendMsg" type="button">匿名で送る</button>
       </div>
       <div class="toast" id="msgToast" role="status"></div>
-      <p class="note">マシュマロでも受け付けています。<a href="https://marshmallow-qa.com/67tfnamlmr8nw5h" target="_blank" rel="noopener">マシュマロを開く</a></p>
+      <p class="note">マシュマロでも受け付けてるよ🩵<a href="https://marshmallow-qa.com/67tfnamlmr8nw5h" target="_blank" rel="noopener">マシュマロを開く</a></p>
     </div>
   </section>
 
   <section id="pg-omikuji" class="page">
-    <h2>おみくじ・スタンプカード</h2>
+    <h2>おみくじ</h2>
     <div class="card omikuji">
-      <p style="margin:0"><span class="ph">1日1回、</span><span class="ph">おみくじをひけます。</span><span class="ph">ひくとスタンプが</span><span class="ph">1つたまります。</span></p>
+      <p style="margin:0"><span class="ph">1日1回、</span><span class="ph">おみくじをひけるよ🎴</span><span class="ph">大吉(とレア)が出たら、</span><span class="ph">スタンプが+1個もらえるよ🐻</span></p>
       <div class="result" id="omiResult" aria-live="polite">
         <img class="ted" src="assets/teddy.svg" alt="">
         <span>今日のうんせいは?</span>
       </div>
       <button class="btn pink" id="omiBtn" type="button">おみくじをひく</button>
-      <div class="stamps" id="stamps" aria-label="スタンプカード"></div>
-      <p class="prize" id="prize">10個たまると、ごほうびがもらえます。</p>
-      <p class="note">この試作では、スタンプはこの端末の中にだけ保存されます。</p>
+      <p class="note" style="text-align:center"><a href="#stamp">スタンプカードを見る🐻</a></p>
     </div>
+  </section>
+
+  <section id="pg-stamp" class="page">
+    <h2>スタンプカード</h2>
+    <div class="card stampcard">
+      <div class="mytitle" id="myTitle"></div>
+      <label for="nick" style="margin-top:12px">ニックネーム</label>
+      <input id="nick" type="text" maxlength="12" placeholder="なまえをいれてね🐻" autocomplete="nickname">
+      <p class="cardno" id="cardNo"></p>
+      <div class="stamps" id="stamps" aria-label="スタンプカード"></div>
+      <p class="prize" id="prize"></p>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <b style="color:var(--blue)">配信スタンプ🎤</b>
+      <p style="margin:6px 0 0;font-size:14px"><span class="ph">配信で発表される</span><span class="ph">「配信コード」を入れると、</span><span class="ph">1日1回スタンプ+1個だよ🩵</span></p>
+      <div class="coderow"><input id="codeIn" type="text" placeholder="配信コード" autocomplete="off"><button class="btn pink" id="codeBtn" type="button">もらう</button></div>
+      <div class="toast" id="stToast" role="status"></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <b style="color:var(--blue)">スタンプのたまりかた✨</b>
+      <ul class="how"><li>配信に来て「配信コード」を入れる → +1個</li><li>おみくじで大吉(とレア)が出る → +1個</li><li>20個たまったらレベルUP!次のカードへ🩵</li></ul>
+      <b style="color:var(--blue);display:block;margin-top:14px">称号の一覧🐻</b>
+      <ol class="ttl" id="ttlList"></ol>
+      <p class="note">カードが1枚そろうたびに、あなたの称号が変わっていくよ。(称号の名前は仮だよ。みちゃが決めてね)</p>
+      <p class="note">この試作では、スタンプはこの端末の中にだけ保存されるよ。</p>
+    </div>
+  </section>
+
+  <section id="pg-secret" class="page">
+    <h2>ひみつの部屋</h2>
+    <div class="card" id="secretBody"></div>
   </section>
 
   <section id="pg-contact" class="page">
@@ -474,8 +578,20 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
     <button class="btn small" id="openAdmin" type="button">HP更新ページ(デモ)</button>
   </div>
   <div>© みちゃﾏﾙ</div>
-  <details class="credit"><summary>CREDIT</summary><p>リボン・雲・くまのイラスト: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
+  <details class="credit"><summary>CREDIT</summary><p>くま・雲・キラキラ・しゃぼん玉・ハートのイラスト: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
 </footer>
+
+<div id="lvup" role="dialog" aria-label="レベルアップ">
+  <div class="lvbox">
+    <img class="lvbear" src="assets/bear.svg" alt="">
+    <p class="lvk">✨ キラキラーん ✨</p>
+    <p class="lvt">みちゃレベルUP!</p>
+    <p class="lvs" id="lvSub"></p>
+    <p class="lvn" id="lvName"></p>
+    <p class="lvu" id="lvUnlock"></p>
+    <button class="btn pink" id="lvClose" type="button">つづける🩵</button>
+  </div>
+</div>
 
 <!-- 更新ページ(デモ) -->
 <div id="admin" role="dialog" aria-label="HP更新ページ">
@@ -530,13 +646,14 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
 
   /* ---------- data ---------- */
   var DEF={
-    news:[['11/12','ホームページができました。ゆっくり見ていってね。'],['11/10','今週の配信予定をのせました。'],['11/08','おみくじとスタンプカードをはじめました。']],
+    v:2, code:'みちゃ',
+    news:[['11/12','ホームページができたよ☁️ ゆっくり見ていってね🩵'],['11/10','今週の配信予定をのせたよ✨'],['11/08','おみくじとスタンプカードをはじめたよ🐻']],
     week:[['月','',''],['火','21:00','夜の歌枠'],['水','22:00','おしゃべり'],['木','',''],['金','21:00','夜の歌枠'],['土','20:00','リクエスト歌枠'],['日','21:30','おしゃべり']],
     songs:[['サンプル曲 A','アーティスト1'],['サンプル曲 B','アーティスト2'],['サンプル曲 C','アーティスト3'],['サンプル曲 D','アーティスト1'],['サンプル曲 E','アーティスト4'],['サンプル曲 F','アーティスト2']]
   };
   var data;
   try{ data=JSON.parse(store('mcm_data')||'null'); }catch(e){ data=null; }
-  if(!data||!data.news||!data.week||!data.songs) data=JSON.parse(JSON.stringify(DEF));
+  if(!data||data.v!==2||!data.news||!data.week||!data.songs) data=JSON.parse(JSON.stringify(DEF));
   function save(){ store('mcm_data',JSON.stringify(data)); }
   var inbox; try{ inbox=JSON.parse(store('mcm_inbox')||'[]'); }catch(e){ inbox=[]; }
   function saveInbox(){ store('mcm_inbox',JSON.stringify(inbox)); }
@@ -562,9 +679,24 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
   }
   document.querySelectorAll('[data-pending]').forEach(function(a){ a.addEventListener('click',function(e){e.preventDefault();}); });
 
+  /* ---------- deco ---------- */
+  (function(){
+    var d=$('#deco'); if(!d) return;
+    var items=[['bear',44,6,18,'df',7,0],['bear',36,88,42,'df',9,-3],['bear',40,10,72,'df',8,-5],['bear',34,84,86,'df',10,-2],
+      ['cloud',70,70,10,'df',11,-4],['cloud',58,4,45,'df',12,-6],['cloud',64,80,64,'df',10,-1],['cloud',52,18,92,'df',13,-7],
+      ['sparkle',22,22,12,'dt',3,0],['sparkle',16,92,24,'dt',4,-1],['sparkle',20,6,60,'dt',3.4,-2],['sparkle',18,90,56,'dt',4.2,-1.5],['sparkle',24,40,88,'dt',3.6,-.5],['sparkle',14,60,30,'dt',3.2,-2.4],
+      ['heart',26,14,34,'df',8,-2],['heart',22,86,74,'df',9,-4],
+      ['bubble',26,12,0,'dr',20,0],['bubble',34,34,0,'dr',26,-8],['bubble',22,58,0,'dr',22,-14],['bubble',30,80,0,'dr',28,-4],['bubble',20,94,0,'dr',24,-18]];
+    items.forEach(function(a){
+      var im=document.createElement('img'); im.alt=''; im.src='assets/'+a[0]+'.svg'; im.className=a[4];
+      im.style.cssText='width:'+a[1]+'px;left:'+a[2]+'%;'+(a[4]==='dr'?'':'top:'+a[3]+'%;')+'--d:'+a[5]+'s;--dl:'+a[6]+'s;opacity:'+(a[0]==='cloud'?'.7':'.85');
+      d.appendChild(im);
+    });
+  })();
+
   /* ---------- render ---------- */
   function renderNews(){
-    $('#newsList').innerHTML=data.news.length?data.news.map(function(n){return '<li><time>'+esc(n[0])+'</time><span>'+phr(n[1])+'</span></li>';}).join(''):'<li>お知らせはまだありません。</li>';
+    $('#newsList').innerHTML=data.news.length?data.news.map(function(n){return '<li><time>'+esc(n[0])+'</time><span>'+phr(n[1])+'</span></li>';}).join(''):'<li>お知らせはまだないよ☁️</li>';
   }
   function renderWeek(){
     $('#week').innerHTML=data.week.map(function(d){
@@ -578,17 +710,17 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
     var rows=data.songs.map(function(s,i){return [s,i];}).filter(function(p){return !k||(p[0][0]+p[0][1]).toLowerCase().indexOf(k)>-1;});
     list.innerHTML=rows.length?rows.map(function(p){
       return '<li><div><div class="tt">'+esc(p[0][0])+'</div><div class="ar">'+esc(p[0][1])+'</div></div><button class="btn small" type="button" data-i="'+p[1]+'">リクエスト</button></li>';
-    }).join(''):'<li>見つかりませんでした。別のことばで探してみてね。</li>';
+    }).join(''):'<li>みつからなかったよ…別のことばで探してみてね🫧</li>';
   }
   q.addEventListener('input',renderSongs);
   list.addEventListener('click',function(e){
     var btn=e.target.closest('button[data-i]'); if(!btn) return;
     var s=data.songs[+btn.dataset.i], text='リクエスト:'+s[0]+' / '+s[1];
-    var done=function(ok){ show(toast, ok?('コピーしました。コメント欄に貼ってね →「'+text+'」'):('コメント欄に入力してね →「'+text+'」')); };
+    var done=function(ok){ show(toast, ok?('コピーしたよ!コメント欄に貼ってね →「'+text+'」'):('コメント欄に入力してね →「'+text+'」')); };
     try{ navigator.clipboard.writeText(text).then(function(){done(true)},function(){done(false)}); }catch(err){ done(false); }
   });
   function renderHomeNews(){
-    $('#homeNews').innerHTML=data.news.slice(0,2).map(function(n){return '<li><time>'+esc(n[0])+'</time><span>'+phr(n[1])+'</span></li>';}).join('')||'<li>お知らせはまだありません。</li>';
+    $('#homeNews').innerHTML=data.news.slice(0,2).map(function(n){return '<li><time>'+esc(n[0])+'</time><span>'+phr(n[1])+'</span></li>';}).join('')||'<li>お知らせはまだないよ☁️</li>';
   }
   function renderAll(){ renderNews(); renderWeek(); renderSongs(); renderHomeNews(); }
   renderAll();
@@ -598,36 +730,103 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
   msg.addEventListener('input',function(){ $('#cnt').textContent=msg.value.length; });
   $('#sendMsg').addEventListener('click',function(){
     var v=msg.value.trim();
-    if(!v){ show($('#msgToast'),'メッセージを書いてから送ってね。'); return; }
+    if(!v){ show($('#msgToast'),'メッセージを書いてから送ってね🫧'); return; }
     inbox.unshift([md(),v]); saveInbox();
-    show($('#msgToast'),'ありがとう!届きました。(試作のため、この端末の更新ページにだけ届きます)');
+    show($('#msgToast'),'ありがとう🩵 届いたよ!(試作のため、この端末の更新ページにだけ届くよ)');
     msg.value=''; $('#cnt').textContent='0';
   });
   $('#contactForm').addEventListener('submit',function(e){
     e.preventDefault();
-    if(!$('#cbody').value.trim()){ show($('#contactToast'),'内容を書いてから送信してね。'); return; }
-    show($('#contactToast'),'ありがとうございます。(試作のため、実際には送信されていません)');
+    if(!$('#cbody').value.trim()){ show($('#contactToast'),'内容を書いてから送信してね🫧'); return; }
+    show($('#contactToast'),'ありがとう🩵(試作のため、実際には送信されていないよ)');
     e.target.reset();
   });
 
   /* ---------- omikuji + stamp ---------- */
-  var KEY='mcm_stamps';
-  var count=parseInt(store(KEY)||'0',10)||0;
+  var KEY='mcm_stamps', CARD=20;
+  var count=parseInt(store(KEY)||'0',10)||0; if(count>=CARD) count=0;
+  var cards=parseInt(store('mcm_cards')||'0',10)||0;
+  var nick=store('mcm_nick')||'';
+  var TITLES=['はじめましてのみちゃっこ','なかよしみちゃっこ','みちゃっこ隊員','みちゃっこ隊長','みちゃの親友','みちゃﾏﾙの相棒','みちゃっこ殿堂入り'];
+  function titleOf(n){ return TITLES[Math.min(n,TITLES.length-1)]; }
   function today(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
-  function drawStamps(){
+  var SEC=['ここまで来てくれてありがとう🩵 みちゃ、めっちゃうれしい!これからも一緒に楽しもうね☁️','2枚目クリアおめでとう✨ いつも配信に来てくれてほんとにありがとう🐻','3枚目!もうみちゃの大事な仲間だよ🩵 ここだけの話、みちゃのひみつがここに入るよ(仮)','4枚目もすごい!みちゃっこ隊長だね🫧 いつも元気もらってるよ✨','5枚目まで来てくれてありがとう🩵 みちゃのいちばんの味方だよ!'];
+  function drawStamps(newOne){
     var h='';
-    for(var i=0;i<10;i++) h+= i<count ? '<div class="stamp on"><i></i></div>' : '<div class="stamp">'+(i+1)+'</div>';
+    for(var i=0;i<CARD;i++){
+      if(i<count){ var ic=((i+1)%5===0)?'heart':'bear'; h+='<div class="stamp on'+(newOne&&i===count-1?' new':'')+'"><i style="background-image:url(assets/'+ic+'.svg)"></i></div>'; }
+      else h+='<div class="stamp">'+(i+1)+'</div>';
+    }
     $('#stamps').innerHTML=h;
-    $('#prize').textContent = count>=10 ? 'スタンプがそろいました。ごほうびの壁紙をプレゼント(試作では表示のみ)。' : '10個たまると、ごほうびがもらえます。あと'+(10-count)+'個。';
+    $('#cardNo').innerHTML='<b>'+(cards+1)+'枚目</b>のカード <small>('+count+' / '+CARD+')</small>';
+    $('#prize').textContent='あと'+(CARD-count)+'個で、みちゃレベルUP✨ 称号が「'+titleOf(cards+1)+'」になるよ🩵';
   }
+  function renderTitle(){
+    $('#myTitle').innerHTML='<small>いまの称号</small><b>【'+esc(titleOf(cards))+'】</b><span>'+(nick?esc(nick):'ニックネームを入れてね🐻')+'</span>';
+    $('#ttlList').innerHTML=TITLES.map(function(t,i){return '<li'+(i===Math.min(cards,TITLES.length-1)?' class="now"':'')+'>'+esc(t)+(i===0?'':'<small>('+i+'枚目クリア)</small>')+'</li>';}).join('');
+  }
+  function renderSecret(){
+    var b=$('#secretBody');
+    if(cards<1){
+      b.innerHTML='<div class="lock"><img src="assets/bear.svg" alt=""><p><b>ここは、ひみつの部屋🔒</b></p><p>スタンプカードを<b>1枚</b>そろえた人だけが入れるよ🩵<br>いまは '+count+' / '+CARD+' 個だよ!</p><a class="btn" href="#stamp">スタンプカードを見る🐻</a></div>';
+      return;
+    }
+    var h='<div class="lock open"><img src="assets/heart.svg" alt=""><p><b>ひみつの部屋へようこそ🩵</b></p><p>スタンプカードを'+cards+'枚そろえた、みちゃっこだけの場所だよ✨</p></div>';
+    for(var i=0;i<SEC.length;i++){
+      h+= i<cards ? '<div class="secmsg"><small>みちゃからの特別メッセージ '+(i+1)+'</small><p>'+esc(SEC[i])+'</p></div>'
+                  : '<div class="secmsg lockd"><small>🔒 '+(i+1)+'枚目で開くよ</small></div>';
+    }
+    b.innerHTML=h;
+  }
+  var nickIn=$('#nick'); nickIn.value=nick;
+  nickIn.addEventListener('input',function(){ nick=nickIn.value.trim(); store('mcm_nick',nick); renderTitle(); });
+  function rain(n){
+    if(reduce) return;
+    for(var i=0;i<n;i++){
+      var im=document.createElement('img'); im.className='rain'; im.alt='';
+      im.src='assets/'+['sparkle','bubble','heart','bear'][i%4]+'.svg';
+      var sz=18+Math.random()*22;
+      im.style.cssText='left:'+(Math.random()*100)+'%;width:'+sz+'px;animation-duration:'+(2.4+Math.random()*2.2)+'s;animation-delay:'+(Math.random()*1.4)+'s';
+      $('#lvup').appendChild(im);
+      im.addEventListener('animationend',function(){ this.remove(); });
+    }
+  }
+  function levelUp(){
+    $('#lvSub').textContent='スタンプカード '+cards+'枚目クリア!';
+    $('#lvName').textContent='称号が「'+titleOf(cards)+'」になったよ🩵';
+    $('#lvUnlock').textContent= cards===1 ? 'ひみつの部屋が開いたよ🔓✨ のぞいてみてね!' : cards<=SEC.length ? 'ひみつの部屋に、新しいメッセージが届いたよ💌' : '';
+    $('#lvup').classList.add('open'); rain(36);
+    burst(innerWidth/2,innerHeight*.4,26,150);
+  }
+  $('#lvClose').addEventListener('click',function(){ $('#lvup').classList.remove('open'); });
+  function addStamp(){
+    count++;
+    var up=false;
+    if(count>=CARD){ count=0; cards++; up=true; store('mcm_cards',String(cards)); }
+    store(KEY,String(count));
+    drawStamps(!up); renderTitle(); renderSecret();
+    var last=document.querySelector('#stamps .stamp.new');
+    if(last){ var r=last.getBoundingClientRect(); burst(r.left+r.width/2,r.top+r.height/2,12,70); }
+    if(up) setTimeout(levelUp,500);
+    return up;
+  }
+  $('#codeBtn').addEventListener('click',function(){
+    var v=$('#codeIn').value.trim(), t=$('#stToast');
+    if(!v){ show(t,'配信コードを入れてね🫧'); return; }
+    if(store('mcm_sday')===today()){ show(t,'今日はもうもらったよ!また配信で会おうね🩵'); return; }
+    if(v!==data.code){ show(t,'あれ?コードがちがうみたい🫧 配信でもう一度聞いてみてね'); return; }
+    store('mcm_sday',today()); $('#codeIn').value='';
+    var up=addStamp();
+    show(t,up?'配信に来てくれてありがとう🩵':'配信に来てくれてありがとう🩵 スタンプ+1個だよ🐻');
+  });
   var RANKS=[
-   {n:'大吉',w:14,t:'gold',m:['今日はなんでもうまくいく日!ぜったい配信きてね〜','いいことある予感!友達に自慢していいよ']},
-   {n:'中吉',w:24,m:['ちいさなうれしいことが見つかるよ','いい感じの一日になりそう。にこにこでいこ']},
-   {n:'小吉',w:26,m:['ゆっくりでだいじょうぶ。おいしいもの食べよ','むりしないで、できることからやろっか']},
-   {n:'吉',w:22,m:['いつもどおりが一番。えらい!','なんでもない日こそ大事にしよう']},
-   {n:'末吉',w:10,m:['夜に楽しいことがありそう','あとからじわじわ来るタイプの運勢だよ']},
-   {n:'ふわふわ吉',w:3,t:'rare',m:['雲の上にいるみたいな日。ふわっとゆるく過ごそ','しゃぼん玉みたいにきらきらな一日になるよ']},
-   {n:'ともだち吉',w:1,t:'rare',m:['今日は仲良くなれる予感!気軽に声かけてね','新しい友達ができるかも。コメント待ってるよ']}
+   {n:'大吉',w:14,t:'gold',m:['今日はなんでもうまくいく日だよ✨ ぜったい配信きてね〜🩵','いいことある予感!みんなに自慢していいよ🐻']},
+   {n:'中吉',w:24,m:['ちいさなうれしいことが見つかるよ☁️','いい感じの一日になりそう!にこにこでいこ🩵']},
+   {n:'小吉',w:26,m:['ゆっくりでだいじょうぶ🫧 おいしいもの食べよ','むりしないで、できることからやろっか☁️']},
+   {n:'吉',w:22,m:['いつもどおりが一番だよ🐻 えらい!','なんでもない日こそ大事にしよう🩵']},
+   {n:'末吉',w:10,m:['夜に楽しいことがありそう✨','あとからじわじわ来るタイプの運勢だよ🫧']},
+   {n:'ふわふわ吉',w:3,t:'rare',m:['雲の上にいるみたいな日☁️ ふわっとゆるく過ごそ','しゃぼん玉みたいにきらきらな一日になるよ🫧✨']},
+   {n:'ともだち吉',w:1,t:'rare',m:['今日は仲良くなれる予感!気軽に声かけてね🩵','新しい友達ができるかも🐻 コメント待ってるよ✨']}
   ];
   var FOODS=['オムライス','いちごのパフェ','からあげ','プリン','ホットケーキ','ラーメン','たこ焼き','チョコ','ソフトクリーム','おにぎり','パンケーキ','ミルクティー'];
   var COLORS=[['みずいろ','#9ad4f2'],['ソーダブルー','#6fb8f0'],['しろ','#f3f8ff'],['ラベンダー','#c9b8f0'],['ミント','#a8e6d4'],['さくらいろ','#ffc9dc'],['レモン','#fff2a8']];
@@ -643,7 +842,7 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
       +'<div class="lucky"><span>ラッキーフード<b>'+FOODS[o.f]+'</b></span><span>ラッキーカラー<b><i class="dot" style="background:'+c[1]+'"></i>'+c[0]+'</b></span></div>'
       +'<button type="button" class="share" id="omiShare">結果をシェア</button></div>';
     $('#omiShare').onclick=function(){
-      var done=function(){ $('#omiShare').textContent='コピーしました!Xに貼ってね'; };
+      var done=function(){ $('#omiShare').textContent='コピーしたよ!Xに貼ってね🩵'; };
       if(navigator.share){ navigator.share({text:txt}).catch(function(){}); return; }
       try{ navigator.clipboard.writeText(txt).then(done,function(){ prompt('コピーしてね',txt); }); }catch(e){ prompt('コピーしてね',txt); }
     };
@@ -656,7 +855,7 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
   btnOmi.addEventListener('click',function(){
     if(omiBusy) return;
     var o=getO();
-    if(o){ showResult(o,true); boxOmi.insertAdjacentHTML('beforeend','<span class="again">今日はもう引いたよ。また明日ね</span>'); return; }
+    if(o){ showResult(o,true); boxOmi.insertAdjacentHTML('beforeend','<span class="again">今日はもう引いたよ。また明日ね🩵</span>'); return; }
     omiBusy=true; btnOmi.disabled=true;
     boxOmi.innerHTML='<img class="ted shake" src="assets/teddy.svg" alt=""><span>うーん…</span>';
     setTimeout(function(){
@@ -668,16 +867,14 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
       store(OMI,JSON.stringify(o));
       showResult(o,true);
       var rect=boxOmi.getBoundingClientRect(); burst(rect.left+rect.width/2,rect.top+40,RANKS[i].t?24:14,110);
-      if(count<10){ count++; store(KEY,String(count)); }
-      drawStamps();
-      var on=document.querySelectorAll('#stamps .stamp.on'), last=on[on.length-1];
-      if(last){ var sr=last.getBoundingClientRect(); burst(sr.left+sr.width/2,sr.top+sr.height/2,10,60); }
+      if(RANKS[i].t){ addStamp(); boxOmi.insertAdjacentHTML('beforeend','<span class="again">スタンプ+1個もらったよ🐻✨</span>'); }
+      else boxOmi.insertAdjacentHTML('beforeend','<span class="again">大吉(とレア)が出ると、スタンプがもらえるよ☁️</span>');
       omiBusy=false; btnOmi.disabled=false; btnOmi.textContent='結果をもう一度見る';
     },1100);
   });
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) initOmi(); });
   initOmi();
-  drawStamps();
+  drawStamps(); renderTitle(); renderSecret();
 
   /* tab scroll hints */
   (function(){
@@ -691,7 +888,9 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
   })();
 
   /* ---------- pages (hash routing) ---------- */
-  var routes=['home','profile','news','schedule','songs','rules','message','omikuji','contact'];
+  var routes=['home','profile','news','schedule','songs','rules','message','omikuji','stamp','secret','contact'];
+  var HITO=['今日も会いに来てくれてありがとう♡','みちゃのこと、ちゃんと見つけてくれた?','今日も一緒に笑おうね!','無理せず、ゆっくりしていってね☁️','みちゃっこがいるから配信ができるんだよ🩵'], lastH=-1;
+  function setHito(){ var i; do{ i=Math.floor(Math.random()*HITO.length); }while(i===lastH&&HITO.length>1); lastH=i; var el=$('#hito'); el.textContent=HITO[i]; el.classList.remove('fadeh'); void el.offsetWidth; el.classList.add('fadeh'); }
   var tabLinks={};
   document.querySelectorAll('#tabs a').forEach(function(a){ tabLinks[a.getAttribute('href').slice(1)]=a; });
   function route(){
@@ -704,6 +903,8 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
     var pg=document.getElementById('pg-'+r);
     if(pg){ pg.querySelectorAll('.mt,.card,h2,.day,details').forEach(function(el,i){ el.classList.remove('rv'); void el.offsetWidth; el.style.setProperty('--i',Math.min(i,10)); el.classList.add('rv'); }); }
     var a=tabLinks[r]; if(a){ try{ a.scrollIntoView({inline:'center',block:'nearest'}); }catch(e){} }
+    if(r==='home') setHito();
+    if(r==='secret') renderSecret();
     window.scrollTo(0,0);
   }
   window.addEventListener('hashchange',route);
@@ -718,10 +919,10 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
 
   function go(v){
     view=v; ad.scrollTop=0;
-    var title={menu:'',news:'お知らせ',week:'今週の配信予定',songs:'歌える曲',inbox:'届いたメッセージ'}[v];
+    var title={menu:'',news:'お知らせ',week:'今週の配信予定',songs:'歌える曲',code:'配信スタンプコード',inbox:'届いたメッセージ'}[v];
     $('#adTitle').innerHTML= v==='menu' ? 'HP更新ページ<small>ここから内容を更新できます</small>' : esc(title);
     $('#adBack').textContent= v==='menu' ? '← サイトへ' : '← もどる';
-    var f={menu:vMenu,news:vNews,week:vWeek,songs:vSongs,inbox:vInbox}[v]; f();
+    var f={menu:vMenu,news:vNews,week:vWeek,songs:vSongs,code:vCode,inbox:vInbox}[v]; f();
   }
   function demoNote(){ return '<p class="demo">デモ版です。入力した内容はこの端末の中だけに保存されます。本番では、更新するとすべての人のページに反映されます。</p>'; }
 
@@ -730,9 +931,14 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
       +'<button class="tile" data-go="news"><b>お知らせ</b><span>追加・削除</span></button>'
       +'<button class="tile" data-go="week"><b>今週の配信予定</b><span>曜日ごとに入力</span></button>'
       +'<button class="tile" data-go="songs"><b>歌える曲</b><span>追加・まとめて登録</span></button>'
+      +'<button class="tile" data-go="code"><b>配信コード</b><span>スタンプ用の合言葉</span></button>'
       +'<button class="tile" data-go="inbox"><b>メッセージ</b><span>匿名メッセージを読む</span>'+(inbox.length?'<em>'+inbox.length+'</em>':'')+'</button>'
       +'</div>'+demoNote();
     body.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ go(b.dataset.go); }); });
+  }
+  function vCode(){
+    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">配信中に発表するコードです。リスナーさんが入力すると、1日1回スタンプ+1個になります。</p><label for="cd" style="margin-top:8px">今日の配信コード</label><input id="cd" type="text" value="'+esc(data.code)+'"><div style="text-align:right;margin-top:12px"><button class="btn" id="cSave" type="button">保存する</button></div></div><div class="toast" id="cToast" role="status"></div>'+demoNote();
+    $('#cSave').addEventListener('click',function(){ var v=$('#cd').value.trim(); if(!v) return; data.code=v; save(); show($('#cToast'),'保存しました。リスナーさんは「'+v+'」を入れるとスタンプがもらえます。'); });
   }
   function vNews(){
     var h='<div class="card"><label for="nd" style="margin-top:0">日付</label><input id="nd" type="text" value="'+md()+'">'
