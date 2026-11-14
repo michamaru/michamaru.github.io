@@ -1,4 +1,3 @@
-Cloud, teddy bear, bear, sparkle, bubble and heart graphics (assets/cloud.svg, teddy.svg, bear.svg, sparkle.svg, bubble.svg, heart.svg): Noto Emoji by Google, licensed under the Apache License 2.0.
-https://github.com/googlefonts/noto-emoji
-Extracted via the npm package @svgmoji/noto (MIT).
-Torii and lantern graphics (assets/torii.svg, lantern.svg) also from Noto Emoji (Apache 2.0).
+Bear (assets/bear.svg, teddy.svg): ゆめかわ bear illustration by いらすとや (https://www.irasutoya.com/), free for commercial use per its terms.
+Cloud, sparkle, bubble, heart (assets/*.svg): Noto Emoji by Google, Apache License 2.0. https://github.com/googlefonts/noto-emoji
+Client-owned: logo.png, char.png.
