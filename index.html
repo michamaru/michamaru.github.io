@@ -339,11 +339,11 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
 </style>
 
 <style id="v3">
-.shrine .gate{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin:-4px 0 6px}
-.shrine .tor{width:110px;height:auto;filter:hue-rotate(185deg) saturate(.8) brightness(1.12) drop-shadow(0 4px 6px rgba(91,139,224,.3));animation:float 4s ease-in-out infinite}
-.shrine .ln{width:38px;height:auto;filter:hue-rotate(185deg) saturate(.75) brightness(1.15);transform-origin:50% 0;animation:swing 3.4s ease-in-out infinite}
-.shrine .ln.r{animation-delay:-1.7s}
-@keyframes swing{50%{transform:rotate(7deg)}}
+.shrine .gate{display:flex;align-items:flex-end;justify-content:center;gap:2px;margin:-4px 0 8px}
+.shrine .sh{width:140px;height:auto;filter:drop-shadow(0 4px 6px rgba(91,139,224,.25))}
+.shrine .tor{width:66px;height:auto;filter:drop-shadow(0 3px 5px rgba(91,139,224,.25));animation:float 4s ease-in-out infinite}
+.shrine .tor.r{animation-delay:-2s}
+.shrine .omk{width:46px;height:auto;vertical-align:middle;margin-right:6px;animation:swing 3s ease-in-out infinite;transform-origin:50% 80%}
 .shrine .welcome{margin:0 0 8px;text-align:center;font-weight:700;color:var(--blue);font-size:16px;letter-spacing:.04em}
 .mytitle em{display:block;font-style:normal;font-size:34px;line-height:1.2}
 .mytitle p{margin:6px 0 0;font-size:13px;color:#6f8db8}
@@ -361,7 +361,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
 .rk.done .no{color:#5b8be0}
 #lvup .lvn b{font-size:19px}
 #lvup .lvm{display:block;margin-top:6px;font-size:14px;font-weight:400;color:var(--ink)}
-@media(prefers-reduced-motion:reduce){.shrine .tor,.shrine .ln{animation:none}}
+@media(prefers-reduced-motion:reduce){.shrine .tor,.shrine .omk{animation:none}}
 </style>
 </head>
 <body>
@@ -537,12 +537,12 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   <section id="pg-omikuji" class="page">
     <h2>みちゃﾏﾙ神社</h2>
     <div class="card omikuji shrine">
-      <div class="gate" aria-hidden="true"><img class="ln l" src="assets/lantern.svg" alt=""><img class="tor" src="assets/torii.svg" alt=""><img class="ln r" src="assets/lantern.svg" alt=""></div>
+      <div class="gate" aria-hidden="true"><img class="tor l" src="assets/torii.png" alt=""><img class="sh" src="assets/shrine.png" alt=""><img class="tor r" src="assets/torii.png" alt=""></div>
       <p class="welcome">みちゃﾏﾙ神社へようこそ🩵</p>
       <p style="margin:0"><span class="ph">1日1回、</span><span class="ph">おみくじをひけるよ🎴</span><span class="ph">大吉(とレア)が出たら、</span><span class="ph">スタンプが+1個もらえるよ🐻</span></p>
       <div class="result" id="omiResult" aria-live="polite">
         <img class="ted" src="assets/teddy.svg" alt="">
-        <span>今日のうんせいは?</span>
+        <span><img class="omk" src="assets/omikuji.png" alt="">今日のうんせいは?</span>
       </div>
       <button class="btn pink" id="omiBtn" type="button">おみくじをひく</button>
       <p class="note" style="text-align:center"><a href="#stamp">スタンプカードを見る🐻</a></p>
@@ -605,7 +605,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     <button class="btn small" id="openAdmin" type="button">HP更新ページ(デモ)</button>
   </div>
   <div>© みちゃﾏﾙ</div>
-  <details class="credit"><summary>CREDIT</summary><p>くまのイラスト: <a href="https://tsukatte.com/" target="_blank" rel="noopener">ツカッテ</a><br>雲・キラキラ・しゃぼん玉・ハートのイラスト: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
+  <details class="credit"><summary>CREDIT</summary><p>くま・鳥居・神社・おみくじ箱のイラスト: <a href="https://tsukatte.com/" target="_blank" rel="noopener">ツカッテ</a><br>雲・キラキラ・しゃぼん玉・ハートのイラスト: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
 </footer>
 
 <div id="lvup" role="dialog" aria-label="レベルアップ">
@@ -879,7 +879,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   function initOmi(){
     var o=getO();
     if(o){ showResult(o,false); btnOmi.disabled=false; btnOmi.textContent='結果をもう一度見る'; }
-    else if(!omiBusy){ btnOmi.disabled=false; btnOmi.textContent='おみくじをひく'; boxOmi.innerHTML='<img class="ted" src="assets/teddy.svg" alt=""><span>今日のうんせいは?</span>'; }
+    else if(!omiBusy){ btnOmi.disabled=false; btnOmi.textContent='おみくじをひく'; boxOmi.innerHTML='<img class="ted" src="assets/teddy.svg" alt=""><span><img class="omk" src="assets/omikuji.png" alt="">今日のうんせいは?</span>'; }
   }
   btnOmi.addEventListener('click',function(){
     if(omiBusy) return;
