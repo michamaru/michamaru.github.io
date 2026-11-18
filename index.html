@@ -6,8 +6,9 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118223505">
+<meta name="meta-build" content="20261118224122">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
+<script>if(/[?&]admin\b/.test(location.search)){document.title='みちゃﾏﾙ管理';document.querySelector('link[rel=manifest]').href='manifest-admin.json';document.querySelector('link[rel=apple-touch-icon]').href='assets/icon-admin-192.png';var _m=document.createElement('meta');_m.name='apple-mobile-web-app-title';_m.content='みちゃﾏﾙ管理';document.head.appendChild(_m);}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
@@ -163,7 +164,7 @@ h2::before{content:"";width:34px;height:26px;background:url(assets/cloud.svg) ce
 
 /* forms */
 label{display:block;font-weight:700;margin:12px 0 4px}
-input[type=text],textarea{width:100%;padding:12px 14px;border-radius:14px;border:2px solid #cfe7f6;font:inherit;background:var(--mist);color:var(--ink)}
+input[type=text],input[type=password],textarea{width:100%;padding:12px 14px;border-radius:14px;border:2px solid #cfe7f6;font:inherit;background:var(--mist);color:var(--ink)}
 textarea{min-height:110px;resize:vertical}
 
 /* rules */
@@ -1141,6 +1142,7 @@ details p+.ban{margin-top:-4px}
   window.addEventListener('hashchange',route);
   route();
   loadPub();
+  if(/[?&]admin\b/.test(location.search)) setTimeout(function(){ op.classList.add('gone'); openAd(); },0);
 
   /* ---------- 更新ページ(デモ) ---------- */
   var ad=$('#admin'), body=$('#adBody'), view='menu';
