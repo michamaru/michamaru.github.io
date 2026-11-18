@@ -476,7 +476,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
         <a href="https://www.mirrativ.com/user/154242098" target="_blank" rel="noopener"><span>Mirrativ</span><small>配信はこっち🩵</small></a>
         <a href="https://x.com/mitya2305" target="_blank" rel="noopener"><span>X</span><small>@mitya2305</small></a>
         <a href="https://marshmallow-qa.com/67tfnamlmr8nw5h" target="_blank" rel="noopener"><span>マシュマロ</span><small>質問・メッセージ待ってるよ</small></a>
-        <a href="#" data-pending><span>TikTok</span><small>リンク準備中だよ</small></a>
+        <a href="https://www.tiktok.com/@mitya23050" target="_blank" rel="noopener"><span>TikTok</span><small>@mitya23050</small></a>
       </div>
     </div>
   </section>
@@ -850,20 +850,19 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     show(t,up?'配信に来てくれてありがとう🩵':'配信に来てくれてありがとう🩵 スタンプ+1個だよ🐻');
   });
   var RANKS=[
-   {n:'大吉',w:14,t:'gold',m:['今日はなんでもうまくいく日だよ✨ ぜったい配信きてね〜🩵','いいことある予感!みんなに自慢していいよ🐻']},
-   {n:'中吉',w:24,m:['ちいさなうれしいことが見つかるよ☁️','いい感じの一日になりそう!にこにこでいこ🩵']},
-   {n:'小吉',w:26,m:['ゆっくりでだいじょうぶ🫧 おいしいもの食べよ','むりしないで、できることからやろっか☁️']},
-   {n:'吉',w:22,m:['いつもどおりが一番だよ🐻 えらい!','なんでもない日こそ大事にしよう🩵']},
-   {n:'末吉',w:10,m:['夜に楽しいことがありそう✨','あとからじわじわ来るタイプの運勢だよ🫧']},
-   {n:'ふわふわ吉',w:3,t:'rare',m:['雲の上にいるみたいな日☁️ ふわっとゆるく過ごそ','しゃぼん玉みたいにきらきらな一日になるよ🫧✨']},
-   {n:'ともだち吉',w:1,t:'rare',m:['今日は仲良くなれる予感!気軽に声かけてね🩵','新しい友達ができるかも🐻 コメント待ってるよ✨']}
+   {n:'大吉',w:14,t:'gold',m:['やったね!みちゃから幸運のお届け♡ 今日は何をしてもうまくいっちゃうかも!自信満々でいこっ!']},
+   {n:'中吉',w:24,m:['そこにある小さな幸せを見逃さないで!今日はいいことある予感♪']},
+   {n:'小吉',w:28,m:['焦らなくて大丈夫!君のペースで進めば花丸だよ💮']},
+   {n:'吉',w:24,m:['いつもの毎日がいちばんの宝物。今日も笑顔で過ごそうね!']},
+   {n:'みちゃ吉🐻',w:8,m:['ある意味大当たり!今日はみちゃのことをいっぱい考えて過ごすこと!みちゃしかみちゃだめ🩵']},
+   {n:'レアみちゃ',w:2,t:'rare',m:['えっ!?みちゃに選ばれちゃったの!?今日は君が主役♡ この幸運、絶対逃がさないでね!']}
   ];
   var FOODS=['オムライス','いちごのパフェ','からあげ','プリン','ホットケーキ','ラーメン','たこ焼き','チョコ','ソフトクリーム','おにぎり','パンケーキ','ミルクティー'];
   var COLORS=[['みずいろ','#9ad4f2'],['ソーダブルー','#6fb8f0'],['しろ','#f3f8ff'],['ラベンダー','#c9b8f0'],['ミント','#a8e6d4'],['さくらいろ','#ffc9dc'],['レモン','#fff2a8']];
   var OMI='mcm_omi', omiBusy=false, btnOmi=$('#omiBtn'), boxOmi=$('#omiResult');
   function pad(){ var d=new Date(); return d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate(); }
   function wpick(){ var t=0,i; RANKS.forEach(function(r){t+=r.w;}); var x=Math.random()*t; for(i=0;i<RANKS.length;i++){ x-=RANKS[i].w; if(x<0) return i; } return 0; }
-  function getO(){ try{ var o=JSON.parse(store(OMI)||'null'); return o&&o.day===today()?o:null; }catch(e){ return null; } }
+  function getO(){ try{ var o=JSON.parse(store(OMI)||'null'); return o&&o.day===today()&&RANKS[o.r]&&RANKS[o.r].m[o.m]?o:null; }catch(e){ return null; } }
   function prevO(){ try{ return JSON.parse(store(OMI)||'null')||{}; }catch(e){ return {}; } }
   function showResult(o,anim){
     var r=RANKS[o.r], c=COLORS[o.c], cl=anim?' reveal':'';
