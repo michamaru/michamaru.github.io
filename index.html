@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118181913">
+<meta name="meta-build" content="20261118182219">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -325,6 +325,12 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
 .lock img{width:64px;height:64px;animation:float 3.4s ease-in-out infinite}
 .lock p{margin:6px 0;line-height:1.7}
 .lock .btn{display:inline-block;margin-top:8px;text-decoration:none}
+.sim{margin-bottom:12px;padding:12px 14px}
+.sim summary{cursor:pointer;font-weight:700;font-size:13px;color:var(--blue)}
+.sim .sn{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
+.sim .sn button{font:inherit;font-size:13px;font-weight:700;border:1px solid #cfe6fb;background:#fff;color:#5b8be0;border-radius:999px;min-width:38px;padding:6px 10px;cursor:pointer}
+.sim .sn button.on{background:#5b8be0;color:#fff;border-color:#5b8be0}
+.sim p{margin:6px 0 0;font-size:12px;line-height:1.7;color:#6f8db8}
 .perks{display:grid;gap:10px;margin-top:14px}
 .perk{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:#f1f6fb;border:1px dashed #cfe0f1;color:#8aa6c4}
 .perk.on{background:linear-gradient(135deg,#fff,#eef7ff);border:1px solid #cfe6fb;color:var(--ink)}
@@ -596,6 +602,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
 
   <section id="pg-secret" class="page">
     <h2>ひみつの部屋</h2>
+    <details class="sim card" id="simBox"><summary>🔮 スタンプカードをそろえたら?(お試し)</summary><div id="simIn"></div></details>
     <div class="card" id="secretBody"></div>
   </section>
 
@@ -841,6 +848,20 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     h+='</div>';
     b.innerHTML=h;
   }
+
+  var realCards=null;
+  function simUI(){
+    var h='<p>何枚そろえたときの見え方かを、ここで試せるよ。本物のスタンプは変わらないよ🩵</p><div class="sn">';
+    for(var i=0;i<=10;i++){ var on=(realCards!==null?cards:-1)===i; h+='<button type="button" data-n="'+i+'" class="'+(on?'on':'')+'">'+(i===0?'0枚':i+'枚')+'</button>'; }
+    h+='</div>'+(realCards!==null?'<p><b>お試し中:'+cards+'枚そろえた場合の表示だよ</b></p><button type="button" class="btn small ghost" id="simOff">もとに戻す</button>':'');
+    $('#simIn').innerHTML=h;
+    $('#simIn').querySelectorAll('[data-n]').forEach(function(b){ b.onclick=function(){ simSet(+b.dataset.n); }; });
+    var off=$('#simOff'); if(off) off.onclick=simReset;
+  }
+  function simSet(n){ if(realCards===null) realCards=cards; cards=n; renderTitle(); renderSecret(); drawStamps(false); simUI(); }
+  function simReset(){ if(realCards===null) return; cards=realCards; realCards=null; renderTitle(); renderSecret(); drawStamps(false); simUI(); }
+  window.addEventListener('hashchange',function(){ if(location.hash!=='#secret') simReset(); });
+  simUI();
   var nickIn=$('#nick'); nickIn.value=nick;
   nickIn.addEventListener('input',function(){ nick=nickIn.value.trim(); store('mcm_nick',nick); renderTitle(); });
   function rain(n){
@@ -863,6 +884,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   }
   $('#lvClose').addEventListener('click',function(){ $('#lvup').classList.remove('open'); });
   function addStamp(){
+    simReset();
     count++;
     var up=false;
     if(count>=CARD){ count=0; cards++; up=true; store('mcm_cards',String(cards)); }
