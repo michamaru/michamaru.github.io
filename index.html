@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118184320">
+<meta name="meta-build" content="20261118185326">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -519,7 +519,7 @@ details p+.ban{margin-top:-4px}
   </section>
 
   <section id="pg-news" class="page">
-    <h2>お知らせ <span class="sample">サンプル</span></h2>
+    <h2>お知らせ</h2>
     <div class="card">
       <ul class="list" id="newsList"></ul>
       <p class="note"><span class="ph">公開後は、</span><span class="ph">専用の更新ページから</span><span class="ph">みちゃ自身で追加・編集できるよ✨</span></p>
@@ -527,7 +527,7 @@ details p+.ban{margin-top:-4px}
   </section>
 
   <section id="pg-schedule" class="page">
-    <h2>今週の配信予定 <span class="sample">サンプル</span></h2>
+    <h2>今週の配信予定</h2>
     <div class="card">
       <div class="week" id="week"></div>
     </div>
@@ -713,14 +713,14 @@ details p+.ban{margin-top:-4px}
 
   /* ---------- data ---------- */
   var DEF={
-    v:2, code:'みちゃ',
-    news:[['11/12','ホームページが できたよ☁️ ゆっくり 見ていってね🩵'],['11/10','今週の配信予定を のせたよ✨'],['11/08','おみくじと スタンプカードを はじめたよ🐻']],
-    week:[['月','',''],['火','21:00','夜の歌枠'],['水','22:00','おしゃべり'],['木','',''],['金','21:00','夜の歌枠'],['土','20:00','リクエスト歌枠'],['日','21:30','おしゃべり']],
+    v:2, rev:3, code:'みちゃ',
+    news:[['11月','ホームページ開設🩵'],['10/29','スターズ復帰'],['10/23','初日リボン争奪戦 Bグル1位'],['10/12','配信復帰'],['5/16','スターズSタッチ'],['5/13','新人王2位'],['4/20','スターズAタッチ'],['4/19','デビュラン1ヶ月編 Aグル1位'],['4/6','ミラスタSタッチ'],['3/31','スターズBタッチ'],['3/22','デビュラン1週間編 Bグル1位'],['3/14','初配信 & デビュー🎉']],
+    week:[['18(水)','','雑談・あるぴ・還元企画'],['19(木)','','雑談・あるぴ・還元企画'],['20(金)','','雑談・あるぴ・還元企画'],['21(土)','','雑談・あるぴ・還元企画'],['22(日)','','雑談']],
     songs:[['サンプル曲 A','アーティスト1'],['サンプル曲 B','アーティスト2'],['サンプル曲 C','アーティスト3'],['サンプル曲 D','アーティスト1'],['サンプル曲 E','アーティスト4'],['サンプル曲 F','アーティスト2']]
   };
   var data;
   try{ data=JSON.parse(store('mcm_data')||'null'); }catch(e){ data=null; }
-  if(!data||data.v!==2||!data.news||!data.week||!data.songs) data=JSON.parse(JSON.stringify(DEF));
+  if(!data||data.v!==2||data.rev!==DEF.rev||!data.news||!data.week||!data.songs) data=JSON.parse(JSON.stringify(DEF));
   function save(){ store('mcm_data',JSON.stringify(data)); }
   var inbox; try{ inbox=JSON.parse(store('mcm_inbox')||'[]'); }catch(e){ inbox=[]; }
   function saveInbox(){ store('mcm_inbox',JSON.stringify(inbox)); }
@@ -768,7 +768,7 @@ details p+.ban{margin-top:-4px}
   function renderWeek(){
     $('#week').innerHTML=data.week.map(function(d){
       var on=d[1]||d[2];
-      return '<div class="day'+(on?'':' off')+'"><b>'+esc(d[0])+'</b><div>'+(on?('<span class="t">'+esc(d[1])+'</span> '+esc(d[2])):'お休み')+'</div></div>';
+      return '<div class="day'+(on?'':' off')+'"><b>'+esc(d[0])+'</b><div>'+(on?((d[1]?'<span class="t">'+esc(d[1])+'</span> ':'')+phr(d[2])):'お休み')+'</div></div>';
     }).join('');
   }
   var list=$('#songList'), q=$('#q'), toast=$('#reqToast');
@@ -1075,7 +1075,7 @@ details p+.ban{margin-top:-4px}
     h+='<div style="text-align:right;margin-top:14px"><button class="btn" id="wSave" type="button">保存する</button></div></div>';
     body.innerHTML=h+'<div class="toast" id="wToast" role="status"></div>'+demoNote();
     $('#wSave').addEventListener('click',function(){
-      data.week=data.week.map(function(d,i){ var t=$('#wt'+i).value.trim(), n=$('#wn'+i).value.trim(); return [d[0],t,t?n:'']; });
+      data.week=data.week.map(function(d,i){ var t=$('#wt'+i).value.trim(), n=$('#wn'+i).value.trim(); return [d[0],t,n]; });
       save(); show($('#wToast'),'保存しました。サイトにもどると反映されています。');
     });
   }
