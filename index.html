@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118191425">
+<meta name="meta-build" content="20261118191754">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -851,6 +851,7 @@ details p+.ban{margin-top:-4px}
   function perkBody(pc,i){
     var h='<div class="pc">';
     if(pc.img) h+='<img src="'+pc.img+'" alt="">'+'<a class="btn small ghost" href="'+pc.img+'" download="michamaru-tokuten-'+(i+1)+'.jpg">画像を保存する</a>';
+    if(pc.au) h+='<audio controls preload="none" src="'+pc.au+'" style="width:100%;margin:6px 0"></audio>';
     if(pc.t) h+='<p>'+esc(pc.t).replace(/\n/g,'<br>')+'</p>';
     if(okUrl(pc.url)) h+='<a class="btn small" href="'+esc(pc.url)+'" target="_blank" rel="noopener">ひらく🩵</a>';
     return h+'</div>';
@@ -865,7 +866,7 @@ details p+.ban{margin-top:-4px}
     h+='<div class="perks">';
     for(var i=0;i<SEC.length;i++){
       var p=SEC[i], on=i<cards;
-      var pc=(data.perks||{})[i]||{}, has=pc.t||pc.img||pc.url;
+      var pc=(data.perks||{})[i]||{}, has=pc.t||pc.img||pc.url||pc.au;
       var body=on?('<b>'+phr(p[1])+'</b><small>'+phr(p[2])+'</small>'+(has?perkBody(pc,i):'<em>もうすぐ届くよ☁️(準備中)</em>')):'<b>???</b><em class="lk">'+(i+1)+'枚そろえると開くよ</em>';
       h+='<div class="perk'+(on?' on':'')+(on&&has?' open':'')+'"><span class="pn">'+(i+1)+'枚</span><span class="pi">'+(on?p[0]:'🔒')+'</span><div>'+body+'</div></div>';
     }
@@ -1107,17 +1108,18 @@ details p+.ban{margin-top:-4px}
   }
   function vPerk(){
     data.perks=data.perks||{};
-    var opts=SEC.map(function(p,i){ var d=data.perks[i]||{}; return '<option value="'+i+'">'+(i+1)+'枚目:'+esc(p[1])+((d.t||d.img||d.url)?'(登録ずみ)':'')+'</option>'; }).join('');
-    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">スタンプカードをそろえた人が見られる、特典の中身を登録します。文章・画像・リンクのどれか1つでも大丈夫。できたものから順番に入れてね。</p>'
+    var opts=SEC.map(function(p,i){ var d=data.perks[i]||{}; return '<option value="'+i+'">'+(i+1)+'枚目:'+esc(p[1])+((d.t||d.img||d.url||d.au)?'(登録ずみ)':'')+'</option>'; }).join('');
+    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">スタンプカードをそろえた人が見られる、特典の中身を登録します。文章・画像・音声・リンクのどれか1つでも大丈夫。できたものから順番に入れてね。</p>'
       +'<label for="pm" style="margin-top:8px">どの特典?</label><select id="pm">'+opts+'</select>'
       +'<label for="pt">文章(お手紙・メッセージなど)</label><textarea id="pt" style="min-height:110px"></textarea>'
       +'<label for="pf">画像(キーボード・ヘッダー・ホーム画など)</label><input id="pf" type="file" accept="image/*"><div id="pimg" class="note"></div>'
-      +'<label for="pu">リンク(音声・動画・ファイルなどのURL)</label><input id="pu" type="text" placeholder="https://..." autocomplete="off">'
+      +'<label for="pa">音声(ボイスなど)</label><input id="pa" type="file" accept="audio/*"><div id="paud" class="note"></div>'
+      +'<label for="pu">リンク(動画・ファイルなどのURL。なくてもOK)</label><input id="pu" type="text" placeholder="https://..." autocomplete="off">'
       +'<div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px"><button class="btn small ghost" id="pClr" type="button">この特典を空にする</button><button class="btn" id="pSave" type="button">登録する</button></div>'
       +'<div class="toast" id="pToast" role="status"></div></div>'
-      +'<p class="note" style="margin:12px 4px 0">音声はファイルを直接入れず、リンク(Googleドライブ、YouTube限定公開など)で登録してね。</p>'+demoNote();
-    var cur=0, img='';
-    function load(){ cur=+$('#pm').value; var d=data.perks[cur]||{}; $('#pt').value=d.t||''; $('#pu').value=d.u||d.url||''; img=d.img||''; $('#pf').value=''; $('#pimg').innerHTML=img?'<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">画像は登録ずみ(選び直すと入れ替わるよ)':''; }
+      +'<p class="note" style="margin:12px 4px 0">音声は短いもの(数秒〜十数秒)を選んでね。デモ版は約1.5MBまで。</p>'+demoNote();
+    var cur=0, img='', au='';
+    function load(){ cur=+$('#pm').value; var d=data.perks[cur]||{}; $('#pt').value=d.t||''; $('#pu').value=d.u||d.url||''; img=d.img||''; au=d.au||''; $('#pf').value=''; $('#pa').value=''; $('#paud').innerHTML=au?'<audio controls src="'+au+'" style="width:100%"></audio>音声は登録ずみ(選び直すと入れ替わるよ)':''; $('#pimg').innerHTML=img?'<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">画像は登録ずみ(選び直すと入れ替わるよ)':''; }
     load(); $('#pm').addEventListener('change',load);
     $('#pf').addEventListener('change',function(){
       var f=this.files&&this.files[0]; if(!f) return;
@@ -1127,9 +1129,14 @@ details p+.ban{margin-top:-4px}
         img=c.toDataURL('image/jpeg',.85); $('#pimg').innerHTML='<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">選んだよ。「登録する」で保存されるよ'; };
         im.onerror=function(){ show($('#pToast'),'この画像は読み込めなかったよ'); }; im.src=fr.result; }; fr.readAsDataURL(f);
     });
+    $('#pa').addEventListener('change',function(){
+      var f=this.files&&this.files[0]; if(!f) return;
+      if(f.size>1500000){ this.value=''; show($('#pToast'),'音声が大きいよ(約1.5MBまで)。短くしてね'); return; }
+      var fr=new FileReader(); fr.onload=function(){ au=fr.result; $('#paud').innerHTML='<audio controls src="'+au+'" style="width:100%"></audio>選んだよ。「登録する」で保存されるよ'; }; fr.readAsDataURL(f);
+    });
     $('#pSave').addEventListener('click',function(){
       var u=$('#pu').value.trim(); if(u&&!okUrl(u)){ show($('#pToast'),'リンクは https:// から始まるURLを入れてね'); return; }
-      data.perks[cur]={t:$('#pt').value.trim(),img:img,url:u}; save(); renderSecret(); show($('#pToast'),'登録しました🩵 そろえた人から見られます。'); vPerkKeep();
+      data.perks[cur]={t:$('#pt').value.trim(),img:img,au:au,url:u}; save(); renderSecret(); show($('#pToast'),'登録しました🩵 そろえた人から見られます。'); vPerkKeep();
     });
     $('#pClr').addEventListener('click',function(){ delete data.perks[cur]; save(); renderSecret(); vPerkKeep(); show($('#pToast'),'空にしました'); });
     function vPerkKeep(){ var k=cur; var t=$('#pToast').textContent; vPerk(); $('#pm').value=k; $('#pm').dispatchEvent(new Event('change')); show($('#pToast'),t); }
