@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118190813">
+<meta name="meta-build" content="20261118190959">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -343,6 +343,8 @@ details p+.ban{margin-top:-4px}
 .monprize a{display:inline-block;margin-top:8px}
 #visitToast{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99998;background:#fff;border:2px solid #cfe6f8;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:700;color:#33507f;box-shadow:0 8px 22px rgba(91,139,224,.25);opacity:0;pointer-events:none;transition:opacity .4s;max-width:92vw;text-align:center}
 #visitToast.on{opacity:1}
+#rm{width:100%;font:inherit;padding:10px;border:2px solid #d4ebf8;border-radius:12px;background:#fff;color:var(--ink)}
+#rf{width:100%;font:inherit;font-size:13px}
 .perks{display:grid;gap:10px;margin-top:14px}
 .perk{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:#f1f6fb;border:1px dashed #cfe0f1;color:#8aa6c4}
 .perk.on{background:linear-gradient(135deg,#fff,#eef7ff);border:1px solid #cfe6fb;color:var(--ink)}
@@ -976,8 +978,8 @@ details p+.ban{margin-top:-4px}
     $('#monSub').textContent=(n.getMonth()+1)+'月は '+c+' / '+last+' 日きてくれたよ🩵 毎日きて、1か月ぜんぶそろえると…!';
     var p=$('#monPrize');
     if(c>=last){ p.className='monprize full';
-      var ring=RINGS[ym(n)];
-      p.innerHTML='🎉 皆勤賞!今月の限定アイコンリングがもらえるよ🎁<br>'+(ring?'<a class="btn small" href="'+ring+'" download>アイコンリングを受け取る</a>':'<span class="ph">リングは</span><span class="ph">もうすぐ届くよ☁️</span><span class="ph">(準備中)</span>'); }
+      var ring=(data.rings||{})[ym(n)]||RINGS[ym(n)];
+      p.innerHTML='🎉 皆勤賞!今月の限定アイコンリングがもらえるよ🎁<br>'+(ring?'<a class="btn small" href="'+ring+'" download="michamaru-icon-ring.png">アイコンリングを受け取る</a>':'<span class="ph">リングは</span><span class="ph">もうすぐ届くよ☁️</span><span class="ph">(準備中)</span>'); }
     else { p.className='monprize'; p.textContent='1か月まいにち来てくれた人には、毎月かわる限定アイコンリングをプレゼント🎁(月がかわると、またゼロからスタート!)'; }
   }
   function visitToast(msg){ var t=$('#visitToast'); t.textContent=msg; t.classList.add('on'); setTimeout(function(){ t.classList.remove('on'); },3200); }
@@ -1036,10 +1038,10 @@ details p+.ban{margin-top:-4px}
 
   function go(v){
     view=v; ad.scrollTop=0;
-    var title={menu:'',news:'お知らせ',week:'今週の配信予定',songs:'歌える曲',code:'配信スタンプコード',inbox:'届いたメッセージ'}[v];
+    var title={menu:'',news:'お知らせ',week:'今週の配信予定',songs:'歌える曲',code:'配信スタンプコード',ring:'アイコンリング',inbox:'届いたメッセージ'}[v];
     $('#adTitle').innerHTML= v==='menu' ? 'HP更新ページ<small>ここから内容を更新できます</small>' : esc(title);
     $('#adBack').textContent= v==='menu' ? '← サイトへ' : '← もどる';
-    var f={menu:vMenu,news:vNews,week:vWeek,songs:vSongs,code:vCode,inbox:vInbox}[v]; f();
+    var f={menu:vMenu,news:vNews,week:vWeek,songs:vSongs,code:vCode,ring:vRing,inbox:vInbox}[v]; f();
   }
   function demoNote(){ return '<p class="demo">デモ版です。入力した内容はこの端末の中だけに保存されます。本番では、更新するとすべての人のページに反映されます。</p>'; }
 
@@ -1049,9 +1051,43 @@ details p+.ban{margin-top:-4px}
       +'<button class="tile" data-go="week"><b>今週の配信予定</b><span>曜日ごとに入力</span></button>'
       +'<button class="tile" data-go="songs"><b>歌える曲</b><span>追加・まとめて登録</span></button>'
       +'<button class="tile" data-go="code"><b>配信コード</b><span>スタンプ用の合言葉</span></button>'
+      +'<button class="tile" data-go="ring"><b>アイコンリング</b><span>皆勤賞の毎月のプレゼント</span></button>'
       +'<button class="tile" data-go="inbox"><b>メッセージ</b><span>匿名メッセージを読む</span>'+(inbox.length?'<em>'+inbox.length+'</em>':'')+'</button>'
       +'</div>'+demoNote();
     body.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ go(b.dataset.go); }); });
+  }
+  function vRing(){
+    data.rings=data.rings||{};
+    var now=new Date(), opts='';
+    for(var k=0;k<4;k++){ var d=new Date(now.getFullYear(),now.getMonth()+k,1), key=ym(d); opts+='<option value="'+key+'">'+d.getFullYear()+'年'+(d.getMonth()+1)+'月分'+(data.rings[key]?'(登録ずみ)':'')+'</option>'; }
+    var h='<div class="card"><p class="note" style="margin-top:0">1か月まいにち来てくれた人(皆勤賞)がもらえる、その月の限定アイコンリングの画像です。画像を選ぶだけで登録できます。</p>'
+      +'<label for="rm" style="margin-top:8px">どの月のリング?</label><select id="rm">'+opts+'</select>'
+      +'<label for="rf">リングの画像(PNG・JPG)</label><input id="rf" type="file" accept="image/*">'
+      +'<div style="text-align:right;margin-top:10px"><button class="btn" id="rSave" type="button">登録する</button></div>'
+      +'<div class="toast" id="rToast" role="status"></div></div><div class="card" style="margin-top:16px" id="rList"></div>';
+    body.innerHTML=h+demoNote();
+    function list(){
+      var ks=Object.keys(data.rings).sort();
+      $('#rList').innerHTML=ks.length?ks.map(function(k){ return '<div class="arow"><b>'+esc(k.replace('-','年')+'月分')+'</b><div class="grow"><img src="'+data.rings[k]+'" alt="" style="width:56px;height:56px;object-fit:contain;border-radius:12px;background:#eef7ff"></div><button class="btn small ghost" data-rd="'+esc(k)+'" type="button">削除</button></div>'; }).join(''):'<p class="note" style="margin:0">まだ登録されていないよ。</p>';
+      $('#rList').querySelectorAll('[data-rd]').forEach(function(b){ b.addEventListener('click',function(){ delete data.rings[b.dataset.rd]; save(); drawMonth(); vRing(); }); });
+    }
+    list();
+    $('#rSave').addEventListener('click',function(){
+      var f=$('#rf').files&&$('#rf').files[0]; if(!f){ show($('#rToast'),'画像を選んでね🫧'); return; }
+      var fr=new FileReader();
+      fr.onload=function(){
+        var im=new Image();
+        im.onload=function(){
+          var m=Math.min(1,600/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.round(im.width*m); c.height=Math.round(im.height*m);
+          c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+          data.rings[$('#rm').value]=c.toDataURL('image/png'); save(); drawMonth();
+          show($('#rToast'),'登録しました🩵 その月の皆勤賞の人が受け取れます。'); list();
+        };
+        im.onerror=function(){ show($('#rToast'),'この画像は読み込めなかったよ'); };
+        im.src=fr.result;
+      };
+      fr.readAsDataURL(f);
+    });
   }
   function vCode(){
     body.innerHTML='<div class="card"><p class="note" style="margin-top:0">配信中に発表するコードです。リスナーさんが入力すると、1日1回スタンプ+1個になります。</p><label for="cd" style="margin-top:8px">今日の配信コード</label><input id="cd" type="text" value="'+esc(data.code)+'"><div style="text-align:right;margin-top:12px"><button class="btn" id="cSave" type="button">保存する</button></div></div><div class="toast" id="cToast" role="status"></div>'+demoNote();
