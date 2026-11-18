@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
+<meta name="meta-build" content="20261118175000">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -278,6 +279,13 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
   #opening{display:none}
   .bubbles{display:none}
 }
+#updBar{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:99999;display:none;align-items:center;gap:10px;background:#fff;border:2px solid #cfe6f8;border-radius:20px;padding:10px 12px 10px 16px;box-shadow:0 10px 28px rgba(91,139,224,.28);font-size:13px;color:#33507f;max-width:420px;margin:0 auto}
+#updBar.on{display:flex;animation:updIn .4s ease both}
+#updBar b{flex:1;line-height:1.5}
+#updBar button{font:inherit;font-weight:700;font-size:13px;border:0;border-radius:999px;padding:8px 14px;cursor:pointer;background:#5b8be0;color:#fff}
+#updBar button.x{background:none;color:#8aa6cf;padding:6px}
+@keyframes updIn{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){#updBar.on{animation:none}}
 </style>
 <style id="v2">
 #deco{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none}
@@ -1024,6 +1032,23 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     body.innerHTML=h+'</div>'+demoNote();
     body.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ inbox.splice(+b.dataset.del,1); saveInbox(); vInbox(); }); });
   }
+})();
+</script>
+<div id="updBar" role="status"><b>🫧 新しいバージョンがあるよ!<br>更新するともっと楽しくなるよ✨</b><button type="button" id="updGo">更新する</button><button type="button" class="x" id="updX" aria-label="閉じる">✕</button></div>
+
+<script>
+(function(){
+  var m=document.querySelector('meta[name="meta-build"]'); if(!m) return;
+  var cur=m.content, shown=false;
+  function bar(){ var b=document.getElementById('updBar'); if(!b||shown) return; shown=true; b.classList.add('on');
+    document.getElementById('updGo').onclick=function(){ location.reload(); };
+    document.getElementById('updX').onclick=function(){ b.classList.remove('on'); }; }
+  function check(){
+    try{ fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(j){ if(j&&j.build&&String(j.build)!==cur) bar(); }).catch(function(){}); }catch(e){}
+  }
+  setTimeout(check,4000);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) check(); });
+  setInterval(check,300000);
 })();
 </script>
 </body>
