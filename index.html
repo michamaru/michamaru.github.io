@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118175000">
+<meta name="meta-build" content="20261118181913">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -325,6 +325,17 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
 .lock img{width:64px;height:64px;animation:float 3.4s ease-in-out infinite}
 .lock p{margin:6px 0;line-height:1.7}
 .lock .btn{display:inline-block;margin-top:8px;text-decoration:none}
+.perks{display:grid;gap:10px;margin-top:14px}
+.perk{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:#f1f6fb;border:1px dashed #cfe0f1;color:#8aa6c4}
+.perk.on{background:linear-gradient(135deg,#fff,#eef7ff);border:1px solid #cfe6fb;color:var(--ink)}
+.perk .pn{flex:none;font-size:11px;font-weight:700;color:#fff;background:#9ec3ea;border-radius:999px;padding:3px 8px}
+.perk.on .pn{background:#5b8be0}
+.perk .pi{flex:none;font-size:24px;width:30px;text-align:center}
+.perk b{display:block;font-size:14px;color:var(--blue)}
+.perk:not(.on) b{color:#8aa6c4}
+.perk small{display:block;font-size:12px;line-height:1.6;margin-top:2px}
+.perk em{display:block;font-style:normal;font-size:11px;color:#7aa3d6;margin-top:4px}
+.perk em.lk{color:#a3b8cf}
 .secmsg{margin-top:12px;padding:14px;border-radius:16px;background:linear-gradient(135deg,#fff,#eef7ff);border:1px solid #cfe6fb}
 .secmsg small{color:#7aa3d6;letter-spacing:.08em;font-size:11px}
 .secmsg p{margin:6px 0 0;line-height:1.8;font-size:14px}
@@ -788,7 +799,18 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   function rk(n){ return n<1 ? BASE : RANK[Math.min(n,RANK.length)-1]; }
   function titleOf(n){ return rk(n)[1]; }
   function today(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
-  var SEC=['ここまで来てくれてありがとう🩵 みちゃ、めっちゃうれしい!これからも一緒に楽しもうね☁️','2枚目クリアおめでとう✨ いつも配信に来てくれてほんとにありがとう🐻','3枚目!もうみちゃの大事な仲間だよ🩵 ここだけの話、みちゃのひみつがここに入るよ(仮)','4枚目もすごい!みちゃっこ隊長だね🫧 いつも元気もらってるよ✨','5枚目まで来てくれてありがとう🩵 みちゃのいちばんの味方だよ!'];
+  var SEC=[
+   ['📒','みちゃのプロフィール帳','より詳しく書いてあるよ'],
+   ['💌','手書きの手紙','みちゃの手書きのお手紙だよ'],
+   ['📷','未公開アルバム集','ここだけで見られる写真集'],
+   ['🎙️','みちゃのボイスルーム','おはよう、おやすみ、お疲れ様、今日も頑張ろう など'],
+   ['⌨️','限定みちゃのキーボード','受け取り可能'],
+   ['🖼️','限定みちゃのXヘッダー','受け取り可能'],
+   ['📱','限定みちゃのホーム画','受け取り可能'],
+   ['🌙','みちゃの夢ノート','みちゃの夢が書いてあるよ'],
+   ['💝','お手紙(長文)','たっぷり書いたお手紙だよ'],
+   ['🏅','名前入り記念証と ペアアイコン作成券','みちゃとおそろいのアイコンを作れるよ']
+  ];
   function drawStamps(newOne){
     var h='';
     for(var i=0;i<CARD;i++){
@@ -810,10 +832,13 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
       return;
     }
     var h='<div class="lock open"><img src="assets/heart.svg" alt=""><p><b>ひみつの部屋へようこそ🩵</b></p><p>スタンプカードを'+cards+'枚そろえた、みちゃっこだけの場所だよ✨</p></div>';
+    h+='<div class="perks">';
     for(var i=0;i<SEC.length;i++){
-      h+= i<cards ? '<div class="secmsg"><small>みちゃからの特別メッセージ '+(i+1)+'</small><p>'+esc(SEC[i])+'</p></div>'
-                  : '<div class="secmsg lockd"><small>🔒 '+(i+1)+'枚目で開くよ</small></div>';
+      var p=SEC[i], on=i<cards;
+      h+='<div class="perk'+(on?' on':'')+'"><span class="pn">'+(i+1)+'枚</span><span class="pi">'+(on?p[0]:'🔒')+'</span><div><b>'+phr(p[1])+'</b><small>'+phr(p[2])+'</small>'
+        +(on?'<em>もうすぐ届くよ☁️(準備中)</em>':'<em class="lk">'+(i+1)+'枚そろえると開くよ</em>')+'</div></div>';
     }
+    h+='</div>';
     b.innerHTML=h;
   }
   var nickIn=$('#nick'); nickIn.value=nick;
@@ -832,7 +857,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   function levelUp(){
     $('#lvSub').textContent='スタンプカード '+cards+'枚目クリア!';
     var r=rk(cards); $('#lvName').innerHTML='ランクが<b>'+r[0]+' 「'+esc(r[1])+'」</b>になったよ🩵<br><span class="lvm">'+esc(r[2])+'</span>';
-    $('#lvUnlock').textContent= cards===1 ? 'ひみつの部屋が開いたよ🔓✨ のぞいてみてね!' : cards<=SEC.length ? 'ひみつの部屋に、新しいメッセージが届いたよ💌' : '';
+    $('#lvUnlock').textContent= cards===1 ? 'ひみつの部屋が開いたよ🔓✨ のぞいてみてね!' : cards<=SEC.length ? 'ひみつの部屋に、新しい特典が開いたよ🎁 '+SEC[cards-1][1] : '';
     $('#lvup').classList.add('open'); rain(36);
     burst(innerWidth/2,innerHeight*.4,26,150);
   }
