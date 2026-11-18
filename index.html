@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118224357">
+<meta name="meta-build" content="20261118224812">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -652,7 +652,6 @@ details p+.ban{margin-top:-4px}
   <img class="ted" src="assets/teddy.svg" alt="">
   <div class="btns">
     <button class="btn small ghost" id="replay" type="button">オープニングをもう一度</button>
-    <button class="btn small" id="openAdmin" type="button">HP更新ページ</button>
   </div>
   <img class="cline" src="assets/cloudline.svg" alt="">
   <div>© みちゃﾏﾙ</div>
@@ -672,15 +671,6 @@ details p+.ban{margin-top:-4px}
 </div>
 
 <!-- 更新ページ(デモ) -->
-<div id="admin" role="dialog" aria-label="HP更新ページ">
-  <div class="bar">
-    <button class="btn small ghost" id="adBack" type="button">← もどる</button>
-    <h3 id="adTitle">HP更新ページ<small>ここから内容を更新できます</small></h3>
-    <span id="adStat" role="status"></span>
-  </div>
-  <div class="wrap" style="padding-top:16px;padding-bottom:60px" id="adBody"></div>
-</div>
-
 <script>
 (function(){
   var $=function(s){return document.querySelector(s)};
@@ -755,35 +745,9 @@ details p+.ban{margin-top:-4px}
     }).catch(function(){ hv[k]=0; });
   }
   function stat(t,err){ var e=document.getElementById('adStat'); if(e){ e.textContent=t||''; e.className=err?'err':''; } }
-  var sq=Promise.resolve();
-  function save(){
-    if(mode!=='server') return;
-    var cur={news:data.news,week:data.week,songs:data.songs,code:data.code};
-    Object.keys(data.perks||{}).forEach(function(i){ cur['perk:'+i]=data.perks[i]; });
-    Object.keys(data.rings||{}).forEach(function(k){ cur['ring:'+k]=data.rings[k]; });
-    var any=false;
-    Object.keys(cur).forEach(function(k){
-      var j=JSON.stringify(cur[k]); if(synced[k]===j) return; any=true;
-      sq=sq.then(function(){ return rpc('michamaru_save',{p_pass:getPass(),p_key:k,p_value:cur[k]}); })
-        .then(function(){ synced[k]=j; if((k.indexOf('perk:')===0||k.indexOf('ring:')===0)&&!hasHeavy(k)) heavy.push(k); });
-    });
-    if(!any) return;
-    stat('保存中…');
-    sq=sq.then(function(){ stat('保存しました🩵'); setTimeout(function(){ stat(''); },2500); },function(e){
-      sq=Promise.resolve();
-      if(e&&e.message==='auth'){ mode='locked'; setPass(''); stat('合言葉が違うようです',true); }
-      else stat('保存できませんでした。通信をご確認のうえ、もう一度お試しください',true);
-    });
-  }
-  function serverDel(k){
-    delete synced[k]; heavy=heavy.filter(function(x){ return x!==k; });
-    if(mode!=='server') return;
-    sq=sq.then(function(){ return rpc('michamaru_del',{p_pass:getPass(),p_key:k}); }).then(function(){ stat('保存しました🩵'); setTimeout(function(){ stat(''); },2500); },function(){ sq=Promise.resolve(); stat('削除できませんでした',true); });
-  }
   function loadPub(){
     rpc('michamaru_public').then(function(p){
       if(!p) return; store('mcm_pub',JSON.stringify(p));
-      if(mode==='server') return;
       applyPub(p); renderAll(); drawMonth(); if(location.hash==='#secret') renderSecret();
     }).catch(function(){});
   }
@@ -1141,186 +1105,7 @@ details p+.ban{margin-top:-4px}
   window.addEventListener('hashchange',route);
   route();
   loadPub();
-  if(/[?&]admin\b/.test(location.search)) setTimeout(function(){ op.classList.add('gone'); openAd(); },0);
 
-  /* ---------- 更新ページ(デモ) ---------- */
-  var ad=$('#admin'), body=$('#adBody'), view='menu';
-  function openAd(){
-    ad.classList.add('open'); document.documentElement.style.overflow='hidden'; ad.scrollTop=0;
-    if(mode==='server'||mode==='demo'){ go('menu'); return; }
-    var p=getPass(); if(p) verify(p,true); else vGate();
-  }
-  function verify(p,silent,tt){
-    rpc('michamaru_chk',{p_pass:p}).then(function(ok){
-      if(ok){ setPass(p); mode='server'; go('menu'); }
-      else { setPass(''); vGate(silent?'':'合言葉が違うみたい。もう一度入れてね🫧'); if(!silent&&tt) show(tt,'合言葉が違うみたい。もう一度入れてね🫧'); }
-    }).catch(function(e){
-      if(e&&(e.status===404||/function|schema cache/i.test(e.message||''))){ mode='demo'; go('menu'); }
-      else { vGate('通信できなかったよ。電波のよいところで、もう一度ためしてね'); }
-    });
-  }
-  function vGate(msg){
-    view='gate'; $('#adTitle').innerHTML='HP更新ページ<small>合言葉を入れてひらきます</small>'; $('#adBack').textContent='← サイトへ';
-    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">更新する人だけが入れるページです。合言葉を入れてね。</p><label for="gp">合言葉</label><input id="gp" type="password" autocomplete="current-password"><div style="text-align:right;margin-top:12px"><button class="btn" id="gGo" type="button">ひらく</button></div><div class="toast" id="gToast" role="status"></div></div>';
-    if(msg) show($('#gToast'),msg);
-    var go2=function(){ var v=$('#gp').value; if(!v) return; verify(v,false,$('#gToast')); };
-    $('#gGo').addEventListener('click',go2); $('#gp').addEventListener('keydown',function(e){ if(e.key==='Enter') go2(); });
-  }
-  function closeAd(){ ad.classList.remove('open'); document.documentElement.style.overflow=''; renderAll(); }
-  $('#openAdmin').addEventListener('click',openAd);
-  $('#adBack').addEventListener('click',function(){ if(view==='menu') closeAd(); else go('menu'); });
-
-  function go(v){
-    view=v; ad.scrollTop=0;
-    var title={menu:'',news:'お知らせ',week:'今週の配信予定',songs:'歌える曲',code:'配信スタンプコード',ring:'アイコンリング',perk:'ひみつの特典',inbox:'届いたメッセージ'}[v];
-    $('#adTitle').innerHTML= v==='menu' ? 'HP更新ページ<small>ここから内容を更新できます</small>' : esc(title);
-    $('#adBack').textContent= v==='menu' ? '← サイトへ' : '← もどる';
-    var f={menu:vMenu,news:vNews,week:vWeek,songs:vSongs,code:vCode,ring:vRing,perk:vPerk,inbox:vInbox}[v]; f();
-  }
-  function demoNote(){ return mode==='demo'?'<p class="demo">保存先をじゅんび中のため、いまは試用です。入力した内容は、このページを閉じると消えます。</p>':''; }
-
-  function vMenu(){
-    body.innerHTML='<div class="tiles">'
-      +'<button class="tile" data-go="news"><b>お知らせ</b><span>追加・削除</span></button>'
-      +'<button class="tile" data-go="week"><b>今週の配信予定</b><span>曜日ごとに入力</span></button>'
-      +'<button class="tile" data-go="songs"><b>歌える曲</b><span>追加・まとめて登録</span></button>'
-      +'<button class="tile" data-go="code"><b>配信コード</b><span>スタンプ用の合言葉</span></button>'
-      +'<button class="tile" data-go="ring"><b>アイコンリング</b><span>皆勤賞の毎月のプレゼント</span></button>'
-      +'<button class="tile" data-go="perk"><b>ひみつの特典</b><span>10枚ぶんの中身を登録</span></button>'
-      +'<button class="tile" data-go="inbox"><b>メッセージ</b><span>匿名メッセージを読む</span>'+(inbox.length?'<em>'+inbox.length+'</em>':'')+'</button>'
-      +'</div>'+demoNote();
-    body.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ go(b.dataset.go); }); });
-  }
-  function vRing(){
-    data.rings=data.rings||{};
-    var now=new Date(), opts='';
-    for(var k=0;k<4;k++){ var d=new Date(now.getFullYear(),now.getMonth()+k,1), key=ym(d); opts+='<option value="'+key+'">'+d.getFullYear()+'年'+(d.getMonth()+1)+'月分'+((data.rings[key]||hasHeavy('ring:'+key))?'(登録ずみ)':'')+'</option>'; }
-    var h='<div class="card"><p class="note" style="margin-top:0">1か月まいにち来てくれた人(皆勤賞)がもらえる、その月の限定アイコンリングの画像です。画像を選ぶだけで登録できます。</p>'
-      +'<label for="rm" style="margin-top:8px">どの月のリング?</label><select id="rm">'+opts+'</select>'
-      +'<label for="rf">リングの画像(PNG・JPG)</label><input id="rf" type="file" accept="image/*">'
-      +'<div style="text-align:right;margin-top:10px"><button class="btn" id="rSave" type="button">登録する</button></div>'
-      +'<div class="toast" id="rToast" role="status"></div></div><div class="card" style="margin-top:16px" id="rList"></div>';
-    body.innerHTML=h+demoNote();
-    function list(){
-      var ks=Object.keys(data.rings); heavy.forEach(function(h){ if(h.indexOf('ring:')===0&&ks.indexOf(h.slice(5))<0) ks.push(h.slice(5)); }); ks.sort();
-      ks.forEach(function(k){ if(!data.rings[k]) loadHeavy('ring:'+k,function(){ if(view==='ring') list(); }); });
-      $('#rList').innerHTML=ks.length?ks.map(function(k){ return '<div class="arow"><b>'+esc(k.replace('-','年')+'月分')+'</b><div class="grow">'+(data.rings[k]?'<img src="'+data.rings[k]+'" alt="" style="width:56px;height:56px;object-fit:contain;border-radius:12px;background:#eef7ff">':'よみこみ中…')+'</div><button class="btn small ghost" data-rd="'+esc(k)+'" type="button">削除</button></div>'; }).join(''):'<p class="note" style="margin:0">まだ登録されていないよ。</p>';
-      $('#rList').querySelectorAll('[data-rd]').forEach(function(b){ b.addEventListener('click',function(){ delete data.rings[b.dataset.rd]; serverDel('ring:'+b.dataset.rd); drawMonth(); vRing(); }); });
-    }
-    list();
-    $('#rSave').addEventListener('click',function(){
-      var f=$('#rf').files&&$('#rf').files[0]; if(!f){ show($('#rToast'),'画像を選んでね🫧'); return; }
-      var fr=new FileReader();
-      fr.onload=function(){
-        var im=new Image();
-        im.onload=function(){
-          var m=Math.min(1,600/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.round(im.width*m); c.height=Math.round(im.height*m);
-          c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-          data.rings[$('#rm').value]=c.toDataURL('image/png'); save(); drawMonth();
-          show($('#rToast'),'登録しました🩵 その月の皆勤賞の人が受け取れます。'); list();
-        };
-        im.onerror=function(){ show($('#rToast'),'この画像は読み込めなかったよ'); };
-        im.src=fr.result;
-      };
-      fr.readAsDataURL(f);
-    });
-  }
-  function vPerk(){
-    data.perks=data.perks||{};
-    var opts=SEC.map(function(p,i){ var d=data.perks[i]||{}; return '<option value="'+i+'">'+(i+1)+'枚目:'+esc(p[1])+((d.t||d.img||d.url||d.au||hasHeavy('perk:'+i))?'(登録ずみ)':'')+'</option>'; }).join('');
-    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">スタンプカードをそろえた人が見られる、特典の中身を登録します。文章・画像・音声・リンクのどれか1つでも大丈夫。できたものから順番に入れてね。</p>'
-      +'<label for="pm" style="margin-top:8px">どの特典?</label><select id="pm">'+opts+'</select>'
-      +'<label for="pt">文章(お手紙・メッセージなど)</label><textarea id="pt" style="min-height:110px"></textarea>'
-      +'<label for="pf">画像(キーボード・ヘッダー・ホーム画など)</label><input id="pf" type="file" accept="image/*"><div id="pimg" class="note"></div>'
-      +'<label for="pa">音声(ボイスなど)</label><input id="pa" type="file" accept="audio/*"><div id="paud" class="note"></div>'
-      +'<label for="pu">リンク(動画・ファイルなどのURL。なくてもOK)</label><input id="pu" type="text" placeholder="https://..." autocomplete="off">'
-      +'<div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px"><button class="btn small ghost" id="pClr" type="button">この特典を空にする</button><button class="btn" id="pSave" type="button">登録する</button></div>'
-      +'<div class="toast" id="pToast" role="status"></div></div>'
-      +'<p class="note" style="margin:12px 4px 0">音声は短いもの(数秒〜十数秒)を選んでね。約3MBまで入ります。</p>'+demoNote();
-    var cur=0, img='', au='';
-    function load(){ cur=+$('#pm').value; var d=data.perks[cur]||{}; if(!data.perks[cur]&&hasHeavy('perk:'+cur)){ var kk=cur; loadHeavy('perk:'+kk,function(){ if(view==='perk'&&cur===kk) load(); }); } $('#pt').value=d.t||''; $('#pu').value=d.u||d.url||''; img=d.img||''; au=d.au||''; $('#pf').value=''; $('#pa').value=''; $('#paud').innerHTML=au?'<audio controls src="'+au+'" style="width:100%"></audio>音声は登録ずみ(選び直すと入れ替わるよ)':''; $('#pimg').innerHTML=img?'<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">画像は登録ずみ(選び直すと入れ替わるよ)':''; }
-    load(); $('#pm').addEventListener('change',load);
-    $('#pf').addEventListener('change',function(){
-      var f=this.files&&this.files[0]; if(!f) return;
-      var fr=new FileReader(); fr.onload=function(){ var im=new Image(); im.onload=function(){
-        var m=Math.min(1,900/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.round(im.width*m); c.height=Math.round(im.height*m);
-        var x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(im,0,0,c.width,c.height);
-        img=c.toDataURL('image/jpeg',.85); $('#pimg').innerHTML='<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">選んだよ。「登録する」で保存されるよ'; };
-        im.onerror=function(){ show($('#pToast'),'この画像は読み込めなかったよ'); }; im.src=fr.result; }; fr.readAsDataURL(f);
-    });
-    $('#pa').addEventListener('change',function(){
-      var f=this.files&&this.files[0]; if(!f) return;
-      if(f.size>3000000){ this.value=''; show($('#pToast'),'音声が大きいよ(約3MBまで)。短くしてね'); return; }
-      var fr=new FileReader(); fr.onload=function(){ au=fr.result; $('#paud').innerHTML='<audio controls src="'+au+'" style="width:100%"></audio>選んだよ。「登録する」で保存されるよ'; }; fr.readAsDataURL(f);
-    });
-    $('#pSave').addEventListener('click',function(){
-      var u=$('#pu').value.trim(); if(u&&!okUrl(u)){ show($('#pToast'),'リンクは https:// から始まるURLを入れてね'); return; }
-      data.perks[cur]={t:$('#pt').value.trim(),img:img,au:au,url:u}; save(); renderSecret(); show($('#pToast'),'登録しました🩵 そろえた人から見られます。'); vPerkKeep();
-    });
-    $('#pClr').addEventListener('click',function(){ delete data.perks[cur]; serverDel('perk:'+cur); renderSecret(); vPerkKeep(); show($('#pToast'),'空にしました'); });
-    function vPerkKeep(){ var k=cur; var t=$('#pToast').textContent; vPerk(); $('#pm').value=k; $('#pm').dispatchEvent(new Event('change')); show($('#pToast'),t); }
-  }
-  function vCode(){
-    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">配信中に発表するコードです。リスナーさんが入力すると、1日1回スタンプ+1個になります。</p><label for="cd" style="margin-top:8px">今日の配信コード</label><input id="cd" type="text" value="'+esc(data.code)+'"><div style="text-align:right;margin-top:12px"><button class="btn" id="cSave" type="button">保存する</button></div></div><div class="toast" id="cToast" role="status"></div>'+demoNote();
-    $('#cSave').addEventListener('click',function(){ var v=$('#cd').value.trim(); if(!v) return; data.code=v; save(); show($('#cToast'),'保存しました。リスナーさんは「'+v+'」を入れるとスタンプがもらえます。'); });
-  }
-  function vNews(){
-    var h='<div class="card"><label for="nd" style="margin-top:0">日付</label><input id="nd" type="text" value="'+md()+'">'
-      +'<label for="nb">お知らせの内容</label><textarea id="nb" style="min-height:80px"></textarea>'
-      +'<div style="text-align:right;margin-top:10px"><button class="btn" id="nAdd" type="button">追加する</button></div></div>'
-      +'<div class="card" style="margin-top:16px">';
-    h+= data.news.length? data.news.map(function(n,i){return '<div class="arow"><b>'+esc(n[0])+'</b><div class="grow">'+esc(n[1])+'</div><button class="btn small ghost" data-del="'+i+'" type="button">削除</button></div>';}).join('') : '<p class="note" style="margin:0">お知らせはありません。</p>';
-    body.innerHTML=h+'</div>'+demoNote();
-    $('#nAdd').addEventListener('click',function(){
-      var t=$('#nb').value.trim(); if(!t) return;
-      data.news.unshift([$('#nd').value.trim()||md(),t]); save(); vNews();
-    });
-    body.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ data.news.splice(+b.dataset.del,1); save(); vNews(); }); });
-  }
-  function vWeek(){
-    var h='<div class="card"><p class="note" style="margin-top:0">時間を空にすると「お休み」になります。</p>';
-    data.week.forEach(function(d,i){
-      h+='<div class="arow"><b style="width:1.6em;color:var(--blue)">'+esc(d[0])+'</b><input type="text" id="wt'+i+'" value="'+esc(d[1])+'" placeholder="21:00" style="width:5.6em"><input type="text" id="wn'+i+'" value="'+esc(d[2])+'" placeholder="内容" class="grow"></div>';
-    });
-    h+='<div style="text-align:right;margin-top:14px"><button class="btn" id="wSave" type="button">保存する</button></div></div>';
-    body.innerHTML=h+'<div class="toast" id="wToast" role="status"></div>'+demoNote();
-    $('#wSave').addEventListener('click',function(){
-      data.week=data.week.map(function(d,i){ var t=$('#wt'+i).value.trim(), n=$('#wn'+i).value.trim(); return [d[0],t,n]; });
-      save(); show($('#wToast'),'保存しました。サイトにもどると反映されています。');
-    });
-  }
-  function vSongs(){
-    var h='<div class="card"><label for="st" style="margin-top:0">曲名</label><input id="st" type="text">'
-      +'<label for="sa">アーティスト</label><input id="sa" type="text">'
-      +'<div style="text-align:right;margin-top:10px"><button class="btn" id="sAdd" type="button">1曲追加</button></div>'
-      +'<label for="sb">まとめて追加(1行に1曲、「曲名 / アーティスト」)</label><textarea id="sb" style="min-height:90px"></textarea>'
-      +'<div style="text-align:right;margin-top:10px"><button class="btn ghost" id="sBulk" type="button">まとめて追加</button></div></div>'
-      +'<div class="card" style="margin-top:16px"><p class="note" style="margin-top:0">登録済み '+data.songs.length+'曲</p>';
-    h+= data.songs.map(function(s,i){return '<div class="arow"><div class="grow"><b>'+esc(s[0])+'</b><br><small>'+esc(s[1])+'</small></div><button class="btn small ghost" data-del="'+i+'" type="button">削除</button></div>';}).join('');
-    body.innerHTML=h+'</div><div class="toast" id="sToast" role="status"></div>'+demoNote();
-    $('#sAdd').addEventListener('click',function(){
-      var t=$('#st').value.trim(); if(!t) return;
-      if(data.songs.some(function(s){return s[0]===t&&s[1]===$('#sa').value.trim();})){ show($('#sToast'),'その曲はもう登録されています。'); return; }
-      data.songs.unshift([t,$('#sa').value.trim()]); save(); vSongs();
-    });
-    $('#sBulk').addEventListener('click',function(){
-      var add=0, skip=0;
-      $('#sb').value.split('\n').forEach(function(line){
-        line=line.trim(); if(!line) return;
-        var p=line.split(/\s*[\/／]\s*/), t=p[0], a=p[1]||'';
-        if(data.songs.some(function(s){return s[0]===t&&s[1]===a;})){ skip++; return; }
-        data.songs.push([t,a]); add++;
-      });
-      save(); vSongs(); show($('#sToast'),add+'曲追加しました。'+(skip?'(重複'+skip+'曲はスキップ)':''));
-    });
-    body.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ data.songs.splice(+b.dataset.del,1); save(); vSongs(); }); });
-  }
-  function vInbox(){
-    var h='<div class="card">';
-    h+= inbox.length? inbox.map(function(m,i){return '<div class="arow"><b>'+esc(m[0])+'</b><div class="grow">'+esc(m[1])+'</div><button class="btn small ghost" data-del="'+i+'" type="button">削除</button></div>';}).join('') : '<p class="note" style="margin:0">まだメッセージは届いていません。サイトの「匿名メッセージ」から送ると、ここに届きます。</p>';
-    body.innerHTML=h+'</div>'+demoNote();
-    body.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ inbox.splice(+b.dataset.del,1); saveInbox(); vInbox(); }); });
-  }
 })();
 </script>
 <div id="visitToast" role="status"></div>
