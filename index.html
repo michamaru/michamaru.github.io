@@ -639,7 +639,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){ if(v===undefined) return mem[k]||null; mem[k]=v; }
   }
   function show(el,msg){ el.textContent=msg; el.classList.add('show'); }
-  function phr(t){ return esc(t).replace(/[^、。!?]+[、。!?]*/g,function(m){return '<span class="ph">'+m+'</span>';}); }
+  function phr(t){ return esc(t).replace(/[^、。!?\s]+[、。!?]*\s*/g,function(m){return '<span class="ph">'+m.trim()+'</span>';}); }
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var COLS=['#ffffff','#ffffff','#bfe3ff','#ffc2d9','#fff3a8'];
   function burst(x,y,n,spread){
@@ -676,7 +676,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   /* ---------- data ---------- */
   var DEF={
     v:2, code:'みちゃ',
-    news:[['11/12','ホームページができたよ☁️ ゆっくり見ていってね🩵'],['11/10','今週の配信予定をのせたよ✨'],['11/08','おみくじとスタンプカードをはじめたよ🐻']],
+    news:[['11/12','ホームページが できたよ☁️ ゆっくり 見ていってね🩵'],['11/10','今週の配信予定を のせたよ✨'],['11/08','おみくじと スタンプカードを はじめたよ🐻']],
     week:[['月','',''],['火','21:00','夜の歌枠'],['水','22:00','おしゃべり'],['木','',''],['金','21:00','夜の歌枠'],['土','20:00','リクエスト歌枠'],['日','21:30','おしゃべり']],
     songs:[['サンプル曲 A','アーティスト1'],['サンプル曲 B','アーティスト2'],['サンプル曲 C','アーティスト3'],['サンプル曲 D','アーティスト1'],['サンプル曲 E','アーティスト4'],['サンプル曲 F','アーティスト2']]
   };
