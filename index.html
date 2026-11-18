@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118224812">
+<meta name="meta-build" content="20261119034423">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -151,6 +151,7 @@ h2::before{content:"";width:34px;height:26px;background:url(assets/cloud.svg) ce
 .songs li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:14px;background:var(--mist)}
 .songs .tt{font-weight:700;line-height:1.4}
 .songs .ar{font-size:12px;color:#6f8db8}
+.songs .mk{margin-top:3px}.songs .mk span{display:inline-block;font-size:10px;margin-right:4px;padding:1px 7px;border-radius:99px;background:#fff;color:#4a7bbf}
 .btn{font:inherit;font-weight:700;border:0;border-radius:999px;padding:8px 18px;background:var(--blue);color:var(--white);cursor:pointer;box-shadow:0 3px 0 #3f68b8}
 .btn:active{transform:translateY(2px);box-shadow:0 1px 0 #3f68b8}
 .btn.small{padding:5px 14px;font-size:13px}
@@ -545,7 +546,7 @@ details p+.ban{margin-top:-4px}
   </section>
 
   <section id="pg-songs" class="page">
-    <h2>歌える曲リスト <span class="sample">サンプル</span></h2>
+    <h2>歌える曲リスト <span class="sample" id="songSample">サンプル</span></h2>
     <div class="card">
       <label for="q" style="margin-top:0">曲名・アーティストで探す</label>
       <input class="search" id="q" type="text" placeholder="曲名を入れてね🎵">
@@ -801,17 +802,39 @@ details p+.ban{margin-top:-4px}
     }).join('');
   }
   var list=$('#songList'), q=$('#q'), toast=$('#reqToast');
+  /* ---- UTAEMO「HPに反映する」連携(公開・読み取り専用) ---- */
+  var UT_FEED='https://utaeru-api.manabit.workers.dev/api/hp/michamaru-hp/songs', UT_CACHE='mcm_utaemo', utList=null;
+  var UT_MARKS={signature:'⭐ おはこ',favorite:'❤️ お気に入り',learning:'🔰 練習中'};
+  function utMap(j){
+    if(!j||j.schemaVersion!==1||!Array.isArray(j.songs)) return null;
+    return j.songs.filter(function(x){ return x&&typeof x.t==='string'&&x.t; }).map(function(x){
+      var mk=Array.isArray(x.m)?Object.keys(UT_MARKS).filter(function(k){ return x.m.indexOf(k)>-1; }):[];
+      return [x.t, typeof x.a==='string'?x.a:'', mk, ((x.y||'')+' '+(x.ty||'')).toLowerCase()];
+    });
+  }
+  function useUt(l){ utList=l&&l.length?l:null; var sm=document.getElementById('songSample'); if(sm) sm.style.display=utList?'none':''; renderSongs(); }
+  try{ useUt(utMap(JSON.parse(store(UT_CACHE)||'null'))); }catch(e){}
+  function loadUt(){
+    var ctl=window.AbortController?new AbortController():null, tm=ctl?setTimeout(function(){ ctl.abort(); },8000):0;
+    fetch(UT_FEED,{cache:'no-cache',credentials:'omit',signal:ctl?ctl.signal:undefined}).then(function(r){
+      clearTimeout(tm);
+      if(r.status===404){ try{ localStorage.removeItem(UT_CACHE); }catch(e){} useUt(null); return null; }
+      if(!r.ok) throw new Error('feed'); return r.json();
+    }).then(function(j){ if(j===null||j===undefined) return; var m=utMap(j); if(!m) throw new Error('format'); store(UT_CACHE,JSON.stringify(j)); useUt(m); }).catch(function(){ clearTimeout(tm); });
+  }
+  function songSrc(){ return utList||data.songs; }
   function renderSongs(){
-    var k=q.value.trim().toLowerCase();
-    var rows=data.songs.map(function(s,i){return [s,i];}).filter(function(p){return !k||(p[0][0]+p[0][1]).toLowerCase().indexOf(k)>-1;});
+    var k=q.value.trim().toLowerCase(), src=songSrc();
+    var rows=src.map(function(s,i){return [s,i];}).filter(function(p){return !k||(p[0][0]+p[0][1]+(p[0][3]||'')).toLowerCase().indexOf(k)>-1;});
     list.innerHTML=rows.length?rows.map(function(p){
-      return '<li><div><div class="tt">'+esc(p[0][0])+'</div><div class="ar">'+esc(p[0][1])+'</div></div><button class="btn small" type="button" data-i="'+p[1]+'">リクエスト</button></li>';
+      var mk=(p[0][2]||[]).length?'<div class="mk">'+p[0][2].map(function(m){return '<span>'+esc(UT_MARKS[m])+'</span>';}).join('')+'</div>':'';
+      return '<li><div><div class="tt">'+esc(p[0][0])+'</div><div class="ar">'+esc(p[0][1])+'</div>'+mk+'</div><button class="btn small" type="button" data-i="'+p[1]+'">リクエスト</button></li>';
     }).join(''):'<li>みつからなかったよ…別のことばで探してみてね🫧</li>';
   }
   q.addEventListener('input',renderSongs);
   list.addEventListener('click',function(e){
     var btn=e.target.closest('button[data-i]'); if(!btn) return;
-    var s=data.songs[+btn.dataset.i], text='リクエスト:'+s[0]+' / '+s[1];
+    var s=songSrc()[+btn.dataset.i], text='リクエスト:'+s[0]+' / '+s[1];
     var done=function(ok){ show(toast, ok?('コピーしたよ!コメント欄に貼ってね →「'+text+'」'):('コメント欄に入力してね →「'+text+'」')); };
     try{ navigator.clipboard.writeText(text).then(function(){done(true)},function(){done(false)}); }catch(err){ done(false); }
   });
@@ -1105,6 +1128,7 @@ details p+.ban{margin-top:-4px}
   window.addEventListener('hashchange',route);
   route();
   loadPub();
+  loadUt();
 
 })();
 </script>
