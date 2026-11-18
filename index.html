@@ -607,7 +607,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   </div>
   <img class="cline" src="assets/cloudline.svg" alt="">
   <div>© みちゃﾏﾙ</div>
-  <details class="credit"><summary>CREDIT</summary><p>くま・鳥居・神社・おみくじ箱・雲・キラキラのイラスト: <a href="https://tsukatte.com/" target="_blank" rel="noopener">ツカッテ</a><br>しゃぼん玉・ハート・大きな雲のイラスト: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
+  <details class="credit"><summary>CREDIT</summary><p>くま・鳥居・神社・おみくじ箱・雲・キラキラ・ハートのイラスト: <a href="https://tsukatte.com/" target="_blank" rel="noopener">ツカッテ</a><br>しゃぼん玉・大きな雲のイラスト: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
 </footer>
 
 <div id="lvup" role="dialog" aria-label="レベルアップ">
@@ -714,7 +714,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     var items=[['bear',44,6,18,'df',7,0],['bear2',36,88,42,'df',9,-3],['bear3',40,10,72,'df',8,-5],['bear',34,84,86,'df',10,-2],
       ['cloud',70,70,10,'df',11,-4],['cloud',58,4,45,'df',12,-6],['cloud',64,80,64,'df',10,-1],['cloud',52,18,92,'df',13,-7],
       ['sparkle',22,22,12,'dt',3,0],['sparkle2',16,92,24,'dt',4,-1],['sparkle',20,6,60,'dt',3.4,-2],['sparkle3',18,90,56,'dt',4.2,-1.5],['sparkle',24,40,88,'dt',3.6,-.5],['sparkle2',14,60,30,'dt',3.2,-2.4],
-      ['heart',26,14,34,'df',8,-2],['heart',22,86,74,'df',9,-4],
+      ['heart',26,14,34,'df',8,-2],['heart2',22,86,74,'df',9,-4],
       ['bubble',26,12,0,'dr',20,0],['bubble',34,34,0,'dr',26,-8],['bubble',22,58,0,'dr',22,-14],['bubble',30,80,0,'dr',28,-4],['bubble',20,94,0,'dr',24,-18]];
     items.forEach(function(a){
       var im=document.createElement('img'); im.alt=''; im.src='assets/'+a[0]+'.svg'; im.className=a[4];
@@ -815,7 +815,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     if(reduce) return;
     for(var i=0;i<n;i++){
       var im=document.createElement('img'); im.className='rain'; im.alt='';
-      im.src='assets/'+['sparkle','bubble','heart','bear'][i%4]+'.svg';
+      im.src='assets/'+['sparkle','bubble','heart','heart2','bear'][i%5]+'.svg';
       var sz=18+Math.random()*22;
       im.style.cssText='left:'+(Math.random()*100)+'%;width:'+sz+'px;animation-duration:'+(2.4+Math.random()*2.2)+'s;animation-delay:'+(Math.random()*1.4)+'s';
       $('#lvup').appendChild(im);

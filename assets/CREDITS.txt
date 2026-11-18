@@ -1,3 +1,3 @@
-ツカッテ (https://tsukatte.com/), free for commercial use per https://tsukatte.com/terms/ : bear*.svg, teddy.svg, torii.png, shrine.png, omikuji.png, cloud.svg, cloudline.svg, sparkle*.svg (sparkle*.svg are single stars trimmed from one sparkle sheet; no recoloring). Not redistributed as material.
-Noto Emoji by Google, Apache License 2.0 (https://github.com/googlefonts/noto-emoji): bubble.svg, heart.svg, cloud-soft.svg.
+ツカッテ (https://tsukatte.com/), free for commercial use per https://tsukatte.com/terms/ : bear*.svg, teddy.svg, torii.png, shrine.png, omikuji.png, cloud.svg, cloudline.svg, heart.svg, heart2.svg, sparkle*.svg (sparkle*.svg are single stars trimmed from one sparkle sheet; no recoloring). Not redistributed as material.
+Noto Emoji by Google, Apache License 2.0 (https://github.com/googlefonts/noto-emoji): bubble.svg, cloud-soft.svg.
 Client-owned: logo.png, char.png.
