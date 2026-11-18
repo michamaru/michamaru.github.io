@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118202051">
+<meta name="meta-build" content="20261118214724">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -262,6 +262,7 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
 #admin{position:fixed;inset:0;z-index:60;background:linear-gradient(180deg,#d9eefb,#fff);overflow-y:auto;display:none}
 #admin.open{display:block}
 #admin .bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:12px 18px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid #d8ecf8}
+#adStat{font-size:11px;color:#6f8db8;white-space:nowrap}#adStat.err{color:#d2566b;font-weight:700}
 #admin .bar h3{margin:0;font-size:16px;flex:1;line-height:1.3}
 #admin .bar h3 small{display:block;font-size:11px;font-weight:500;color:#6f8db8}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
@@ -649,7 +650,7 @@ details p+.ban{margin-top:-4px}
   <img class="ted" src="assets/teddy.svg" alt="">
   <div class="btns">
     <button class="btn small ghost" id="replay" type="button">オープニングをもう一度</button>
-    <button class="btn small" id="openAdmin" type="button">HP更新ページ(デモ)</button>
+    <button class="btn small" id="openAdmin" type="button">HP更新ページ</button>
   </div>
   <img class="cline" src="assets/cloudline.svg" alt="">
   <div>© みちゃﾏﾙ</div>
@@ -673,6 +674,7 @@ details p+.ban{margin-top:-4px}
   <div class="bar">
     <button class="btn small ghost" id="adBack" type="button">← もどる</button>
     <h3 id="adTitle">HP更新ページ<small>ここから内容を更新できます</small></h3>
+    <span id="adStat" role="status"></span>
   </div>
   <div class="wrap" style="padding-top:16px;padding-bottom:60px" id="adBody"></div>
 </div>
@@ -726,10 +728,63 @@ details p+.ban{margin-top:-4px}
     week:[['18(水)','22:00','雑談・あるぴ・還元企画'],['19(木)','22:00','雑談・あるぴ・還元企画'],['20(金)','22:00','雑談・あるぴ・還元企画'],['21(土)','22:00','雑談・あるぴ・還元企画'],['22(日)','22:00','雑談']],
     songs:[['サンプル曲 A','アーティスト1'],['サンプル曲 B','アーティスト2'],['サンプル曲 C','アーティスト3'],['サンプル曲 D','アーティスト1'],['サンプル曲 E','アーティスト4'],['サンプル曲 F','アーティスト2']]
   };
-  var data;
-  try{ data=JSON.parse(store('mcm_data')||'null'); }catch(e){ data=null; }
-  if(!data||data.v!==2||data.rev!==DEF.rev||!data.news||!data.week||!data.songs) data=JSON.parse(JSON.stringify(DEF));
-  function save(){ store('mcm_data',JSON.stringify(data)); }
+  /* ---- サーバー(Supabase)と同期 ---- */
+  var SB='https://uglxilcwbgqoofnzngux.supabase.co/rest/v1/rpc/', SBK='sb_publishable_R83zSq90hslRd5jl04sIPg_hZlLxfRC';
+  function rpc(fn,b){
+    return fetch(SB+fn,{method:'POST',headers:{apikey:SBK,'Content-Type':'application/json'},body:JSON.stringify(b||{})})
+      .then(function(r){ return r.json().catch(function(){return null;}).then(function(d){ if(!r.ok){ var e=new Error((d&&d.message)||'server'); e.status=r.status; throw e; } return d; }); });
+  }
+  var data=JSON.parse(JSON.stringify(DEF)); data.perks={}; data.rings={};
+  var heavy=[], synced={}, hv={}, mode='locked';
+  function getPass(){ try{ return localStorage.getItem('mcm_admin_pass')||''; }catch(e){ return ''; } }
+  function setPass(v){ try{ localStorage.setItem('mcm_admin_pass',v); }catch(e){} }
+  function applyPub(p){
+    var d=(p&&p.data)||{};
+    ['news','week','songs','code'].forEach(function(k){ if(d[k]!==undefined){ data[k]=d[k]; synced[k]=JSON.stringify(d[k]); } });
+    heavy=(p&&p.heavy)||[];
+  }
+  try{ var cp=JSON.parse(store('mcm_pub')||'null'); if(cp) applyPub(cp); }catch(e){}
+  function hasHeavy(k){ return heavy.indexOf(k)>-1; }
+  function loadHeavy(k,cb){
+    if(hv[k]) return; hv[k]=1;
+    rpc('michamaru_get',{p_key:k}).then(function(v){
+      if(v){ if(k.indexOf('perk:')===0) data.perks[k.slice(5)]=v; else data.rings[k.slice(5)]=v; synced[k]=JSON.stringify(v); }
+      if(cb) cb();
+    }).catch(function(){ hv[k]=0; });
+  }
+  function stat(t,err){ var e=document.getElementById('adStat'); if(e){ e.textContent=t||''; e.className=err?'err':''; } }
+  var sq=Promise.resolve();
+  function save(){
+    if(mode!=='server') return;
+    var cur={news:data.news,week:data.week,songs:data.songs,code:data.code};
+    Object.keys(data.perks||{}).forEach(function(i){ cur['perk:'+i]=data.perks[i]; });
+    Object.keys(data.rings||{}).forEach(function(k){ cur['ring:'+k]=data.rings[k]; });
+    var any=false;
+    Object.keys(cur).forEach(function(k){
+      var j=JSON.stringify(cur[k]); if(synced[k]===j) return; any=true;
+      sq=sq.then(function(){ return rpc('michamaru_save',{p_pass:getPass(),p_key:k,p_value:cur[k]}); })
+        .then(function(){ synced[k]=j; if((k.indexOf('perk:')===0||k.indexOf('ring:')===0)&&!hasHeavy(k)) heavy.push(k); });
+    });
+    if(!any) return;
+    stat('保存中…');
+    sq=sq.then(function(){ stat('保存しました🩵'); setTimeout(function(){ stat(''); },2500); },function(e){
+      sq=Promise.resolve();
+      if(e&&e.message==='auth'){ mode='locked'; setPass(''); stat('合言葉が違うようです',true); }
+      else stat('保存できませんでした。通信をご確認のうえ、もう一度お試しください',true);
+    });
+  }
+  function serverDel(k){
+    delete synced[k]; heavy=heavy.filter(function(x){ return x!==k; });
+    if(mode!=='server') return;
+    sq=sq.then(function(){ return rpc('michamaru_del',{p_pass:getPass(),p_key:k}); }).then(function(){ stat('保存しました🩵'); setTimeout(function(){ stat(''); },2500); },function(){ sq=Promise.resolve(); stat('削除できませんでした',true); });
+  }
+  function loadPub(){
+    rpc('michamaru_public').then(function(p){
+      if(!p) return; store('mcm_pub',JSON.stringify(p));
+      if(mode==='server') return;
+      applyPub(p); renderAll(); drawMonth(); if(location.hash==='#secret') renderSecret();
+    }).catch(function(){});
+  }
   var inbox; try{ inbox=JSON.parse(store('mcm_inbox')||'[]'); }catch(e){ inbox=[]; }
   function saveInbox(){ store('mcm_inbox',JSON.stringify(inbox)); }
   function md(){ var d=new Date(); return (d.getMonth()+1)+'/'+d.getDate(); }
@@ -866,8 +921,9 @@ details p+.ban{margin-top:-4px}
     h+='<div class="perks">';
     for(var i=0;i<SEC.length;i++){
       var p=SEC[i], on=i<cards;
-      var pc=(data.perks||{})[i]||{}, has=pc.t||pc.img||pc.url||pc.au;
-      var body=on?('<b>'+phr(p[1])+'</b><small>'+phr(p[2])+'</small>'+(has?perkBody(pc,i):'<em>もうすぐ届くよ☁️(準備中)</em>')):'<b>???</b><em class="lk">'+(i+1)+'枚そろえると開くよ</em>';
+      var pc=(data.perks||{})[i]||{}, has=pc.t||pc.img||pc.url||pc.au, pend=on&&!has&&hasHeavy('perk:'+i);
+      if(pend) loadHeavy('perk:'+i,function(){ if(location.hash==='#secret') renderSecret(); });
+      var body=on?('<b>'+phr(p[1])+'</b><small>'+phr(p[2])+'</small>'+(has?perkBody(pc,i):(pend?'<em>よみこんでいるよ☁️</em>':'<em>もうすぐ届くよ☁️(準備中)</em>'))):'<b>???</b><em class="lk">'+(i+1)+'枚そろえると開くよ</em>';
       h+='<div class="perk'+(on?' on':'')+(on&&has?' open':'')+'"><span class="pn">'+(i+1)+'枚</span><span class="pi">'+(on?p[0]:'🔒')+'</span><div>'+body+'</div></div>';
     }
     h+='</div>';
@@ -995,6 +1051,7 @@ details p+.ban{margin-top:-4px}
     var p=$('#monPrize');
     if(c>=last){ p.className='monprize full';
       var ring=(data.rings||{})[ym(n)]||RINGS[ym(n)];
+      if(!ring&&hasHeavy('ring:'+ym(n))) loadHeavy('ring:'+ym(n),drawMonth);
       p.innerHTML='🎉 皆勤賞!今月の限定アイコンリングがもらえるよ🎁<br>'+(ring?'<a class="btn small" href="'+ring+'" download="michamaru-icon-ring.png">アイコンリングを受け取る</a>':'<span class="ph">リングは</span><span class="ph">もうすぐ届くよ☁️</span><span class="ph">(準備中)</span>'); }
     else { p.className='monprize'; p.textContent='1か月まいにち来てくれた人には、毎月かわる限定アイコンリングをプレゼント🎁(月がかわると、またゼロからスタート!)'; }
   }
@@ -1044,10 +1101,31 @@ details p+.ban{margin-top:-4px}
   }
   window.addEventListener('hashchange',route);
   route();
+  loadPub();
 
   /* ---------- 更新ページ(デモ) ---------- */
   var ad=$('#admin'), body=$('#adBody'), view='menu';
-  function openAd(){ ad.classList.add('open'); document.documentElement.style.overflow='hidden'; go('menu'); ad.scrollTop=0; }
+  function openAd(){
+    ad.classList.add('open'); document.documentElement.style.overflow='hidden'; ad.scrollTop=0;
+    if(mode==='server'||mode==='demo'){ go('menu'); return; }
+    var p=getPass(); if(p) verify(p,true); else vGate();
+  }
+  function verify(p,silent,tt){
+    rpc('michamaru_chk',{p_pass:p}).then(function(ok){
+      if(ok){ setPass(p); mode='server'; go('menu'); }
+      else { setPass(''); vGate(silent?'':'合言葉が違うみたい。もう一度入れてね🫧'); if(!silent&&tt) show(tt,'合言葉が違うみたい。もう一度入れてね🫧'); }
+    }).catch(function(e){
+      if(e&&(e.status===404||/function|schema cache/i.test(e.message||''))){ mode='demo'; go('menu'); }
+      else { vGate('通信できなかったよ。電波のよいところで、もう一度ためしてね'); }
+    });
+  }
+  function vGate(msg){
+    view='gate'; $('#adTitle').innerHTML='HP更新ページ<small>合言葉を入れてひらきます</small>'; $('#adBack').textContent='← サイトへ';
+    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">更新する人だけが入れるページです。合言葉を入れてね。</p><label for="gp">合言葉</label><input id="gp" type="password" autocomplete="current-password"><div style="text-align:right;margin-top:12px"><button class="btn" id="gGo" type="button">ひらく</button></div><div class="toast" id="gToast" role="status"></div></div>';
+    if(msg) show($('#gToast'),msg);
+    var go2=function(){ var v=$('#gp').value; if(!v) return; verify(v,false,$('#gToast')); };
+    $('#gGo').addEventListener('click',go2); $('#gp').addEventListener('keydown',function(e){ if(e.key==='Enter') go2(); });
+  }
   function closeAd(){ ad.classList.remove('open'); document.documentElement.style.overflow=''; renderAll(); }
   $('#openAdmin').addEventListener('click',openAd);
   $('#adBack').addEventListener('click',function(){ if(view==='menu') closeAd(); else go('menu'); });
@@ -1059,7 +1137,7 @@ details p+.ban{margin-top:-4px}
     $('#adBack').textContent= v==='menu' ? '← サイトへ' : '← もどる';
     var f={menu:vMenu,news:vNews,week:vWeek,songs:vSongs,code:vCode,ring:vRing,perk:vPerk,inbox:vInbox}[v]; f();
   }
-  function demoNote(){ return '<p class="demo">デモ版です。入力した内容はこの端末の中だけに保存されます。本番では、更新するとすべての人のページに反映されます。</p>'; }
+  function demoNote(){ return mode==='demo'?'<p class="demo">保存先をじゅんび中のため、いまは試用です。入力した内容は、このページを閉じると消えます。</p>':''; }
 
   function vMenu(){
     body.innerHTML='<div class="tiles">'
@@ -1076,7 +1154,7 @@ details p+.ban{margin-top:-4px}
   function vRing(){
     data.rings=data.rings||{};
     var now=new Date(), opts='';
-    for(var k=0;k<4;k++){ var d=new Date(now.getFullYear(),now.getMonth()+k,1), key=ym(d); opts+='<option value="'+key+'">'+d.getFullYear()+'年'+(d.getMonth()+1)+'月分'+(data.rings[key]?'(登録ずみ)':'')+'</option>'; }
+    for(var k=0;k<4;k++){ var d=new Date(now.getFullYear(),now.getMonth()+k,1), key=ym(d); opts+='<option value="'+key+'">'+d.getFullYear()+'年'+(d.getMonth()+1)+'月分'+((data.rings[key]||hasHeavy('ring:'+key))?'(登録ずみ)':'')+'</option>'; }
     var h='<div class="card"><p class="note" style="margin-top:0">1か月まいにち来てくれた人(皆勤賞)がもらえる、その月の限定アイコンリングの画像です。画像を選ぶだけで登録できます。</p>'
       +'<label for="rm" style="margin-top:8px">どの月のリング?</label><select id="rm">'+opts+'</select>'
       +'<label for="rf">リングの画像(PNG・JPG)</label><input id="rf" type="file" accept="image/*">'
@@ -1084,9 +1162,10 @@ details p+.ban{margin-top:-4px}
       +'<div class="toast" id="rToast" role="status"></div></div><div class="card" style="margin-top:16px" id="rList"></div>';
     body.innerHTML=h+demoNote();
     function list(){
-      var ks=Object.keys(data.rings).sort();
-      $('#rList').innerHTML=ks.length?ks.map(function(k){ return '<div class="arow"><b>'+esc(k.replace('-','年')+'月分')+'</b><div class="grow"><img src="'+data.rings[k]+'" alt="" style="width:56px;height:56px;object-fit:contain;border-radius:12px;background:#eef7ff"></div><button class="btn small ghost" data-rd="'+esc(k)+'" type="button">削除</button></div>'; }).join(''):'<p class="note" style="margin:0">まだ登録されていないよ。</p>';
-      $('#rList').querySelectorAll('[data-rd]').forEach(function(b){ b.addEventListener('click',function(){ delete data.rings[b.dataset.rd]; save(); drawMonth(); vRing(); }); });
+      var ks=Object.keys(data.rings); heavy.forEach(function(h){ if(h.indexOf('ring:')===0&&ks.indexOf(h.slice(5))<0) ks.push(h.slice(5)); }); ks.sort();
+      ks.forEach(function(k){ if(!data.rings[k]) loadHeavy('ring:'+k,function(){ if(view==='ring') list(); }); });
+      $('#rList').innerHTML=ks.length?ks.map(function(k){ return '<div class="arow"><b>'+esc(k.replace('-','年')+'月分')+'</b><div class="grow">'+(data.rings[k]?'<img src="'+data.rings[k]+'" alt="" style="width:56px;height:56px;object-fit:contain;border-radius:12px;background:#eef7ff">':'よみこみ中…')+'</div><button class="btn small ghost" data-rd="'+esc(k)+'" type="button">削除</button></div>'; }).join(''):'<p class="note" style="margin:0">まだ登録されていないよ。</p>';
+      $('#rList').querySelectorAll('[data-rd]').forEach(function(b){ b.addEventListener('click',function(){ delete data.rings[b.dataset.rd]; serverDel('ring:'+b.dataset.rd); drawMonth(); vRing(); }); });
     }
     list();
     $('#rSave').addEventListener('click',function(){
@@ -1108,7 +1187,7 @@ details p+.ban{margin-top:-4px}
   }
   function vPerk(){
     data.perks=data.perks||{};
-    var opts=SEC.map(function(p,i){ var d=data.perks[i]||{}; return '<option value="'+i+'">'+(i+1)+'枚目:'+esc(p[1])+((d.t||d.img||d.url||d.au)?'(登録ずみ)':'')+'</option>'; }).join('');
+    var opts=SEC.map(function(p,i){ var d=data.perks[i]||{}; return '<option value="'+i+'">'+(i+1)+'枚目:'+esc(p[1])+((d.t||d.img||d.url||d.au||hasHeavy('perk:'+i))?'(登録ずみ)':'')+'</option>'; }).join('');
     body.innerHTML='<div class="card"><p class="note" style="margin-top:0">スタンプカードをそろえた人が見られる、特典の中身を登録します。文章・画像・音声・リンクのどれか1つでも大丈夫。できたものから順番に入れてね。</p>'
       +'<label for="pm" style="margin-top:8px">どの特典?</label><select id="pm">'+opts+'</select>'
       +'<label for="pt">文章(お手紙・メッセージなど)</label><textarea id="pt" style="min-height:110px"></textarea>'
@@ -1117,9 +1196,9 @@ details p+.ban{margin-top:-4px}
       +'<label for="pu">リンク(動画・ファイルなどのURL。なくてもOK)</label><input id="pu" type="text" placeholder="https://..." autocomplete="off">'
       +'<div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px"><button class="btn small ghost" id="pClr" type="button">この特典を空にする</button><button class="btn" id="pSave" type="button">登録する</button></div>'
       +'<div class="toast" id="pToast" role="status"></div></div>'
-      +'<p class="note" style="margin:12px 4px 0">音声は短いもの(数秒〜十数秒)を選んでね。デモ版は約1.5MBまで。</p>'+demoNote();
+      +'<p class="note" style="margin:12px 4px 0">音声は短いもの(数秒〜十数秒)を選んでね。約3MBまで入ります。</p>'+demoNote();
     var cur=0, img='', au='';
-    function load(){ cur=+$('#pm').value; var d=data.perks[cur]||{}; $('#pt').value=d.t||''; $('#pu').value=d.u||d.url||''; img=d.img||''; au=d.au||''; $('#pf').value=''; $('#pa').value=''; $('#paud').innerHTML=au?'<audio controls src="'+au+'" style="width:100%"></audio>音声は登録ずみ(選び直すと入れ替わるよ)':''; $('#pimg').innerHTML=img?'<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">画像は登録ずみ(選び直すと入れ替わるよ)':''; }
+    function load(){ cur=+$('#pm').value; var d=data.perks[cur]||{}; if(!data.perks[cur]&&hasHeavy('perk:'+cur)){ var kk=cur; loadHeavy('perk:'+kk,function(){ if(view==='perk'&&cur===kk) load(); }); } $('#pt').value=d.t||''; $('#pu').value=d.u||d.url||''; img=d.img||''; au=d.au||''; $('#pf').value=''; $('#pa').value=''; $('#paud').innerHTML=au?'<audio controls src="'+au+'" style="width:100%"></audio>音声は登録ずみ(選び直すと入れ替わるよ)':''; $('#pimg').innerHTML=img?'<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">画像は登録ずみ(選び直すと入れ替わるよ)':''; }
     load(); $('#pm').addEventListener('change',load);
     $('#pf').addEventListener('change',function(){
       var f=this.files&&this.files[0]; if(!f) return;
@@ -1131,14 +1210,14 @@ details p+.ban{margin-top:-4px}
     });
     $('#pa').addEventListener('change',function(){
       var f=this.files&&this.files[0]; if(!f) return;
-      if(f.size>1500000){ this.value=''; show($('#pToast'),'音声が大きいよ(約1.5MBまで)。短くしてね'); return; }
+      if(f.size>3000000){ this.value=''; show($('#pToast'),'音声が大きいよ(約3MBまで)。短くしてね'); return; }
       var fr=new FileReader(); fr.onload=function(){ au=fr.result; $('#paud').innerHTML='<audio controls src="'+au+'" style="width:100%"></audio>選んだよ。「登録する」で保存されるよ'; }; fr.readAsDataURL(f);
     });
     $('#pSave').addEventListener('click',function(){
       var u=$('#pu').value.trim(); if(u&&!okUrl(u)){ show($('#pToast'),'リンクは https:// から始まるURLを入れてね'); return; }
       data.perks[cur]={t:$('#pt').value.trim(),img:img,au:au,url:u}; save(); renderSecret(); show($('#pToast'),'登録しました🩵 そろえた人から見られます。'); vPerkKeep();
     });
-    $('#pClr').addEventListener('click',function(){ delete data.perks[cur]; save(); renderSecret(); vPerkKeep(); show($('#pToast'),'空にしました'); });
+    $('#pClr').addEventListener('click',function(){ delete data.perks[cur]; serverDel('perk:'+cur); renderSecret(); vPerkKeep(); show($('#pToast'),'空にしました'); });
     function vPerkKeep(){ var k=cur; var t=$('#pToast').textContent; vPerk(); $('#pm').value=k; $('#pm').dispatchEvent(new Event('change')); show($('#pToast'),t); }
   }
   function vCode(){
