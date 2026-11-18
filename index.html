@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118214724">
+<meta name="meta-build" content="20261118223505">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -350,6 +350,8 @@ details p+.ban{margin-top:-4px}
 .perk .pc{margin-top:8px}
 .perk .pc img{display:block;max-width:100%;border-radius:12px;margin-bottom:8px}
 .perk .pc p{margin:6px 0;font-size:13px;line-height:1.8;color:var(--ink)}
+.perk .pc canvas{display:block;width:100%;height:auto;border-radius:12px;margin:6px 0;box-shadow:0 2px 8px rgba(80,130,200,.18)}
+.perk .pc h4{margin:12px 0 2px;font-size:13px;color:var(--blue)}
 .perk .pc .btn{display:inline-block;text-decoration:none;margin-top:4px}
 #pm{width:100%;font:inherit;padding:10px;border:2px solid #d4ebf8;border-radius:12px;background:#fff;color:var(--ink)}
 .perks{display:grid;gap:10px;margin-top:14px}
@@ -911,6 +913,43 @@ details p+.ban{margin-top:-4px}
     if(okUrl(pc.url)) h+='<a class="btn small" href="'+esc(pc.url)+'" target="_blank" rel="noopener">ひらく🩵</a>';
     return h+'</div>';
   }
+  function perkAuto(){
+    return '<div class="pc"><p>下の2つは、ニックネームが入った、あなただけのものだよ🩵 画像を保存して使ってね。'+(nick?'':'<br><b>ニックネームを入れると、お名前が入るよ(スタンプカードのところで入れられるよ)</b>')+'</p>'
+      +'<h4>🏅 名前入り記念証</h4><canvas id="certC" width="1000" height="700"></canvas><a class="btn small" id="certA" href="#" download="michamaru-kinenshou.png">記念証を保存する</a>'
+      +'<h4>🎟️ ペア系作成券</h4><canvas id="tickC" width="1000" height="520"></canvas><a class="btn small ghost" id="tickA" href="#" download="michamaru-ticket.png">券を保存する</a>'
+      +'<p>券を保存したら、XのDMで みちゃﾏﾙ に送ってね☁️</p><a class="btn small" href="https://x.com/mitya2305" target="_blank" rel="noopener">Xのみちゃﾏﾙへ🩵</a></div>';
+  }
+  function drawCerts(){
+    var c1=document.getElementById('certC'), c2=document.getElementById('tickC'); if(!c1||!c2) return;
+    var nm=(nick||'みちゃっこ')+' さま', d=new Date(), ds=d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate();
+    var srcs=['assets/cloud.svg','assets/heart.svg','assets/bear.svg'], ims=[], n=0;
+    srcs.forEach(function(u,k){ var im=new Image(); im.onload=im.onerror=function(){ if(++n===srcs.length) go(); }; im.src=u; ims[k]=im; });
+    function bg(c,w,h){
+      var x=c.getContext('2d'), g=x.createLinearGradient(0,0,0,h); g.addColorStop(0,'#bfe3fb'); g.addColorStop(1,'#f4faff');
+      x.fillStyle=g; x.fillRect(0,0,w,h); x.strokeStyle='#fff'; x.lineWidth=14; x.strokeRect(24,24,w-48,h-48);
+      x.strokeStyle='#8fc4ee'; x.lineWidth=3; x.setLineDash([2,12]); x.lineCap='round'; x.strokeRect(46,46,w-92,h-92); x.setLineDash([]);
+      return x;
+    }
+    function img(x,im,px,py,w){ if(im&&im.naturalWidth) x.drawImage(im,px,py,w,w*im.naturalHeight/im.naturalWidth); }
+    function fit(x,t,max,size,font){ do{ x.font='700 '+size+'px '+font; size-=2; }while(x.measureText(t).width>max&&size>20); }
+    function go(){
+      var F='"Zen Maru Gothic","Noto Sans JP","Hiragino Maru Gothic ProN",sans-serif', x=bg(c1,1000,700);
+      img(x,ims[0],70,70,260); img(x,ims[0],690,470,260); img(x,ims[1],840,90,90); img(x,ims[2],60,470,170);
+      x.textAlign='center'; x.fillStyle='#3d6fb8'; x.font='700 64px '+F; x.fillText('記念証',500,180);
+      x.fillStyle='#6f8db8'; x.font='500 26px '+F; x.fillText('ひみつの部屋 10まい ぜんぶ そろえました',500,250);
+      x.fillStyle='#2a4a7f'; fit(x,nm,760,72,F); x.fillText(nm,500,400);
+      x.strokeStyle='#8fc4ee'; x.lineWidth=3; x.beginPath(); x.moveTo(220,425); x.lineTo(780,425); x.stroke();
+      x.fillStyle='#6f8db8'; x.font='500 28px '+F; x.fillText('いつもあそびにきてくれて ありがとう🩵',500,500);
+      x.fillStyle='#3d6fb8'; x.font='700 34px '+F; x.fillText('みちゃﾏﾙ',500,580); x.fillStyle='#8aa6c4'; x.font='500 22px '+F; x.fillText(ds,500,625);
+      document.getElementById('certA').href=c1.toDataURL('image/png');
+      x=bg(c2,1000,520); img(x,ims[0],690,330,230); img(x,ims[1],70,90,90); img(x,ims[2],80,300,150);
+      x.textAlign='center'; x.fillStyle='#3d6fb8'; x.font='700 56px '+F; x.fillText('ペア系作成券',500,160);
+      x.fillStyle='#2a4a7f'; fit(x,nm+' 専用',700,52,F); x.fillText(nm+' 専用',500,260);
+      x.fillStyle='#6f8db8'; x.font='500 26px '+F; x.fillText('この画像を保存して、XのDMで',500,350); x.fillText('みちゃﾏﾙ に送ってね☁️',500,392);
+      x.fillStyle='#8aa6c4'; x.font='500 20px '+F; x.fillText(ds,500,455);
+      document.getElementById('tickA').href=c2.toDataURL('image/png');
+    }
+  }
   function renderSecret(){
     var b=$('#secretBody');
     if(cards<1){
@@ -921,13 +960,13 @@ details p+.ban{margin-top:-4px}
     h+='<div class="perks">';
     for(var i=0;i<SEC.length;i++){
       var p=SEC[i], on=i<cards;
-      var pc=(data.perks||{})[i]||{}, has=pc.t||pc.img||pc.url||pc.au, pend=on&&!has&&hasHeavy('perk:'+i);
+      var pc=(data.perks||{})[i]||{}, auto=on&&i===9, has=pc.t||pc.img||pc.url||pc.au||auto, pend=on&&!has&&hasHeavy('perk:'+i);
       if(pend) loadHeavy('perk:'+i,function(){ if(location.hash==='#secret') renderSecret(); });
-      var body=on?('<b>'+phr(p[1])+'</b><small>'+phr(p[2])+'</small>'+(has?perkBody(pc,i):(pend?'<em>よみこんでいるよ☁️</em>':'<em>もうすぐ届くよ☁️(準備中)</em>'))):'<b>???</b><em class="lk">'+(i+1)+'枚そろえると開くよ</em>';
+      var body=on?('<b>'+phr(p[1])+'</b><small>'+phr(p[2])+'</small>'+(has?(auto?perkAuto():'')+((pc.t||pc.img||pc.url||pc.au)?perkBody(pc,i):''):(pend?'<em>よみこんでいるよ☁️</em>':'<em>もうすぐ届くよ☁️(準備中)</em>'))):'<b>???</b><em class="lk">'+(i+1)+'枚そろえると開くよ</em>';
       h+='<div class="perk'+(on?' on':'')+(on&&has?' open':'')+'"><span class="pn">'+(i+1)+'枚</span><span class="pi">'+(on?p[0]:'🔒')+'</span><div>'+body+'</div></div>';
     }
     h+='</div>';
-    b.innerHTML=h;
+    b.innerHTML=h; if(cards>=10) drawCerts();
   }
 
   var realCards=null;
@@ -944,7 +983,7 @@ details p+.ban{margin-top:-4px}
   window.addEventListener('hashchange',function(){ if(location.hash!=='#secret') simReset(); });
   simUI();
   var nickIn=$('#nick'); nickIn.value=nick;
-  nickIn.addEventListener('input',function(){ nick=nickIn.value.trim(); store('mcm_nick',nick); renderTitle(); });
+  nickIn.addEventListener('input',function(){ nick=nickIn.value.trim(); store('mcm_nick',nick); renderTitle(); if(location.hash==='#secret'&&cards>=10) renderSecret(); });
   function rain(n){
     if(reduce) return;
     for(var i=0;i<n;i++){
@@ -1053,7 +1092,7 @@ details p+.ban{margin-top:-4px}
       var ring=(data.rings||{})[ym(n)]||RINGS[ym(n)];
       if(!ring&&hasHeavy('ring:'+ym(n))) loadHeavy('ring:'+ym(n),drawMonth);
       p.innerHTML='🎉 皆勤賞!今月の限定アイコンリングがもらえるよ🎁<br>'+(ring?'<a class="btn small" href="'+ring+'" download="michamaru-icon-ring.png">アイコンリングを受け取る</a>':'<span class="ph">リングは</span><span class="ph">もうすぐ届くよ☁️</span><span class="ph">(準備中)</span>'); }
-    else { p.className='monprize'; p.textContent='1か月まいにち来てくれた人には、毎月かわる限定アイコンリングをプレゼント🎁(月がかわると、またゼロからスタート!)'; }
+    else { p.className='monprize'; p.textContent=(n.getFullYear()*12+n.getMonth()<2026*12+11?'12月から、':'')+'1か月まいにち来てくれた人には、毎月かわる限定アイコンリングをプレゼント🎁(月がかわると、またゼロからスタート!)'; }
   }
   function visitToast(msg){ var t=$('#visitToast'); t.textContent=msg; t.classList.add('on'); setTimeout(function(){ t.classList.remove('on'); },3200); }
   function dailyVisit(){
