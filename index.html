@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118183655">
+<meta name="meta-build" content="20261118184320">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -849,8 +849,8 @@ details p+.ban{margin-top:-4px}
     h+='<div class="perks">';
     for(var i=0;i<SEC.length;i++){
       var p=SEC[i], on=i<cards;
-      h+='<div class="perk'+(on?' on':'')+'"><span class="pn">'+(i+1)+'枚</span><span class="pi">'+(on?p[0]:'🔒')+'</span><div><b>'+phr(p[1])+'</b><small>'+phr(p[2])+'</small>'
-        +(on?'<em>もうすぐ届くよ☁️(準備中)</em>':'<em class="lk">'+(i+1)+'枚そろえると開くよ</em>')+'</div></div>';
+      h+='<div class="perk'+(on?' on':'')+'"><span class="pn">'+(i+1)+'枚</span><span class="pi">'+(on?p[0]:'🔒')+'</span><div>'
+        +(on?'<b>'+phr(p[1])+'</b><small>'+phr(p[2])+'</small><em>もうすぐ届くよ☁️(準備中)</em>':'<b>???</b><em class="lk">'+(i+1)+'枚そろえると開くよ</em>')+'</div></div>';
     }
     h+='</div>';
     b.innerHTML=h;
