@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118185326">
+<meta name="meta-build" content="20261118190813">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -966,6 +966,7 @@ details p+.ban{margin-top:-4px}
   drawStamps(); renderTitle(); renderSecret();
   /* ---------- 来訪スタンプ & 毎日きたよ ---------- */
   function ym(d){ return d.getFullYear()+'-'+(d.getMonth()+1); }
+  var RINGS={}; /* 例: '2026-12':'assets/ring-2026-12.png' (毎月の限定アイコンリング画像をここに追加) */
   function getDays(){ try{ var j=JSON.parse(store('mcm_days')||'null'); if(j&&j.m===ym(new Date())&&Array.isArray(j.d)) return j; }catch(e){} return {m:ym(new Date()),d:[]}; }
   function drawMonth(){
     var n=new Date(), last=new Date(n.getFullYear(),n.getMonth()+1,0).getDate(), j=getDays(), h='';
@@ -974,7 +975,9 @@ details p+.ban{margin-top:-4px}
     var c=j.d.length;
     $('#monSub').textContent=(n.getMonth()+1)+'月は '+c+' / '+last+' 日きてくれたよ🩵 毎日きて、1か月ぜんぶそろえると…!';
     var p=$('#monPrize');
-    if(c>=last){ p.className='monprize full'; p.innerHTML='🎉 皆勤賞!今月の限定アイコンリングがもらえるよ🎁<br>みちゃのXに、この画面のスクショを付けてDMしてね<br><a class="btn small" href="https://x.com/mitya2305" target="_blank" rel="noopener">XでみちゃにDMする</a>'; }
+    if(c>=last){ p.className='monprize full';
+      var ring=RINGS[ym(n)];
+      p.innerHTML='🎉 皆勤賞!今月の限定アイコンリングがもらえるよ🎁<br>'+(ring?'<a class="btn small" href="'+ring+'" download>アイコンリングを受け取る</a>':'<span class="ph">リングは</span><span class="ph">もうすぐ届くよ☁️</span><span class="ph">(準備中)</span>'); }
     else { p.className='monprize'; p.textContent='1か月まいにち来てくれた人には、毎月かわる限定アイコンリングをプレゼント🎁(月がかわると、またゼロからスタート!)'; }
   }
   function visitToast(msg){ var t=$('#visitToast'); t.textContent=msg; t.classList.add('on'); setTimeout(function(){ t.classList.remove('on'); },3200); }
