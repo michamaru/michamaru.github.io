@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261118182219">
+<meta name="meta-build" content="20261118183655">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -317,6 +317,8 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
 @keyframes stp{from{transform:scale(0) rotate(-40deg)}60%{transform:scale(1.35) rotate(8deg)}to{transform:scale(1) rotate(0)}}
 .coderow{display:flex;gap:8px;margin-top:10px}
 .coderow input{flex:1;min-width:0}
+.ban{margin:0;padding:0 16px 6px 58px;font-size:14px;line-height:1.8}
+details p+.ban{margin-top:-4px}
 .how{margin:8px 0 0;padding-left:1.2em;font-size:14px;line-height:1.8}
 .ttl{margin:8px 0 0;padding-left:1.6em;font-size:14px;line-height:1.9}
 .ttl li small{color:#8ab0d2;margin-left:6px;font-size:11px}
@@ -331,6 +333,16 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
 .sim .sn button{font:inherit;font-size:13px;font-weight:700;border:1px solid #cfe6fb;background:#fff;color:#5b8be0;border-radius:999px;min-width:38px;padding:6px 10px;cursor:pointer}
 .sim .sn button.on{background:#5b8be0;color:#fff;border-color:#5b8be0}
 .sim p{margin:6px 0 0;font-size:12px;line-height:1.7;color:#6f8db8}
+.monsub{margin:6px 0 10px;font-size:13px;color:#6f8db8;line-height:1.7}
+.mon{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.mon i{font-style:normal;aspect-ratio:1;border-radius:50%;border:2px dashed #cfe0f1;color:#9ab4cf;font-size:11px;display:flex;align-items:center;justify-content:center}
+.mon i.on{border:2px solid #9ad4f2;background:#e8f6ff url(assets/bear.svg) center/70% no-repeat;color:transparent}
+.mon i.now{box-shadow:0 0 0 3px #bfe3ff}
+.monprize{margin-top:12px;padding:12px;border-radius:14px;background:#f1f6fb;font-size:13px;line-height:1.7;color:#6f8db8;text-align:center}
+.monprize.full{background:linear-gradient(135deg,#fff7e8,#eef7ff);border:2px solid #ffe2a8;color:var(--ink)}
+.monprize a{display:inline-block;margin-top:8px}
+#visitToast{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99998;background:#fff;border:2px solid #cfe6f8;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:700;color:#33507f;box-shadow:0 8px 22px rgba(91,139,224,.25);opacity:0;pointer-events:none;transition:opacity .4s;max-width:92vw;text-align:center}
+#visitToast.on{opacity:1}
 .perks{display:grid;gap:10px;margin-top:14px}
 .perk{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:#f1f6fb;border:1px dashed #cfe0f1;color:#8aa6c4}
 .perk.on{background:linear-gradient(135deg,#fff,#eef7ff);border:1px solid #cfe6fb;color:var(--ink)}
@@ -451,7 +463,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     <a href="#omikuji">おみくじ</a>
     <a href="#stamp">スタンプ</a>
     <a href="#secret">ひみつの部屋</a>
-    <a href="#contact">お問い合わせ</a>
+    <a href="#contact">お仕事・コラボ</a>
   </div>
 </nav>
 
@@ -474,7 +486,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
       <a class="mt" href="#omikuji"><b>おみくじ</b><span><i>みちゃﾏﾙ神社⛩</i> <i>大吉で</i><i>スタンプ+1</i></span></a>
       <a class="mt" href="#stamp"><b>スタンプカード</b><span>あつめてレベルUP✨</span></a>
       <a class="mt" href="#secret"><b>ひみつの部屋</b><span>あつめた人だけ🔒</span></a>
-      <a class="mt" href="#contact"><b>お問い合わせ</b><span>ご連絡はこちら☁️</span></a>
+      <a class="mt" href="#contact"><b>お仕事・コラボ</b><span><i>ご依頼は</i><i>XのDMから☁️</i></span></a>
     </div>
     <div class="home-news">
       <h2>最新のお知らせ</h2>
@@ -533,14 +545,13 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   </section>
 
   <section id="pg-rules" class="page">
-    <h2>お願いごと <span class="sample">サンプル</span></h2>
+    <h2>お願いごと</h2>
     <div class="card">
       <p style="margin:0 0 4px"><span class="ph">みんなで気持ちよく</span><span class="ph">過ごすためのお願いだよ🩵</span><span class="ph">タップで開くよ☁️</span></p>
-      <details><summary>配信について</summary><p>初見さんもROMさんも大歓迎だよ🩵 気軽にコメントしてね✨(本文はみちゃの言葉に差し替えるよ)</p></details>
-      <details><summary>Xでの反応について</summary><p><span class="ph">いいねや</span><span class="ph">リプライは</span><span class="ph">とっても</span><span class="ph">うれしいよ🩵</span><span class="ph">(本文は</span><span class="ph">あとで</span><span class="ph">差し替えるよ)</span></p></details>
-      <details><summary>プレゼントについて</summary><p><span class="ph">お気持ちだけで</span><span class="ph">十分だよ☁️</span><span class="ph">(本文は</span><span class="ph">あとで</span><span class="ph">差し替えるよ)</span></p></details>
-      <details><summary>お休みについて</summary><p><span class="ph">お休みの日は、</span><span class="ph">お知らせで</span><span class="ph">伝えるね🐻</span><span class="ph">(本文は</span><span class="ph">あとで</span><span class="ph">差し替えるよ)</span></p></details>
-      <details><summary>少しだけ大切なお願い</summary><p><span class="ph">ほかの人が</span><span class="ph">嫌な気持ちに</span><span class="ph">なることは</span><span class="ph">控えてね🫧</span><span class="ph">(本文は</span><span class="ph">あとで</span><span class="ph">差し替えるよ)</span></p></details>
+      <details><summary>🎀 配信について</summary><p><span class="ph">みんなが楽しく過ごせる枠にしたいので、</span><span class="ph">過度な発言や</span><span class="ph">誰かを傷つけるような発言は</span><span class="ph">控えてね🙇🏻‍♀️</span><br><span class="ph">みんなで居心地のいい枠を</span><span class="ph">作っていこうね✨</span></p></details>
+      <details><summary>🩵 Xについて</summary><p><span class="ph">リプやいいねなど、</span><span class="ph">反応してもらえるのは</span><span class="ph">とっても嬉しいです!</span><br><span class="ph">気軽に絡んでくれたら</span><span class="ph">喜びます♡</span><span class="ph">どんどん反応してね!</span></p></details>
+      <details><summary>🎁 プレゼントについて</summary><p><span class="ph">チア鯖には</span><span class="ph">Amazonのほしい物リストを</span><span class="ph">掲載しています✨</span><br><span class="ph">お気持ちで送っていただけたら、</span><span class="ph">とっても嬉しいです!</span><br><span class="ph">いただいたプレゼントは、</span><span class="ph">感謝の気持ちを込めて</span><span class="ph">Xでメンション付きで</span><span class="ph">紹介させてもらいます🩵</span></p></details>
+      <details><summary>⚠️ 大切なお願い</summary><p><span class="ph">配信・X・チア鯖、</span><span class="ph">すべての場所で</span><span class="ph">みんなが安心して楽しめるよう、</span><span class="ph">以下の行為は禁止しています。</span></p><ul class="ban"><li><span class="ph">他枠での会話内容や</span><span class="ph">個人的な情報の持ち込み</span></li><li><span class="ph">過度な暴言や</span><span class="ph">誹謗中傷</span></li><li><span class="ph">過度な下ネタや</span><span class="ph">不適切な発言</span></li><li><span class="ph">内通行為や、</span><span class="ph">他の場所での会話内容を</span><span class="ph">無断で共有する行為</span></li></ul><p><span class="ph">それぞれの場所や状況に合った</span><span class="ph">発言・行動を</span><span class="ph">お願いします🙇🏻‍♀️</span></p></details>
     </div>
   </section>
 
@@ -584,6 +595,12 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
       <div class="stamps" id="stamps" aria-label="スタンプカード"></div>
       <p class="prize" id="prize"></p>
     </div>
+    <div class="card" style="margin-top:16px" id="monCard">
+      <b style="color:var(--blue)">毎日きたよカレンダー📅</b>
+      <p class="monsub" id="monSub"></p>
+      <div class="mon" id="monGrid" aria-label="今月の来た日"></div>
+      <div class="monprize" id="monPrize"></div>
+    </div>
     <div class="card" style="margin-top:16px">
       <b style="color:var(--blue)">配信スタンプ🎤</b>
       <p style="margin:6px 0 0;font-size:14px"><span class="ph">配信で発表される</span><span class="ph">「配信コード」を入れると、</span><span class="ph">1日1回スタンプ+1個だよ🩵</span></p>
@@ -592,7 +609,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     </div>
     <div class="card" style="margin-top:16px">
       <b style="color:var(--blue)">スタンプのたまりかた✨</b>
-      <ul class="how"><li>配信に来て「配信コード」を入れる → +1個</li><li>おみくじで大吉(とレア)が出る → +1個</li><li>20個たまったらレベルUP!次のカードへ🩵</li></ul>
+      <ul class="how"><li>HPに来る(1日1回) → +1個</li><li>配信に来て「配信コード」を入れる → +1個</li><li>おみくじで大吉(とレア)が出る → +1個</li><li>20個たまったらレベルUP!次のカードへ🩵</li></ul>
       <b style="color:var(--blue);display:block;margin-top:14px">ランクの一覧🐻</b>
       <div class="rkwrap"><p class="rkh">MICHAMARU RANK</p><p class="rks">20 STAMPS TO LEVEL UP 🩵</p><div id="ttlList"></div></div>
       <p class="note">カードが1枚そろうたびに、あなたのランクが上がっていくよ✨</p>
@@ -607,18 +624,14 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   </section>
 
   <section id="pg-contact" class="page">
-    <h2>お問い合わせ</h2>
+    <h2>お仕事・コラボ</h2>
     <div class="card">
-      <form id="contactForm" novalidate>
-        <label for="cname" style="margin-top:0">お名前</label>
-        <input id="cname" type="text" autocomplete="name">
-        <label for="cmail">連絡先(メールまたはXのID)</label>
-        <input id="cmail" type="text">
-        <label for="cbody">内容</label>
-        <textarea id="cbody"></textarea>
-        <div style="margin-top:14px;text-align:right"><button class="btn" type="submit">送信する</button></div>
-      </form>
-      <div class="toast" id="contactToast" role="status"></div>
+      <b style="color:var(--blue);font-size:16px">お仕事のご依頼はXから</b>
+      <p style="margin:10px 0 0;font-size:14px;line-height:1.9"><span class="ph">X(旧Twitter)のDMから、</span><span class="ph">お気軽にご連絡ください。</span></p>
+      <p style="margin:10px 0 0;font-size:14px;line-height:1.9"><span class="ph">ご連絡の際は、</span><span class="ph">企業名・</span><span class="ph">ホームページのURL・</span><span class="ph">ご担当者さまのお名前・</span><span class="ph">ご依頼内容の詳細を</span><span class="ph">お書き添えいただけると</span><span class="ph">助かります🩵</span></p>
+      <p style="margin:10px 0 0;font-size:14px;line-height:1.9"><span class="ph">コラボのお誘いも、</span><span class="ph">同じようにDMで</span><span class="ph">お待ちしています☁️</span></p>
+      <div style="margin-top:16px;text-align:center"><a class="btn" href="https://x.com/mitya2305" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">XのプロフィールからDMする</a></div>
+      <p class="note" style="margin-top:10px"><span class="ph">プロフィールの</span><span class="ph">メッセージボタンから</span><span class="ph">送ってね</span></p>
     </div>
   </section>
 
@@ -789,12 +802,6 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
     show($('#msgToast'),'ありがとう🩵 届いたよ!(試作のため、この端末の更新ページにだけ届くよ)');
     msg.value=''; $('#cnt').textContent='0';
   });
-  $('#contactForm').addEventListener('submit',function(e){
-    e.preventDefault();
-    if(!$('#cbody').value.trim()){ show($('#contactToast'),'内容を書いてから送信してね🫧'); return; }
-    show($('#contactToast'),'ありがとう🩵(試作のため、実際には送信されていないよ)');
-    e.target.reset();
-  });
 
   /* ---------- omikuji + stamp ---------- */
   var KEY='mcm_stamps', CARD=20;
@@ -957,6 +964,31 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) initOmi(); });
   initOmi();
   drawStamps(); renderTitle(); renderSecret();
+  /* ---------- 来訪スタンプ & 毎日きたよ ---------- */
+  function ym(d){ return d.getFullYear()+'-'+(d.getMonth()+1); }
+  function getDays(){ try{ var j=JSON.parse(store('mcm_days')||'null'); if(j&&j.m===ym(new Date())&&Array.isArray(j.d)) return j; }catch(e){} return {m:ym(new Date()),d:[]}; }
+  function drawMonth(){
+    var n=new Date(), last=new Date(n.getFullYear(),n.getMonth()+1,0).getDate(), j=getDays(), h='';
+    for(var i=1;i<=last;i++) h+='<i class="'+(j.d.indexOf(i)>-1?'on':'')+(i===n.getDate()?' now':'')+'">'+i+'</i>';
+    $('#monGrid').innerHTML=h;
+    var c=j.d.length;
+    $('#monSub').textContent=(n.getMonth()+1)+'月は '+c+' / '+last+' 日きてくれたよ🩵 毎日きて、1か月ぜんぶそろえると…!';
+    var p=$('#monPrize');
+    if(c>=last){ p.className='monprize full'; p.innerHTML='🎉 皆勤賞!今月の限定アイコンリングがもらえるよ🎁<br>みちゃのXに、この画面のスクショを付けてDMしてね<br><a class="btn small" href="https://x.com/mitya2305" target="_blank" rel="noopener">XでみちゃにDMする</a>'; }
+    else { p.className='monprize'; p.textContent='1か月まいにち来てくれた人には、毎月かわる限定アイコンリングをプレゼント🎁(月がかわると、またゼロからスタート!)'; }
+  }
+  function visitToast(msg){ var t=$('#visitToast'); t.textContent=msg; t.classList.add('on'); setTimeout(function(){ t.classList.remove('on'); },3200); }
+  function dailyVisit(){
+    var t=today(); if(store('mcm_visit')===t) return;
+    store('mcm_visit',t);
+    var j=getDays(), d=new Date().getDate(); if(j.d.indexOf(d)<0) j.d.push(d); store('mcm_days',JSON.stringify(j));
+    var up=addStamp(); drawMonth();
+    visitToast('きてくれてありがとう🩵 来訪スタンプ+1🐻');
+  }
+  drawMonth();
+  setTimeout(dailyVisit,2500);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) setTimeout(dailyVisit,500); });
+
 
   /* tab scroll hints */
   (function(){
@@ -1081,6 +1113,7 @@ h2::after{content:"";width:20px;height:20px;background:url(assets/sparkle.svg) c
   }
 })();
 </script>
+<div id="visitToast" role="status"></div>
 <div id="updBar" role="status"><b>🫧 新しいバージョンがあるよ!<br>更新するともっと楽しくなるよ✨</b><button type="button" id="updGo">更新する</button><button type="button" class="x" id="updX" aria-label="閉じる">✕</button></div>
 
 <script>
