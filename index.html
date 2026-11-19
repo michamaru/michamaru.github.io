@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261119120812">
+<meta name="meta-build" content="20261119150621">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -330,6 +330,7 @@ details p+.ban{margin-top:-4px}
 .lock p{margin:6px 0;line-height:1.7}
 .lock .btn{display:inline-block;margin-top:8px;text-decoration:none}
 .sim{margin-bottom:12px;padding:12px 14px}
+.sim[hidden]{display:none}
 .sim summary{cursor:pointer;font-weight:700;font-size:13px;color:var(--blue)}
 .sim .sn{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
 .sim .sn button{font:inherit;font-size:13px;font-weight:700;border:1px solid #cfe6fb;background:#fff;color:#5b8be0;border-radius:999px;min-width:38px;padding:6px 10px;cursor:pointer}
@@ -631,7 +632,7 @@ details p+.ban{margin-top:-4px}
 
   <section id="pg-secret" class="page">
     <h2>ひみつの部屋</h2>
-    <details class="sim card" id="simBox"><summary>🔮 スタンプカードをそろえたら?(お試し)</summary><div id="simIn"></div></details>
+    <details class="sim card" id="simBox" hidden><summary>🔮 スタンプカードをそろえたら?(お試し)</summary><div id="simIn"></div></details>
     <div class="card" id="secretBody"></div>
   </section>
 
@@ -940,7 +941,7 @@ details p+.ban{margin-top:-4px}
   function renderSecret(){
     var b=$('#secretBody');
     if(cards<1){
-      b.innerHTML='<div class="lock"><img src="assets/bear.svg" alt=""><p><b>ここは、ひみつの部屋🔒</b></p><p>スタンプカードを<b>1枚</b>そろえた人だけが入れるよ🩵<br>いまは '+count+' / '+CARD+' 個だよ!</p><a class="btn" href="#stamp">スタンプカードを見る🐻</a></div>';
+      b.innerHTML='<div class="lock"><img src="assets/bear.svg" alt=""><p><b>ここは、ひみつの部屋🔒</b></p><p>スタンプカードを<b>1枚</b>そろえた人だけが入れるよ🩵<br>いまは <b>'+(cards+1)+'枚目</b>のカードに<br>'+count+' / '+CARD+' 個たまってるよ🩵</p><a class="btn" href="#stamp">スタンプカードを見る🐻</a></div>';
       return;
     }
     var h='<div class="lock open"><img src="assets/heart.svg" alt=""><p><b>ひみつの部屋へようこそ🩵</b></p><p>スタンプカードを'+cards+'枚そろえた、みちゃっこだけの場所だよ✨</p></div>';
