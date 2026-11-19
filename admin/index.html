@@ -556,7 +556,7 @@ details p+.ban{margin-top:-4px}
     body.innerHTML='<div class="tiles">'
       +'<button class="tile" data-go="news"><b>お知らせ</b><span>追加・削除</span></button>'
       +'<button class="tile" data-go="week"><b>今週の配信予定</b><span>曜日ごとに入力</span></button>'
-      +'<button class="tile" data-go="songs"><b>歌える曲</b><span>追加・まとめて登録</span></button>'
+      +'<button class="tile" data-go="songs"><b>歌える曲</b><span>UTAEMOで更新</span></button>'
       +'<button class="tile" data-go="code"><b>配信コード</b><span>スタンプ用の合言葉</span></button>'
       +'<button class="tile" data-go="ring"><b>アイコンリング</b><span>皆勤賞の毎月のプレゼント</span></button>'
       +'<button class="tile" data-go="perk"><b>ひみつの特典</b><span>10枚ぶんの中身を登録</span></button>'
@@ -662,30 +662,17 @@ details p+.ban{margin-top:-4px}
     });
   }
   function vSongs(){
-    var h='<div class="card"><label for="st" style="margin-top:0">曲名</label><input id="st" type="text">'
-      +'<label for="sa">アーティスト</label><input id="sa" type="text">'
-      +'<div style="text-align:right;margin-top:10px"><button class="btn" id="sAdd" type="button">1曲追加</button></div>'
-      +'<label for="sb">まとめて追加(1行に1曲、「曲名 / アーティスト」)</label><textarea id="sb" style="min-height:90px"></textarea>'
-      +'<div style="text-align:right;margin-top:10px"><button class="btn ghost" id="sBulk" type="button">まとめて追加</button></div></div>'
-      +'<div class="card" style="margin-top:16px"><p class="note" style="margin-top:0">登録済み '+data.songs.length+'曲</p>';
-    h+= data.songs.map(function(s,i){return '<div class="arow"><div class="grow"><b>'+esc(s[0])+'</b><br><small>'+esc(s[1])+'</small></div><button class="btn small ghost" data-del="'+i+'" type="button">削除</button></div>';}).join('');
-    body.innerHTML=h+'</div><div class="toast" id="sToast" role="status"></div>'+demoNote();
-    $('#sAdd').addEventListener('click',function(){
-      var t=$('#st').value.trim(); if(!t) return;
-      if(data.songs.some(function(s){return s[0]===t&&s[1]===$('#sa').value.trim();})){ show($('#sToast'),'その曲はもう登録されています。'); return; }
-      data.songs.unshift([t,$('#sa').value.trim()]); save(); vSongs();
-    });
-    $('#sBulk').addEventListener('click',function(){
-      var add=0, skip=0;
-      $('#sb').value.split('\n').forEach(function(line){
-        line=line.trim(); if(!line) return;
-        var p=line.split(/\s*[\/／]\s*/), t=p[0], a=p[1]||'';
-        if(data.songs.some(function(s){return s[0]===t&&s[1]===a;})){ skip++; return; }
-        data.songs.push([t,a]); add++;
-      });
-      save(); vSongs(); show($('#sToast'),add+'曲追加しました。'+(skip?'(重複'+skip+'曲はスキップ)':''));
-    });
-    body.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ data.songs.splice(+b.dataset.del,1); save(); vSongs(); }); });
+    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">歌える曲は、<b>UTAEMO</b>で更新します。曲を選んだあと、UTAEMOの「管理」タブにある「HPに反映する」を押すと、HPの「歌える曲」ページが同じ内容になります。</p>'
+      +'<p class="note" id="utState" style="margin-top:10px">HPに出ている曲を確認しています…</p>'
+      +'<div style="display:grid;gap:10px;margin-top:14px"><a class="btn" href="https://utalis.github.io/" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">UTAEMOを開く</a>'
+      +'<a class="btn ghost" href="../#songs" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">HPの歌える曲ページを見る</a></div>'
+      +'<p class="note" style="margin-top:14px">UTAEMOには、公開したときと同じ方法(Googleログイン)で入ってね。</p></div>';
+    fetch('https://utaeru-api.manabit.workers.dev/api/hp/michamaru-hp/songs',{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(d){
+      var el=$('#utState'); if(!el) return;
+      if(!d||!d.songs){ el.textContent='まだHPに反映されていません。'; return; }
+      var t=''; try{ var x=new Date(d.publishedAt); t=(x.getMonth()+1)+'/'+x.getDate()+' '+('0'+x.getHours()).slice(-2)+':'+('0'+x.getMinutes()).slice(-2); }catch(e){}
+      el.innerHTML='いまHPに出ている曲:<b> '+d.songCount+'曲</b>'+(t?'(最終反映 '+esc(t)+')':'');
+    }).catch(function(){ var el=$('#utState'); if(el) el.textContent=''; });
   }
   function vInbox(){
     var h='<div class="card">';
