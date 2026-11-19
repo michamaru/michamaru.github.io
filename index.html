@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261120045855">
+<meta name="meta-build" content="20261120050116">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -660,10 +660,6 @@ details p+.ban{margin-top:-4px}
       <button class="btn pink" id="omiBtn" type="button">おみくじをひく</button>
       <p class="note" style="text-align:center"><a href="#stamp">スタンプカードを見る🐻</a></p>
     </div>
-  </section>
-
-  <section id="pg-ema" class="page">
-    <h2>絵馬</h2>
     <div class="card ema" id="emaCard">
       <h3>絵馬を奉納する</h3>
       <p style="margin:0;font-size:14px"><span class="ph">みちゃﾏﾙと叶えたいことでも、</span><span class="ph">自分の願い事でも、</span><span class="ph">好きなほうを書いてね🩵</span></p>
@@ -1198,18 +1194,19 @@ details p+.ban{margin-top:-4px}
   function route(){
     var r=location.hash.slice(1); if(routes.indexOf(r)<0) r='home';
     document.body.setAttribute('data-route',r);
+    var pk=(r==='ema')?'omikuji':r;
     routes.forEach(function(k){
-      var el=document.getElementById('pg-'+k); if(el) el.classList.toggle('on',k===r);
+      var el=document.getElementById('pg-'+k); if(el) el.classList.toggle('on',k===pk);
       if(tabLinks[k]) tabLinks[k].classList.toggle('on',k===r);
     });
-    var pg=document.getElementById('pg-'+r);
+    var pg=document.getElementById('pg-'+pk);
     if(pg){ pg.querySelectorAll('.mt,.card,h2,.day,details').forEach(function(el,i){ el.classList.remove('rv'); void el.offsetWidth; el.style.setProperty('--i',Math.min(i,10)); el.classList.add('rv'); }); }
     var a=tabLinks[r]; if(a){ try{ a.scrollIntoView({inline:'center',block:'nearest'}); }catch(e){} }
     if(r==='home') setHito();
     if(r==='secret') renderSecret();
     if(r==='calendar') renderCal();
-    if(r==='ema') loadEma();
-    window.scrollTo(0,0);
+    if(r==='omikuji'||r==='ema') loadEma();
+    if(r==='ema'){ var ec=document.getElementById('emaCard'); setTimeout(function(){ if(ec) window.scrollTo(0,Math.max(0,ec.getBoundingClientRect().top+window.pageYOffset-90)); },60); } else window.scrollTo(0,0);
   }
   window.addEventListener('hashchange',route);
 
