@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261119231939">
+<meta name="meta-build" content="20261119234531">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -323,8 +323,12 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
 .ema .kinds button{font:inherit;font-size:13px;font-weight:700;border:2px solid #d8ecf8;background:#fff;color:#6f8db8;border-radius:999px;padding:6px 12px;cursor:pointer}
 .ema .kinds button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .ema textarea{width:100%;min-height:76px;border:2px solid #d8ecf8;border-radius:14px;padding:10px 12px;font:inherit;font-size:15px;color:var(--ink);resize:vertical}
-.emawall{display:grid;grid-template-columns:1fr;gap:6px;margin-top:6px;justify-items:center}
-.emap{position:relative;width:min(100%,300px);aspect-ratio:403/420;background:url(assets/ema.png) center/100% 100% no-repeat;color:#6b4a2a;filter:drop-shadow(0 4px 6px rgba(91,139,224,.18))}
+.emawall{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 2px 10px;margin-top:4px;scrollbar-width:thin}
+.emasort{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 8px}
+.emasort button{font:inherit;font-size:12px;font-weight:700;border:2px solid #d8ecf8;background:#fff;color:#6f8db8;border-radius:999px;padding:3px 11px;cursor:pointer}
+.emasort button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.emahint{font-size:12px;color:#6f8db8;margin:0;text-align:center}
+.emap{position:relative;flex:0 0 min(80%,290px);scroll-snap-align:center;aspect-ratio:403/420;background:url(assets/ema.png) center/100% 100% no-repeat;color:#6b4a2a;filter:drop-shadow(0 4px 6px rgba(91,139,224,.18))}
 .emap .et{position:absolute;left:17%;right:17%;top:47%;bottom:15%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:13px;line-height:1.5;word-break:break-word;overflow:hidden}
 .emap small{display:block;margin-bottom:3px;font-size:11px;font-weight:700;border-radius:999px;padding:0 9px}
 .emap.together small{background:#dff0fb;color:#4f86c6}
@@ -664,7 +668,9 @@ details p+.ban{margin-top:-4px}
       <p class="note">書いた願い事は、みちゃﾏﾙが見て、選んだものだけが絵馬掛けに並ぶよ🫧</p>
     </div>
     <h2 style="margin-top:22px">絵馬掛け</h2>
-    <div class="emawall" id="emaWall"><p class="note" style="grid-column:1/-1;text-align:center">よみこみ中…</p></div>
+    <div class="emasort" id="emaSort"><button type="button" class="on" data-s="new">新しい順</button><button type="button" data-s="old">古い順</button><button type="button" data-s="rnd">ランダム</button></div>
+    <div class="emawall" id="emaWall"><p class="note" style="margin:0 auto;text-align:center">よみこみ中…</p></div>
+    <p class="emahint">← 横にスライドして見られるよ →</p>
   </section>
 
   <section id="pg-stamp" class="page">
@@ -1248,16 +1254,25 @@ details p+.ban{margin-top:-4px}
 
   /* ---------- 絵馬 ---------- */
   var emaKind='together', emaLoaded=false;
+  var emaAll=[], emaSort='new';
+  function sortedEma(){
+    var l=emaAll.slice();
+    if(emaSort==='old') l.reverse();
+    else if(emaSort==='rnd'){ for(var i=l.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=l[i]; l[i]=l[j]; l[j]=t; } }
+    return l;
+  }
   function drawEma(list){
     var w=document.getElementById('emaWall'); if(!w) return;
-    if(!list||!list.length){ w.innerHTML='<p class="note" style="grid-column:1/-1;text-align:center">まだ絵馬はないよ。これから並んでいくよ\ud83e\ude75</p>'; return; }
+    if(list) w.scrollLeft=0;
+    if(!list||!list.length){ w.innerHTML='<p class="note" style="margin:0 auto;text-align:center">まだ絵馬はないよ。これから並んでいくよ\ud83e\ude75</p>'; return; }
     w.innerHTML=list.map(function(x){ return '<div class="emap '+(x.k==='together'?'together':'self')+'"><div class="et"><small>'+(x.k==='together'?'みちゃﾏﾙと叶えたい':'わたしの願い事')+'</small><span>'+esc(x.b)+'</span></div></div>'; }).join('');
   }
   function loadEma(){
     if(emaLoaded) return; emaLoaded=true;
-    rpc('michamaru_ema_pub').then(function(l){ drawEma(l||[]); }).catch(function(){ emaLoaded=false; drawEma([]); });
+    rpc('michamaru_ema_pub').then(function(l){ emaAll=l||[]; drawEma(sortedEma()); }).catch(function(){ emaLoaded=false; drawEma([]); });
   }
   (function(){
+    var so=document.getElementById('emaSort'); if(so) so.addEventListener('click',function(ev){ var b=ev.target.closest('button[data-s]'); if(!b) return; emaSort=b.dataset.s; so.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',x===b); }); drawEma(sortedEma()); });
     var k=document.getElementById('emaKinds'); if(!k) return;
     k.addEventListener('click',function(ev){ var b=ev.target.closest('button[data-k]'); if(!b) return; emaKind=b.dataset.k; k.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',x===b); }); });
     var t=document.getElementById('emaT'); t.addEventListener('input',function(){ document.getElementById('emaCnt').textContent=t.value.length; });
