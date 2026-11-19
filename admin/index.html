@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="meta-build" content="20261119152651">
+<meta name="meta-build" content="20261119152850">
 <meta name="theme-color" content="#3d6fb8">
 <meta name="robots" content="noindex">
 <title>みちゃﾏﾙ管理</title>
@@ -501,7 +501,7 @@ details p+.ban{margin-top:-4px}
     });
     if(!any) return;
     stat('保存中…');
-    sq=sq.then(function(){ stat('保存しました🩵'); setTimeout(function(){ stat(''); },2500); },function(e){
+    sq=sq.then(function(){ stat('保存しました'); setTimeout(function(){ stat(''); },2500); },function(e){
       sq=Promise.resolve();
       if(e&&e.message==='auth'){ mode='locked'; setPass(''); stat('合言葉が違うようです',true); }
       else stat('保存できませんでした。通信をご確認のうえ、もう一度お試しください',true);
@@ -510,7 +510,7 @@ details p+.ban{margin-top:-4px}
   function serverDel(k){
     delete synced[k]; heavy=heavy.filter(function(x){ return x!==k; });
     if(mode!=='server') return;
-    sq=sq.then(function(){ return rpc('michamaru_del',{p_pass:getPass(),p_key:k}); }).then(function(){ stat('保存しました🩵'); setTimeout(function(){ stat(''); },2500); },function(){ sq=Promise.resolve(); stat('削除できませんでした',true); });
+    sq=sq.then(function(){ return rpc('michamaru_del',{p_pass:getPass(),p_key:k}); }).then(function(){ stat('保存しました'); setTimeout(function(){ stat(''); },2500); },function(){ sq=Promise.resolve(); stat('削除できませんでした',true); });
   }
   function loadPub(){
     rpc('michamaru_public').then(function(p){
@@ -533,16 +533,16 @@ details p+.ban{margin-top:-4px}
   }
   function verify(p,silent,tt){
     rpc('michamaru_chk',{p_pass:p}).then(function(ok){
-      if(ok){ setPass(p); mode='server'; rpc('michamaru_public').then(function(pb){ if(pb) applyPub(pb); go('menu'); }).catch(function(){ vGate('読み込めなかったよ。電波のよいところで、もう一度ためしてね'); }); }
-      else { setPass(''); vGate(silent?'':'合言葉が違うみたい。もう一度入れてね🫧'); if(!silent&&tt) show(tt,'合言葉が違うみたい。もう一度入れてね🫧'); }
+      if(ok){ setPass(p); mode='server'; rpc('michamaru_public').then(function(pb){ if(pb) applyPub(pb); go('menu'); }).catch(function(){ vGate('読み込めませんでした。電波のよい場所で、もう一度お試しください'); }); }
+      else { setPass(''); vGate(silent?'':'合言葉が違うようです。もう一度ご入力ください'); if(!silent&&tt) show(tt,'合言葉が違うようです。もう一度ご入力ください'); }
     }).catch(function(e){
       if(e&&(e.status===404||/function|schema cache/i.test(e.message||''))){ mode='demo'; go('menu'); }
-      else { vGate('通信できなかったよ。電波のよいところで、もう一度ためしてね'); }
+      else { vGate('通信できませんでした。電波のよい場所で、もう一度お試しください'); }
     });
   }
   function vGate(msg){
-    view='gate'; $('#adTitle').innerHTML='HP更新ページ<small>合言葉を入れてひらきます</small>'; $('#adBack').style.display='none';
-    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">更新する人だけが入れるページです。合言葉を入れてね。</p><label for="gp">合言葉</label><input id="gp" type="password" autocomplete="current-password"><div style="text-align:right;margin-top:12px"><button class="btn" id="gGo" type="button">ひらく</button></div><div class="toast" id="gToast" role="status"></div></div>';
+    view='gate'; $('#adTitle').innerHTML='HP更新ページ<small>合言葉を入力すると開きます</small>'; $('#adBack').style.display='none';
+    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">更新する方だけが入れるページです。合言葉をご入力ください。</p><label for="gp">合言葉</label><input id="gp" type="password" autocomplete="current-password"><div style="text-align:right;margin-top:12px"><button class="btn" id="gGo" type="button">ひらく</button></div><div class="toast" id="gToast" role="status"></div></div>';
     if(msg) show($('#gToast'),msg);
     var go2=function(){ var v=$('#gp').value; if(!v) return; verify(v,false,$('#gToast')); };
     $('#gGo').addEventListener('click',go2); $('#gp').addEventListener('keydown',function(e){ if(e.key==='Enter') go2(); });
@@ -582,12 +582,12 @@ details p+.ban{margin-top:-4px}
     function list(){
       var ks=Object.keys(data.rings); heavy.forEach(function(h){ if(h.indexOf('ring:')===0&&ks.indexOf(h.slice(5))<0) ks.push(h.slice(5)); }); ks.sort();
       ks.forEach(function(k){ if(!data.rings[k]) loadHeavy('ring:'+k,function(){ if(view==='ring') list(); }); });
-      $('#rList').innerHTML=ks.length?ks.map(function(k){ return '<div class="arow"><b>'+esc(k.replace('-','年')+'月分')+'</b><div class="grow">'+(data.rings[k]?'<img src="'+data.rings[k]+'" alt="" style="width:56px;height:56px;object-fit:contain;border-radius:12px;background:#eef7ff">':'よみこみ中…')+'</div><button class="btn small ghost" data-rd="'+esc(k)+'" type="button">削除</button></div>'; }).join(''):'<p class="note" style="margin:0">まだ登録されていないよ。</p>';
+      $('#rList').innerHTML=ks.length?ks.map(function(k){ return '<div class="arow"><b>'+esc(k.replace('-','年')+'月分')+'</b><div class="grow">'+(data.rings[k]?'<img src="'+data.rings[k]+'" alt="" style="width:56px;height:56px;object-fit:contain;border-radius:12px;background:#eef7ff">':'よみこみ中…')+'</div><button class="btn small ghost" data-rd="'+esc(k)+'" type="button">削除</button></div>'; }).join(''):'<p class="note" style="margin:0">まだ登録されていません。</p>';
       $('#rList').querySelectorAll('[data-rd]').forEach(function(b){ b.addEventListener('click',function(){ delete data.rings[b.dataset.rd]; serverDel('ring:'+b.dataset.rd); drawMonth(); vRing(); }); });
     }
     list();
     $('#rSave').addEventListener('click',function(){
-      var f=$('#rf').files&&$('#rf').files[0]; if(!f){ show($('#rToast'),'画像を選んでね🫧'); return; }
+      var f=$('#rf').files&&$('#rf').files[0]; if(!f){ show($('#rToast'),'画像を選んでください'); return; }
       var fr=new FileReader();
       fr.onload=function(){
         var im=new Image();
@@ -595,9 +595,9 @@ details p+.ban{margin-top:-4px}
           var m=Math.min(1,600/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.round(im.width*m); c.height=Math.round(im.height*m);
           c.getContext('2d').drawImage(im,0,0,c.width,c.height);
           data.rings[$('#rm').value]=c.toDataURL('image/png'); save(); drawMonth();
-          show($('#rToast'),'登録しました🩵 その月の皆勤賞の人が受け取れます。'); list();
+          show($('#rToast'),'登録しました。その月の皆勤賞の方が受け取れます。'); list();
         };
-        im.onerror=function(){ show($('#rToast'),'この画像は読み込めなかったよ'); };
+        im.onerror=function(){ show($('#rToast'),'この画像は読み込めませんでした'); };
         im.src=fr.result;
       };
       fr.readAsDataURL(f);
@@ -606,7 +606,7 @@ details p+.ban{margin-top:-4px}
   function vPerk(){
     data.perks=data.perks||{};
     var opts=SEC.map(function(p,i){ var d=data.perks[i]||{}; return '<option value="'+i+'">'+(i+1)+'枚目:'+esc(p[1])+((d.t||d.img||d.url||d.au||hasHeavy('perk:'+i))?'(登録ずみ)':'')+'</option>'; }).join('');
-    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">スタンプカードをそろえた人が見られる、特典の中身を登録します。文章・画像・音声・リンクのどれか1つでも大丈夫。できたものから順番に入れてね。</p>'
+    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">スタンプカードをそろえた人が見られる、特典の中身を登録します。文章・画像・音声・リンクのどれか1つでも大丈夫。できたものから順番にご登録ください。</p>'
       +'<label for="pm" style="margin-top:8px">どの特典?</label><select id="pm">'+opts+'</select>'
       +'<label for="pt">文章(お手紙・メッセージなど)</label><textarea id="pt" style="min-height:110px"></textarea>'
       +'<label for="pf">画像(キーボード・ヘッダー・ホーム画など)</label><input id="pf" type="file" accept="image/*"><div id="pimg" class="note"></div>'
@@ -614,26 +614,26 @@ details p+.ban{margin-top:-4px}
       +'<label for="pu">リンク(動画・ファイルなどのURL。なくてもOK)</label><input id="pu" type="text" placeholder="https://..." autocomplete="off">'
       +'<div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px"><button class="btn small ghost" id="pClr" type="button">この特典を空にする</button><button class="btn" id="pSave" type="button">登録する</button></div>'
       +'<div class="toast" id="pToast" role="status"></div></div>'
-      +'<p class="note" style="margin:12px 4px 0">音声は短いもの(数秒〜十数秒)を選んでね。約3MBまで入ります。</p>'+demoNote();
+      +'<p class="note" style="margin:12px 4px 0">音声は短いもの(数秒〜十数秒)をお選びください。約3MBまで入ります。</p>'+demoNote();
     var cur=0, img='', au='';
-    function load(){ cur=+$('#pm').value; var d=data.perks[cur]||{}; if(!data.perks[cur]&&hasHeavy('perk:'+cur)){ var kk=cur; loadHeavy('perk:'+kk,function(){ if(view==='perk'&&cur===kk) load(); }); } $('#pt').value=d.t||''; $('#pu').value=d.u||d.url||''; img=d.img||''; au=d.au||''; $('#pf').value=''; $('#pa').value=''; $('#paud').innerHTML=au?'<audio controls src="'+au+'" style="width:100%"></audio>音声は登録ずみ(選び直すと入れ替わるよ)':''; $('#pimg').innerHTML=img?'<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">画像は登録ずみ(選び直すと入れ替わるよ)':''; }
+    function load(){ cur=+$('#pm').value; var d=data.perks[cur]||{}; if(!data.perks[cur]&&hasHeavy('perk:'+cur)){ var kk=cur; loadHeavy('perk:'+kk,function(){ if(view==='perk'&&cur===kk) load(); }); } $('#pt').value=d.t||''; $('#pu').value=d.u||d.url||''; img=d.img||''; au=d.au||''; $('#pf').value=''; $('#pa').value=''; $('#paud').innerHTML=au?'<audio controls src="'+au+'" style="width:100%"></audio>音声は登録済みです(選び直すと入れ替わります)':''; $('#pimg').innerHTML=img?'<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">画像は登録済みです(選び直すと入れ替わります)':''; }
     load(); $('#pm').addEventListener('change',load);
     $('#pf').addEventListener('change',function(){
       var f=this.files&&this.files[0]; if(!f) return;
       var fr=new FileReader(); fr.onload=function(){ var im=new Image(); im.onload=function(){
         var m=Math.min(1,900/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.round(im.width*m); c.height=Math.round(im.height*m);
         var x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(im,0,0,c.width,c.height);
-        img=c.toDataURL('image/jpeg',.85); $('#pimg').innerHTML='<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">選んだよ。「登録する」で保存されるよ'; };
-        im.onerror=function(){ show($('#pToast'),'この画像は読み込めなかったよ'); }; im.src=fr.result; }; fr.readAsDataURL(f);
+        img=c.toDataURL('image/jpeg',.85); $('#pimg').innerHTML='<img src="'+img+'" alt="" style="max-width:120px;border-radius:10px;display:block;margin-top:6px">選択しました。「登録する」を押すと保存されます'; };
+        im.onerror=function(){ show($('#pToast'),'この画像は読み込めませんでした'); }; im.src=fr.result; }; fr.readAsDataURL(f);
     });
     $('#pa').addEventListener('change',function(){
       var f=this.files&&this.files[0]; if(!f) return;
-      if(f.size>3000000){ this.value=''; show($('#pToast'),'音声が大きいよ(約3MBまで)。短くしてね'); return; }
-      var fr=new FileReader(); fr.onload=function(){ au=fr.result; $('#paud').innerHTML='<audio controls src="'+au+'" style="width:100%"></audio>選んだよ。「登録する」で保存されるよ'; }; fr.readAsDataURL(f);
+      if(f.size>3000000){ this.value=''; show($('#pToast'),'音声が大きすぎます(約3MBまで)。短いものをお選びください'); return; }
+      var fr=new FileReader(); fr.onload=function(){ au=fr.result; $('#paud').innerHTML='<audio controls src="'+au+'" style="width:100%"></audio>選択しました。「登録する」を押すと保存されます'; }; fr.readAsDataURL(f);
     });
     $('#pSave').addEventListener('click',function(){
-      var u=$('#pu').value.trim(); if(u&&!okUrl(u)){ show($('#pToast'),'リンクは https:// から始まるURLを入れてね'); return; }
-      data.perks[cur]={t:$('#pt').value.trim(),img:img,au:au,url:u}; save(); renderSecret(); show($('#pToast'),'登録しました🩵 そろえた人から見られます。'); vPerkKeep();
+      var u=$('#pu').value.trim(); if(u&&!okUrl(u)){ show($('#pToast'),'リンクは https:// から始まるURLをご入力ください'); return; }
+      data.perks[cur]={t:$('#pt').value.trim(),img:img,au:au,url:u}; save(); renderSecret(); show($('#pToast'),'登録しました。そろえた方から見られます。'); vPerkKeep();
     });
     $('#pClr').addEventListener('click',function(){ delete data.perks[cur]; serverDel('perk:'+cur); renderSecret(); vPerkKeep(); show($('#pToast'),'空にしました'); });
     function vPerkKeep(){ var k=cur; var t=$('#pToast').textContent; vPerk(); $('#pm').value=k; $('#pm').dispatchEvent(new Event('change')); show($('#pToast'),t); }
@@ -672,7 +672,7 @@ details p+.ban{margin-top:-4px}
       +'<p class="note" id="utState" style="margin-top:10px">HPに出ている曲を確認しています…</p>'
       +'<div style="display:grid;gap:10px;margin-top:14px"><a class="btn" href="https://utalis.github.io/" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">UTAEMOを開く</a>'
       +'<a class="btn ghost" href="../#songs" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">HPの歌える曲ページを見る</a></div>'
-      +'<p class="note" style="margin-top:14px">UTAEMOには、公開したときと同じ方法(Googleログイン)で入ってね。</p></div>';
+      +'<p class="note" style="margin-top:14px">UTAEMOには、公開したときと同じ方法(Googleログイン)でお入りください。</p></div>';
     fetch('https://utaeru-api.manabit.workers.dev/api/hp/michamaru-hp/songs',{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(d){
       var el=$('#utState'); if(!el) return;
       if(!d||!d.songs){ el.textContent='まだHPに反映されていません。'; return; }
@@ -689,7 +689,7 @@ details p+.ban{margin-top:-4px}
   openAd();
 })();
 </script>
-<div id="updBar" role="status"><b>新しいバージョンがあるよ!<br>更新すると、最新の画面になるよ</b><button type="button" id="updGo">更新する</button><button type="button" class="x" id="updX" aria-label="閉じる">✕</button></div>
+<div id="updBar" role="status"><b>新しいバージョンがあります。<br>更新すると、最新の画面になります。</b><button type="button" id="updGo">更新する</button><button type="button" class="x" id="updX" aria-label="閉じる">✕</button></div>
 <script>
 (function(){
   var m=document.querySelector('meta[name="meta-build"]'); if(!m) return;
