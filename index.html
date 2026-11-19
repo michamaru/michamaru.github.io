@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261119153401">
+<meta name="meta-build" content="20261119223650">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -288,6 +288,52 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
 #updBar button.x{background:none;color:#8aa6cf;padding:6px}
 @keyframes updIn{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){#updBar.on{animation:none}}
+
+/* ---- みちゃﾏﾙカレンダー ---- */
+.cal{padding:18px 14px 16px;overflow:hidden}
+.calyears{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.calyears button{font:inherit;font-weight:700;font-size:15px;border:0;background:none;color:#8db6e8;padding:4px 10px;border-radius:999px;cursor:pointer}
+.calyears button.on{background:#dcebff;color:var(--blue)}
+.calhead{display:flex;align-items:center;justify-content:center;gap:12px;margin:2px 0 10px}
+.calhead b{font-family:var(--font-display);font-size:20px;color:var(--blue);letter-spacing:.04em}
+.calhead button{font:inherit;font-size:20px;font-weight:700;border:0;background:#eaf3ff;color:var(--blue);width:34px;height:34px;border-radius:50%;cursor:pointer;line-height:1}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.calgrid .wd{background:#dcebff;color:var(--blue);font-weight:700;font-size:13px;text-align:center;border-radius:10px;padding:5px 0}
+.calgrid .wd.su{color:#e58bb0}
+.calgrid .d{position:relative;min-height:62px;background:#fff;border:1px solid #e1eefa;border-radius:10px;padding:3px 4px;font:inherit;font-size:12px;color:#7d97bd;text-align:left;display:flex;flex-direction:column;gap:2px}
+.calgrid .d.su{color:#e58bb0}.calgrid .d.sa{color:#6b9be0}
+.calgrid .d.blank{border-color:transparent;background:none}
+.calgrid button.d{cursor:pointer}
+.calgrid .d.today{box-shadow:0 0 0 2px #9ad4f2 inset}
+.calgrid .rk{display:block;border-radius:8px;padding:2px 0;text-align:center;font-weight:700;font-size:11px;line-height:1.3}
+.calgrid .rk.r1{background:#fbecc8;color:#9a6a12}.calgrid .rk.r2{background:#e6e2fb;color:#6b5db5}.calgrid .rk.r3{background:#fbdfe6;color:#b25b78}
+.calgrid .rk.rx{background:#dff0fb;color:#4f86c6}
+.calfoot{margin:12px 0 0;text-align:center;font-size:12px;color:#7d97bd}
+.calchar{position:absolute;right:4px;top:-14px;width:58px;height:auto;opacity:.95;pointer-events:none;animation:calfloat 4s ease-in-out infinite}
+@keyframes calfloat{50%{transform:translateY(-4px)}}
+.caldetail{margin-top:14px;text-align:center}
+.caldetail .cd{color:#8db6e8;font-size:14px;letter-spacing:.08em;margin:0}
+.caldetail h3{margin:4px 0 8px;font-family:var(--font-display);color:var(--blue);font-size:20px}
+.caldetail ul{list-style:none;margin:10px 0 0;padding:0;text-align:left;font-size:14px}
+.caldetail li{padding:5px 0;border-top:1px dashed #d8ecf8}
+@media (prefers-reduced-motion:reduce){.calchar{animation:none}}
+/* ---- 絵馬 ---- */
+.ema h3{margin:0 0 6px;font-family:var(--font-display);color:var(--blue);font-size:17px}
+.ema .kinds{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.ema .kinds button{font:inherit;font-size:13px;font-weight:700;border:2px solid #d8ecf8;background:#fff;color:#6f8db8;border-radius:999px;padding:6px 12px;cursor:pointer}
+.ema .kinds button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.ema textarea{width:100%;min-height:76px;border:2px solid #d8ecf8;border-radius:14px;padding:10px 12px;font:inherit;font-size:15px;color:var(--ink);resize:vertical}
+.emawall{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.emap{position:relative;background:#fff4e0;border:2px solid #e8cfa4;clip-path:none;border-radius:6px 6px 14px 14px;padding:22px 10px 12px;text-align:center;font-size:13px;line-height:1.6;color:#6b4f2a;box-shadow:0 4px 10px rgba(120,90,40,.12);word-break:break-word}
+.emap::before{content:"";position:absolute;top:7px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#fff;border:2px solid #d9b987}
+.emap::after{content:"";position:absolute;top:-10px;left:50%;width:2px;height:12px;background:#d9b987}
+.emap small{display:block;margin-bottom:4px;font-size:11px;font-weight:700;color:#b58a4d}
+.emap.together{background:#eaf6ff;border-color:#b9dcf5;color:#2f5f93}
+.emap.together small{color:#5b8be0}
+.emap.together::before{border-color:#9ad4f2}.emap.together::after{background:#9ad4f2}
+/* ---- 累計来訪者 ---- */
+.visit{margin:8px 0 2px;font-size:13px;color:#6f8db8}
+.visit b{font-size:17px;color:var(--blue)}
 </style>
 <style id="v2">
 #deco{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none}
@@ -470,6 +516,7 @@ details p+.ban{margin-top:-4px}
     <a href="#profile">プロフィール</a>
     <a href="#news">お知らせ</a>
     <a href="#schedule">今週の配信</a>
+    <a href="#calendar">カレンダー</a>
     <a href="#songs">歌える曲</a>
     <a href="#rules">お願いごと</a>
     <a href="#message">メッセージ</a>
@@ -493,6 +540,7 @@ details p+.ban{margin-top:-4px}
       <a class="mt" href="#profile"><b>プロフィール</b><span><i>みちゃのこと</i><i>知ってね🐻</i></span></a>
       <a class="mt" href="#news"><b>お知らせ</b><span><i>最新の</i><i>ニュースだよ✨</i></span></a>
       <a class="mt" href="#schedule"><b>今週の配信</b><span>遊びに来てね☁️</span></a>
+      <a class="mt" href="#calendar"><b>みちゃﾏﾙカレンダー</b><span><i>ランキングの</i><i>記録だよ🏆</i></span></a>
       <a class="mt" href="#songs"><b>歌える曲</b><span><i>リクエストも</i><i>どうぞ🎵</i></span></a>
       <a class="mt" href="#rules"><b>お願いごと</b><span>みんなで楽しく🩵</span></a>
       <a class="mt" href="#message"><b>匿名メッセージ</b><span><i>名前なしで</i><i>送れるよ🫧</i></span></a>
@@ -546,6 +594,18 @@ details p+.ban{margin-top:-4px}
     </div>
   </section>
 
+  <section id="pg-calendar" class="page">
+    <h2>みちゃﾏﾙカレンダー</h2>
+    <div class="card cal">
+      <img class="calchar" src="assets/char.png" alt="">
+      <div class="calyears" id="calYears"></div>
+      <div class="calhead"><button type="button" id="calPrev" aria-label="前の月">‹</button><b id="calTitle"></b><button type="button" id="calNext" aria-label="次の月">›</button></div>
+      <div class="calgrid" id="calGrid"></div>
+      <p class="calfoot">🏆 ランキングTOP10に入った日だけ、記録が残るよ</p>
+    </div>
+    <div class="card caldetail" id="calDetail" hidden></div>
+  </section>
+
   <section id="pg-songs" class="page">
     <h2>歌える曲リスト <span class="sample" id="songSample">サンプル</span></h2>
     <div class="card">
@@ -596,6 +656,17 @@ details p+.ban{margin-top:-4px}
       <button class="btn pink" id="omiBtn" type="button">おみくじをひく</button>
       <p class="note" style="text-align:center"><a href="#stamp">スタンプカードを見る🐻</a></p>
     </div>
+    <div class="card ema" id="emaCard">
+      <h3>絵馬を奉納する</h3>
+      <p style="margin:0;font-size:14px"><span class="ph">みちゃﾏﾙと叶えたいことでも、</span><span class="ph">自分の願い事でも、</span><span class="ph">好きなほうを書いてね🩵</span></p>
+      <div class="kinds" id="emaKinds"><button type="button" class="on" data-k="together">みちゃﾏﾙと叶えたいこと</button><button type="button" data-k="self">自分の願い事</button></div>
+      <textarea id="emaT" maxlength="80" placeholder="80文字まで書けるよ" aria-label="願い事"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span class="note" style="margin:0"><span id="emaCnt">0</span> / 80</span><button class="btn" id="emaBtn" type="button">奉納する</button></div>
+      <div class="toast" id="emaToast" role="status"></div>
+      <p class="note">書いた願い事は、みちゃﾏﾙが見て、選んだものだけが絵馬掛けに並ぶよ🫧</p>
+    </div>
+    <h2 style="margin-top:22px">絵馬掛け</h2>
+    <div class="emawall" id="emaWall"><p class="note" style="grid-column:1/-1;text-align:center">よみこみ中…</p></div>
   </section>
 
   <section id="pg-stamp" class="page">
@@ -656,6 +727,7 @@ details p+.ban{margin-top:-4px}
     <button class="btn small ghost" id="replay" type="button">オープニングをもう一度</button>
   </div>
   <img class="cline" src="assets/cloudline.svg" alt="">
+  <div class="visit" id="visit" hidden>累計来訪者 <b id="visN">0</b>人<small>(11/23〜)</small></div>
   <div>© みちゃﾏﾙ</div>
   <details class="credit"><summary>CREDIT</summary><p>くま・鳥居・神社・おみくじ箱・雲・キラキラ・ハートのイラスト: <a href="https://tsukatte.com/" target="_blank" rel="noopener">ツカッテ</a><br>しゃぼん玉: 甘樫(<a href="https://booth.pm/ja/items/7387531" target="_blank" rel="noopener">BOOTH・かわいい素材屋さん</a>)<br>大きな雲: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
 </footer>
@@ -717,7 +789,7 @@ details p+.ban{margin-top:-4px}
 
   /* ---------- data ---------- */
   var DEF={
-    v:2, rev:4, code:'みちゃ',
+    v:2, rev:4, code:'みちゃ', cal:{},
     news:[['11/23','ホームページ開設🩵'],['10/29','スターズ復帰'],['10/23','初日リボン争奪戦 Bグル1位'],['10/12','配信復帰'],['5/16','スターズSタッチ'],['5/13','新人王2位'],['4/20','スターズAタッチ'],['4/19','デビュラン1ヶ月編 Aグル1位'],['4/6','ミラスタSタッチ'],['3/31','スターズBタッチ'],['3/22','デビュラン1週間編 Bグル1位'],['3/14','初配信 & デビュー🎉']],
     week:[['18(水)','22:00','雑談・あるぴ・還元企画'],['19(木)','22:00','雑談・あるぴ・還元企画'],['20(金)','22:00','雑談・あるぴ・還元企画'],['21(土)','22:00','雑談・あるぴ・還元企画'],['22(日)','22:00','雑談']],
     songs:[['サンプル曲 A','アーティスト1'],['サンプル曲 B','アーティスト2'],['サンプル曲 C','アーティスト3'],['サンプル曲 D','アーティスト1'],['サンプル曲 E','アーティスト4'],['サンプル曲 F','アーティスト2']]
@@ -734,7 +806,7 @@ details p+.ban{margin-top:-4px}
   function setPass(v){ try{ localStorage.setItem('mcm_admin_pass',v); }catch(e){} }
   function applyPub(p){
     var d=(p&&p.data)||{};
-    ['news','week','songs','code'].forEach(function(k){ if(d[k]!==undefined){ data[k]=d[k]; synced[k]=JSON.stringify(d[k]); } });
+    ['news','week','songs','code','cal'].forEach(function(k){ if(d[k]!==undefined){ data[k]=d[k]; synced[k]=JSON.stringify(d[k]); } });
     heavy=(p&&p.heavy)||[];
   }
   try{ var cp=JSON.parse(store('mcm_pub')||'null'); if(cp) applyPub(cp); }catch(e){}
@@ -842,7 +914,7 @@ details p+.ban{margin-top:-4px}
   function renderHomeNews(){
     $('#homeNews').innerHTML=data.news.slice(0,2).map(function(n){return '<li><time>'+esc(n[0])+'</time><span>'+phr(n[1])+'</span></li>';}).join('')||'<li>お知らせはまだないよ☁️</li>';
   }
-  function renderAll(){ renderNews(); renderWeek(); renderSongs(); renderHomeNews(); }
+  function renderAll(){ renderNews(); renderWeek(); renderSongs(); renderHomeNews(); if(typeof renderCal==='function') renderCal(); }
   renderAll();
 
   /* ---------- message / contact ---------- */
@@ -1109,7 +1181,7 @@ details p+.ban{margin-top:-4px}
   })();
 
   /* ---------- pages (hash routing) ---------- */
-  var routes=['home','profile','news','schedule','songs','rules','message','omikuji','stamp','secret','contact'];
+  var routes=['home','profile','news','schedule','calendar','songs','rules','message','omikuji','stamp','secret','contact'];
   var HITO=['今日も会いに来てくれてありがとう♡','みちゃのこと、ちゃんと見つけてくれた?','今日も一緒に笑おうね!','無理せず、ゆっくりしていってね☁️','みちゃっこがいるから配信ができるんだよ🩵'], lastH=-1;
   function setHito(){ var i; do{ i=Math.floor(Math.random()*HITO.length); }while(i===lastH&&HITO.length>1); lastH=i; var el=$('#hito'); el.textContent=HITO[i]; el.classList.remove('fadeh'); void el.offsetWidth; el.classList.add('fadeh'); }
   var tabLinks={};
@@ -1126,9 +1198,92 @@ details p+.ban{margin-top:-4px}
     var a=tabLinks[r]; if(a){ try{ a.scrollIntoView({inline:'center',block:'nearest'}); }catch(e){} }
     if(r==='home') setHito();
     if(r==='secret') renderSecret();
+    if(r==='calendar') renderCal();
+    if(r==='omikuji') loadEma();
     window.scrollTo(0,0);
   }
   window.addEventListener('hashchange',route);
+
+  /* ---------- みちゃﾏﾙカレンダー ---------- */
+  var calY=0, calM=0, calSel='';
+  function jstNow(){ var d=new Date(Date.now()+9*3600*1000); return {y:d.getUTCFullYear(),m:d.getUTCMonth()+1,d:d.getUTCDate()}; }
+  (function(){ var n=jstNow(); calY=n.y; calM=n.m; })();
+  function renderCal(){
+    var grid=document.getElementById('calGrid'); if(!grid) return;
+    var cal=(data&&data.cal)||{}, now=jstNow();
+    var maxY=now.y+1; Object.keys(cal).forEach(function(k){ var y=+k.slice(0,4); if(y>maxY) maxY=y; });
+    var minY=2026; Object.keys(cal).forEach(function(k){ var y=+k.slice(0,4); if(y<minY) minY=y; });
+    var yh=''; for(var y=minY;y<=maxY;y++){ yh+='<button type="button" data-y="'+y+'" class="'+(y===calY?'on':'')+'">'+y+'</button>'; }
+    $('#calYears').innerHTML=yh;
+    $('#calTitle').textContent='\ud83d\udc99 '+calY+'年'+calM+'月 \ud83d\udc99';
+    var wd=['日','月','火','水','木','金','土'], h='';
+    wd.forEach(function(w,i){ h+='<div class="wd'+(i===0?' su':'')+'">'+w+'</div>'; });
+    var first=new Date(Date.UTC(calY,calM-1,1)).getUTCDay(), last=new Date(Date.UTC(calY,calM,0)).getUTCDate();
+    for(var b=0;b<first;b++) h+='<div class="d blank"></div>';
+    for(var d=1;d<=last;d++){
+      var key=calY+'-'+('0'+calM).slice(-2)+'-'+('0'+d).slice(-2), wdI=(first+d-1)%7, e=cal[key];
+      var cls='d'+(wdI===0?' su':'')+(wdI===6?' sa':'')+((calY===now.y&&calM===now.m&&d===now.d)?' today':'');
+      if(e&&e.r){
+        var rc=e.r<=3?('r'+e.r):'rx';
+        h+='<button type="button" class="'+cls+'" data-d="'+key+'" aria-label="'+calM+'月'+d+'日 '+e.r+'位"><span>'+d+'</span><span class="rk '+rc+'">\ud83d\udc51 '+e.r+'位</span></button>';
+      } else h+='<div class="'+cls+'"><span>'+d+'</span></div>';
+    }
+    grid.innerHTML=h;
+    var box=document.getElementById('calDetail');
+    if(calSel&&cal[calSel]&&calSel.slice(0,7)===calY+'-'+('0'+calM).slice(-2)) showCalDetail(calSel); else { calSel=''; box.hidden=true; }
+  }
+  function showCalDetail(key){
+    var e=((data&&data.cal)||{})[key]; var box=document.getElementById('calDetail'); if(!e){ box.hidden=true; return; }
+    calSel=key;
+    var p=key.split('-'), dow=['SUN','MON','TUE','WED','THU','FRI','SAT'][new Date(Date.UTC(+p[0],+p[1]-1,+p[2])).getUTCDay()];
+    var li=''; if(e.e) li+='<li>イベント名:'+esc(e.e)+'</li>'; li+='<li>ランキング:'+esc(String(e.r))+'位</li><li>参加してくれたみんな:ありがとう\ud83e\ude75</li>'; if(e.m) li+='<li>みちゃのひとこと:'+esc(e.m)+'</li>';
+    box.innerHTML='<p class="cd">'+p[0]+'.'+p[1]+'.'+p[2]+' '+dow+'</p><h3>\ud83c\udfc6 ランキング'+esc(String(e.r))+'位 \ud83c\udfc6</h3><ul>'+li+'</ul>';
+    box.hidden=false;
+  }
+  (function(){
+    var g=document.getElementById('calGrid'); if(!g) return;
+    g.addEventListener('click',function(ev){ var b=ev.target.closest('button[data-d]'); if(b) showCalDetail(b.dataset.d); });
+    document.getElementById('calYears').addEventListener('click',function(ev){ var b=ev.target.closest('button[data-y]'); if(b){ calY=+b.dataset.y; renderCal(); } });
+    document.getElementById('calPrev').addEventListener('click',function(){ calM--; if(calM<1){ calM=12; calY--; } if(calY<2026){ calY=2026; calM=1; } renderCal(); });
+    document.getElementById('calNext').addEventListener('click',function(){ calM++; if(calM>12){ calM=1; calY++; } renderCal(); });
+  })();
+
+  /* ---------- 絵馬 ---------- */
+  var emaKind='together', emaLoaded=false;
+  function drawEma(list){
+    var w=document.getElementById('emaWall'); if(!w) return;
+    if(!list||!list.length){ w.innerHTML='<p class="note" style="grid-column:1/-1;text-align:center">まだ絵馬はないよ。これから並んでいくよ\ud83e\ude75</p>'; return; }
+    w.innerHTML=list.map(function(x){ return '<div class="emap '+(x.k==='together'?'together':'')+'"><small>'+(x.k==='together'?'みちゃﾏﾙと叶えたい':'わたしの願い事')+'</small>'+esc(x.b)+'</div>'; }).join('');
+  }
+  function loadEma(){
+    if(emaLoaded) return; emaLoaded=true;
+    rpc('michamaru_ema_pub').then(function(l){ drawEma(l||[]); }).catch(function(){ emaLoaded=false; drawEma([]); });
+  }
+  (function(){
+    var k=document.getElementById('emaKinds'); if(!k) return;
+    k.addEventListener('click',function(ev){ var b=ev.target.closest('button[data-k]'); if(!b) return; emaKind=b.dataset.k; k.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',x===b); }); });
+    var t=document.getElementById('emaT'); t.addEventListener('input',function(){ document.getElementById('emaCnt').textContent=t.value.length; });
+    document.getElementById('emaBtn').addEventListener('click',function(){
+      var v=t.value.trim(), tt=document.getElementById('emaToast');
+      if(!v){ show(tt,'願い事を書いてから奉納してね\ud83e\udee7'); return; }
+      var last=+(store('mcm_ema_t')||0); if(Date.now()-last<30000){ show(tt,'少しあいだをあけて、もう一度ためしてね\ud83e\udee7'); return; }
+      var btn=this; btn.disabled=true;
+      rpc('michamaru_ema_add',{p_kind:emaKind,p_body:v}).then(function(){
+        store('mcm_ema_t',String(Date.now())); t.value=''; document.getElementById('emaCnt').textContent='0';
+        show(tt,'奉納したよ\ud83e\ude75 みちゃﾏﾙが見て、選ばれたら絵馬掛けに並ぶよ');
+      }).catch(function(){ show(tt,'いまは奉納できないみたい。あとでもう一度ためしてね\ud83e\udee7'); }).then(function(){ btn.disabled=false; });
+    });
+  })();
+
+  /* ---------- 累計来訪者(11/23から。端末ごとに1人) ---------- */
+  (function(){
+    var seen=store('mcm_visited'), owner=!!getPass();
+    rpc('michamaru_visit',{p_new:!seen&&!owner}).then(function(d){
+      if(!d||!d.started) return;
+      if(!seen&&!owner) store('mcm_visited','1');
+      if(d.n>0){ document.getElementById('visN').textContent=Number(d.n).toLocaleString('ja-JP'); document.getElementById('visit').hidden=false; }
+    }).catch(function(){});
+  })();
   route();
   loadPub();
   loadUt();

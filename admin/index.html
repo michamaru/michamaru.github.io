@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="meta-build" content="20261119153401">
+<meta name="meta-build" content="20261119223650">
 <meta name="theme-color" content="#3d6fb8">
 <meta name="robots" content="noindex">
 <title>みちゃﾏﾙ管理</title>
@@ -468,13 +468,13 @@ details p+.ban{margin-top:-4px}
     return fetch(SB+fn,{method:'POST',headers:{apikey:SBK,'Content-Type':'application/json'},body:JSON.stringify(b||{})})
       .then(function(r){ return r.json().catch(function(){return null;}).then(function(d){ if(!r.ok){ var e=new Error((d&&d.message)||'server'); e.status=r.status; throw e; } return d; }); });
   }
-  var data=JSON.parse(JSON.stringify(DEF)); data.perks={}; data.rings={};
+  var data=JSON.parse(JSON.stringify(DEF)); data.perks={}; data.rings={}; data.cal={};
   var heavy=[], synced={}, hv={}, mode='locked';
   function getPass(){ try{ return localStorage.getItem('mcm_admin_pass')||''; }catch(e){ return ''; } }
   function setPass(v){ try{ localStorage.setItem('mcm_admin_pass',v); }catch(e){} }
   function applyPub(p){
     var d=(p&&p.data)||{};
-    ['news','week','songs','code'].forEach(function(k){ if(d[k]!==undefined){ data[k]=d[k]; synced[k]=JSON.stringify(d[k]); } });
+    ['news','week','songs','code','cal'].forEach(function(k){ if(d[k]!==undefined){ data[k]=d[k]; synced[k]=JSON.stringify(d[k]); } });
     heavy=(p&&p.heavy)||[];
   }
   try{ var cp=JSON.parse(store('mcm_pub')||'null'); if(cp) applyPub(cp); }catch(e){}
@@ -490,7 +490,7 @@ details p+.ban{margin-top:-4px}
   var sq=Promise.resolve();
   function save(){
     if(mode!=='server') return;
-    var cur={news:data.news,week:data.week,songs:data.songs,code:data.code};
+    var cur={news:data.news,week:data.week,songs:data.songs,code:data.code,cal:data.cal||{}};
     Object.keys(data.perks||{}).forEach(function(i){ cur['perk:'+i]=data.perks[i]; });
     Object.keys(data.rings||{}).forEach(function(k){ cur['ring:'+k]=data.rings[k]; });
     var any=false;
@@ -551,10 +551,10 @@ details p+.ban{margin-top:-4px}
 
   function go(v){
     view=v; ad.scrollTop=0;
-    var title={menu:'',news:'お知らせ',week:'今週の配信予定',songs:'歌える曲',code:'配信スタンプコード',ring:'アイコンリング',perk:'ひみつの特典',inbox:'届いたメッセージ'}[v];
+    var title={menu:'',news:'お知らせ',week:'今週の配信予定',songs:'歌える曲',code:'配信スタンプコード',ring:'アイコンリング',perk:'ひみつの特典',inbox:'届いたメッセージ',cal:'みちゃﾏﾙカレンダー',ema:'絵馬',visit:'累計来訪者'}[v];
     $('#adTitle').innerHTML= v==='menu' ? 'HP更新ページ<small>ここから内容を更新できます</small>' : esc(title);
     $('#adBack').style.display= v==='menu' ? 'none' : ''; $('#adBack').textContent='← もどる';
-    var f={menu:vMenu,news:vNews,week:vWeek,songs:vSongs,code:vCode,ring:vRing,perk:vPerk,inbox:vInbox}[v]; f();
+    var f={menu:vMenu,news:vNews,week:vWeek,songs:vSongs,code:vCode,ring:vRing,perk:vPerk,inbox:vInbox,cal:vCal,ema:vEma,visit:vVisit}[v]; f();
   }
   function demoNote(){ return mode==='demo'?'<p class="demo">保存先をじゅんび中のため、いまは試用です。入力した内容は、このページを閉じると消えます。</p>':''; }
 
@@ -563,6 +563,9 @@ details p+.ban{margin-top:-4px}
       +'<button class="tile" data-go="news"><b>お知らせ</b><span>追加・削除</span></button>'
       +'<button class="tile" data-go="week"><b>今週の配信予定</b><span>曜日ごとに入力</span></button>'
       +'<button class="tile" data-go="songs"><b>歌える曲</b><span>UTAEMOで更新</span></button>'
+      +'<button class="tile" data-go="cal"><b>みちゃﾏﾙカレンダー</b><span>ランキング入りを記録</span></button>'
+      +'<button class="tile" data-go="ema"><b>絵馬</b><span>届いた願い事を選ぶ</span></button>'
+      +'<button class="tile" data-go="visit"><b>累計来訪者</b><span>11/23からの人数</span></button>'
       +'<button class="tile" data-go="code"><b>配信コード</b><span>スタンプ用の合言葉</span></button>'
       +'<button class="tile" data-go="ring"><b>アイコンリング</b><span>皆勤賞の毎月のプレゼント</span></button>'
       +'<button class="tile" data-go="perk"><b>ひみつの特典</b><span>10枚ぶんの中身を登録</span></button>'
@@ -681,6 +684,43 @@ details p+.ban{margin-top:-4px}
       var t=''; try{ var x=new Date(d.publishedAt); t=(x.getMonth()+1)+'/'+x.getDate()+' '+('0'+x.getHours()).slice(-2)+':'+('0'+x.getMinutes()).slice(-2); }catch(e){}
       el.innerHTML='いまHPに出ている曲:<b> '+d.songCount+'曲</b>'+(t?'(最終反映 '+esc(t)+')':'');
     }).catch(function(){ var el=$('#utState'); if(el) el.textContent=''; });
+  }
+
+  function vCal(){
+    var cal=data.cal||(data.cal={}), keys=Object.keys(cal).sort().reverse();
+    var types=['総合ランキング','イベントランキング','新人王・大型イベント','達成記念・周年記念','特別な配信記録'];
+    var n=new Date(), today=n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2);
+    var h='<div class="card"><p class="note" style="margin-top:0">ランキングTOP10に入った日を記録します。HPの「みちゃﾏﾙカレンダー」に表示されます。</p>'
+      +'<label for="cdt">日付</label><input id="cdt" type="date" value="'+today+'">'
+      +'<label for="crk">順位(1〜10位)</label><input id="crk" type="number" min="1" max="10" value="1">'
+      +'<label for="cev">イベント名(空でも大丈夫です)</label><input id="cev" type="text" maxlength="40">'
+      +'<label for="cms">みちゃのひとこと(空でも大丈夫です)</label><textarea id="cms" maxlength="80" style="min-height:64px"></textarea>'
+      +'<div style="text-align:right;margin-top:10px"><button class="btn" id="cAdd" type="button">記録する</button></div></div>'
+      +'<div class="toast" id="cToast2" role="status"></div><div class="card" style="margin-top:16px">';
+    h+= keys.length? keys.map(function(k){ var e=cal[k]; return '<div class="arow"><b>'+esc(k.slice(5).replace('-','/'))+'</b><div class="grow">'+esc(String(e.r))+'位 '+esc(e.e||'')+(e.m?'<br><small>'+esc(e.m)+'</small>':'')+'</div><button class="btn small ghost" data-del="'+esc(k)+'" type="button">削除</button></div>'; }).join('') : '<p class="note" style="margin:0">まだ記録はありません。</p>';
+    body.innerHTML=h+'</div>'+demoNote();
+    $('#cAdd').addEventListener('click',function(){
+      var d=$('#cdt').value, r=parseInt($('#crk').value,10);
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!(r>=1&&r<=10)){ show($('#cToast2'),'日付と順位(1〜10位)をご確認ください'); return; }
+      data.cal[d]={r:r,e:$('#cev').value.trim(),m:$('#cms').value.trim()}; save(); vCal(); show($('#cToast2'),'記録しました。');
+    });
+    body.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ delete data.cal[b.dataset.del]; save(); vCal(); }); });
+  }
+  function vEma(){
+    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">読み込んでいます…</p></div>'+demoNote();
+    if(mode!=='server'){ body.innerHTML='<div class="card"><p class="note" style="margin:0">合言葉でログインした状態でご利用いただけます。</p></div>'; return; }
+    rpc('michamaru_ema_list',{p_pass:getPass()}).then(function(l){
+      l=l||[];
+      var h='<div class="card"><p class="note" style="margin-top:0">届いた願い事です。「公開」にしたものだけ、HPの絵馬掛けに並びます(最新の60件まで)。</p></div><div class="card" style="margin-top:12px">';
+      h+= l.length? l.map(function(x){ return '<div class="arow"><b style="font-size:12px">'+(x.k==='together'?'一緒に':'自分')+'</b><div class="grow">'+esc(x.b)+'</div><button class="btn small '+(x.a?'':'ghost')+'" data-set="'+x.id+'" data-a="'+(x.a?0:1)+'" type="button">'+(x.a?'公開中':'公開する')+'</button><button class="btn small ghost" data-rm="'+x.id+'" type="button">削除</button></div>'; }).join('') : '<p class="note" style="margin:0">まだ届いていません。</p>';
+      body.innerHTML=h+'</div><div class="toast" id="eToast" role="status"></div>';
+      body.querySelectorAll('[data-set]').forEach(function(b){ b.addEventListener('click',function(){ rpc('michamaru_ema_set',{p_pass:getPass(),p_id:+b.dataset.set,p_approved:b.dataset.a==='1'}).then(vEma).catch(function(){ show($('#eToast'),'更新できませんでした'); }); }); });
+      body.querySelectorAll('[data-rm]').forEach(function(b){ b.addEventListener('click',function(){ rpc('michamaru_ema_del',{p_pass:getPass(),p_id:+b.dataset.rm}).then(vEma).catch(function(){ show($('#eToast'),'削除できませんでした'); }); }); });
+    }).catch(function(){ body.innerHTML='<div class="card"><p class="note" style="margin:0">読み込めませんでした。追加の設定(SQL)がまだの場合は、完了後にご確認ください。</p></div>'; });
+  }
+  function vVisit(){
+    body.innerHTML='<div class="card"><p class="note" style="margin-top:0">2026年11/23 0時から、端末ごとに1人として数えています。更新ページを使っている端末は、数えません。</p><p id="vN" style="font-size:28px;font-weight:700;color:var(--blue);text-align:center;margin:12px 0">…</p></div>';
+    rpc('michamaru_visit',{p_new:false}).then(function(d){ $('#vN').textContent= d&&d.started ? Number(d.n).toLocaleString('ja-JP')+'人' : '11/23から数え始めます'; }).catch(function(){ $('#vN').textContent='読み込めませんでした'; });
   }
   function vInbox(){
     var h='<div class="card">';
