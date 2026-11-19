@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261119152850">
+<meta name="meta-build" content="20261119153401">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -970,6 +970,8 @@ details p+.ban{margin-top:-4px}
   function simReset(){ if(realCards===null) return; cards=realCards; realCards=null; renderTitle(); renderSecret(); drawStamps(false); simUI(); }
   window.addEventListener('hashchange',function(){ if(location.hash!=='#secret') simReset(); });
   simUI();
+  /* 更新ページを使っている端末でだけ、お試し表示を出す(来訪者には見えない) */
+  try{ if(localStorage.getItem('mcm_admin_pass')){ var sb=document.getElementById('simBox'); if(sb) sb.hidden=false; } }catch(e){}
   var nickIn=$('#nick'); nickIn.value=nick;
   nickIn.addEventListener('input',function(){ nick=nickIn.value.trim(); store('mcm_nick',nick); renderTitle(); if(location.hash==='#secret'&&cards>=10) renderSecret(); });
   function rain(n){

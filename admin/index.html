@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="meta-build" content="20261119152850">
+<meta name="meta-build" content="20261119153401">
 <meta name="theme-color" content="#3d6fb8">
 <meta name="robots" content="noindex">
 <title>みちゃﾏﾙ管理</title>
@@ -566,8 +566,10 @@ details p+.ban{margin-top:-4px}
       +'<button class="tile" data-go="code"><b>配信コード</b><span>スタンプ用の合言葉</span></button>'
       +'<button class="tile" data-go="ring"><b>アイコンリング</b><span>皆勤賞の毎月のプレゼント</span></button>'
       +'<button class="tile" data-go="perk"><b>ひみつの特典</b><span>10枚ぶんの中身を登録</span></button>'
+      +'<button class="tile" data-href="../#secret"><b>ひみつの部屋の確認</b><span>HPで見え方を試せます</span></button>'
       +'</div>'+demoNote();
     body.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ go(b.dataset.go); }); });
+    body.querySelectorAll('[data-href]').forEach(function(b){ b.addEventListener('click',function(){ window.open(b.dataset.href,'_blank'); }); });
   }
   function vRing(){
     data.rings=data.rings||{};
