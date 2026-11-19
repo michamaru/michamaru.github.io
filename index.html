@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261120050632">
+<meta name="meta-build" content="20261120051246">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -653,13 +653,13 @@ details p+.ban{margin-top:-4px}
     <div class="card omikuji shrine">
       <div class="gate" aria-hidden="true"><img class="tor l" src="assets/torii.png" alt=""><img class="sh" src="assets/shrine.png" alt=""><img class="tor r" src="assets/torii.png" alt=""></div>
       <p class="welcome">みちゃﾏﾙ神社へようこそ🩵</p>
-      <p style="margin:0"><span class="ph">1日1回、</span><span class="ph">おみくじをひけるよ🎴</span><span class="ph">大吉(とレア)が出たら、</span><span class="ph">スタンプが+1個もらえるよ🐻</span></p>
+      <p style="margin:0"><span class="ph">1日1回、</span><span class="ph">おみくじをひけるよ🎴</span><span class="ph">大吉(とレア)が出たら、</span><span class="ph">スタンプが+1個もらえるよ🐻ྀི️</span></p>
       <div class="result" id="omiResult" aria-live="polite">
         <img class="ted" src="assets/teddy.svg" alt="">
         <span><img class="omk" src="assets/omikuji.png" alt="">今日のうんせいは?</span>
       </div>
       <button class="btn pink" id="omiBtn" type="button">おみくじをひく</button>
-      <p class="note" style="text-align:center"><a href="#stamp">スタンプカードを見る🐻</a></p>
+      <p class="note" style="text-align:center"><a href="#stamp">スタンプカードを見る🐻ྀི️</a></p>
     </div>
     <div class="card ema" id="emaCard">
       <h3>絵馬を奉納する</h3>
@@ -681,7 +681,7 @@ details p+.ban{margin-top:-4px}
     <div class="card stampcard">
       <div class="mytitle" id="myTitle"></div>
       <label for="nick" style="margin-top:12px">ニックネーム</label>
-      <input id="nick" type="text" maxlength="12" placeholder="なまえをいれてね🐻" autocomplete="nickname">
+      <input id="nick" type="text" maxlength="12" placeholder="なまえをいれてね🐻ྀི️" autocomplete="nickname">
       <p class="cardno" id="cardNo"></p>
       <div class="stamps" id="stamps" aria-label="スタンプカード"></div>
       <p class="prize" id="prize"></p>
@@ -701,7 +701,7 @@ details p+.ban{margin-top:-4px}
     <div class="card" style="margin-top:16px">
       <b style="color:var(--blue)">スタンプのたまりかた✨</b>
       <ul class="how"><li>HPに来る(1日1回) → +1個</li><li>配信に来て「配信コード」を入れる → +1個</li><li>おみくじで大吉(とレア)が出る → +1個</li><li>20個たまったらレベルUP!次のカードへ🩵</li></ul>
-      <b style="color:var(--blue);display:block;margin-top:14px">ランクの一覧🐻</b>
+      <b style="color:var(--blue);display:block;margin-top:14px">ランクの一覧🐻ྀི️</b>
       <div class="rkwrap"><p class="rkh">MICHAMARU RANK</p><p class="rks">20 STAMPS TO LEVEL UP 🩵</p><div id="ttlList"></div></div>
       <p class="note">カードが1枚そろうたびに、あなたのランクが上がっていくよ✨</p>
     </div>
@@ -940,7 +940,7 @@ details p+.ban{margin-top:-4px}
   var cards=parseInt(store('mcm_cards')||'0',10)||0;
   var nick=store('mcm_nick')||'';
   var RANK=[['🔍','みちゃ発見隊','あ!みちゃマルを見つけちゃった!'],['☁️','みちゃ探検隊','もっとみちゃのことを知りたいな♡'],['🎀','みちゃ見習い','みちゃの世界に一歩踏み出したよ!'],['🩵','みちゃっこ','今日から正式にみちゃっこの仲間入り!'],['💗','みちゃだいすき隊','みちゃへの大好きが育ってきたね♡'],['🫧','みちゃ沼住人','もうすっかりみちゃの世界の住人!'],['🪽','みちゃ専属天使','みちゃのそばにいてくれる天使さん♡'],['⭐','みちゃの相棒','一緒に笑って、一緒に夢を追いかけよう!'],['👑','みちゃの守り神','みちゃマル王国を支えてくれる大切な存在!'],['💎','みちゃマルの宝物','ここまで一緒にいてくれてありがとう。君はみちゃの大切な宝物♡']];
-  var BASE=['🐻','はじめましてのみちゃっこ','スタンプ20個で、最初のランクに上がれるよ!'];
+  var BASE=['🐻ྀི️','はじめましてのみちゃっこ','スタンプ20個で、最初のランクに上がれるよ!'];
   function rk(n){ return n<1 ? BASE : RANK[Math.min(n,RANK.length)-1]; }
   function titleOf(n){ return rk(n)[1]; }
   function today(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
@@ -967,7 +967,7 @@ details p+.ban{margin-top:-4px}
     $('#prize').textContent='あと'+(CARD-count)+'個で、みちゃレベルUP✨ ランクが「'+titleOf(cards+1)+'」になるよ🩵';
   }
   function renderTitle(){
-    var r=rk(cards); $('#myTitle').innerHTML='<small>いまのランク</small><em>'+r[0]+'</em><b>【'+esc(r[1])+'】</b><span>'+(nick?esc(nick):'ニックネームを入れてね🐻')+'</span><p>'+esc(r[2])+'</p>';
+    var r=rk(cards); $('#myTitle').innerHTML='<small>いまのランク</small><em>'+r[0]+'</em><b>【'+esc(r[1])+'】</b><span>'+(nick?esc(nick):'ニックネームを入れてね🐻ྀི️')+'</span><p>'+esc(r[2])+'</p>';
     $('#ttlList').innerHTML=RANK.map(function(t,i){ var st=cards>i+1?'done':(cards===i+1?'now':''); return '<div class="rk '+st+'"><span class="no">'+String(i+1).padStart(2,'0')+'</span><span class="ic">'+t[0]+'</span><div><b>'+esc(t[1])+'</b><small>'+((i+1)*20)+' STAMP</small></div><p>'+esc(t[2])+'</p>'+(i===RANK.length-1?'<em>最終ランク</em>':'')+'</div>'; }).join('');
   }
   function okUrl(u){ return /^https?:\/\//i.test(u||''); }
@@ -1019,7 +1019,7 @@ details p+.ban{margin-top:-4px}
   function renderSecret(){
     var b=$('#secretBody');
     if(cards<1){
-      b.innerHTML='<div class="lock"><img src="assets/bear.svg" alt=""><p><b>ここは、ひみつの部屋🔒</b></p><p>スタンプカードを<b>1枚</b>そろえた人だけが入れるよ🩵<br>いまは <b>'+(cards+1)+'枚目</b>のカードに<br>'+count+' / '+CARD+' 個たまってるよ🩵</p><a class="btn" href="#stamp">スタンプカードを見る🐻</a></div>';
+      b.innerHTML='<div class="lock"><img src="assets/bear.svg" alt=""><p><b>ここは、ひみつの部屋🔒</b></p><p>スタンプカードを<b>1枚</b>そろえた人だけが入れるよ🩵<br>いまは <b>'+(cards+1)+'枚目</b>のカードに<br>'+count+' / '+CARD+' 個たまってるよ🩵</p><a class="btn" href="#stamp">スタンプカードを見る🐻ྀི️</a></div>';
       return;
     }
     var h='<div class="lock open"><img src="assets/heart.svg" alt=""><p><b>ひみつの部屋へようこそ🩵</b></p><p>スタンプカードを'+cards+'枚そろえた、みちゃっこだけの場所だよ✨</p></div>';
@@ -1090,14 +1090,14 @@ details p+.ban{margin-top:-4px}
     if(v!==data.code){ show(t,'あれ?コードがちがうみたい🫧 配信でもう一度聞いてみてね'); return; }
     store('mcm_sday',today()); $('#codeIn').value='';
     var up=addStamp();
-    show(t,up?'配信に来てくれてありがとう🩵':'配信に来てくれてありがとう🩵 スタンプ+1個だよ🐻');
+    show(t,up?'配信に来てくれてありがとう🩵':'配信に来てくれてありがとう🩵 スタンプ+1個だよ🐻ྀི️');
   });
   var RANKS=[
    {n:'大吉',w:14,t:'gold',m:['やったね!みちゃから幸運のお届け♡ 今日は何をしてもうまくいっちゃうかも!自信満々でいこっ!']},
    {n:'中吉',w:24,m:['そこにある小さな幸せを見逃さないで!今日はいいことある予感♪']},
    {n:'小吉',w:28,m:['焦らなくて大丈夫!君のペースで進めば花丸だよ💮']},
    {n:'吉',w:24,m:['いつもの毎日がいちばんの宝物。今日も笑顔で過ごそうね!']},
-   {n:'みちゃ吉🐻',w:8,m:['ある意味大当たり!今日はみちゃのことをいっぱい考えて過ごすこと!みちゃしかみちゃだめ🩵']},
+   {n:'みちゃ吉🐻ྀི️',w:8,m:['ある意味大当たり!今日はみちゃのことをいっぱい考えて過ごすこと!みちゃしかみちゃだめ🩵']},
    {n:'レアみちゃ',w:2,t:'rare',m:['えっ!?みちゃに選ばれちゃったの!?今日は君が主役♡ この幸運、絶対逃がさないでね!']}
   ];
   var FOODS=['オムライス','いちごのパフェ','からあげ','プリン','ホットケーキ','ラーメン','たこ焼き','チョコ','ソフトクリーム','おにぎり','パンケーキ','ミルクティー'];
@@ -1137,7 +1137,7 @@ details p+.ban{margin-top:-4px}
       store(OMI,JSON.stringify(o));
       showResult(o,true);
       var rect=boxOmi.getBoundingClientRect(); burst(rect.left+rect.width/2,rect.top+40,RANKS[i].t?24:14,110);
-      if(RANKS[i].t){ addStamp(); boxOmi.insertAdjacentHTML('beforeend','<span class="again">スタンプ+1個もらったよ🐻✨</span>'); }
+      if(RANKS[i].t){ addStamp(); boxOmi.insertAdjacentHTML('beforeend','<span class="again">スタンプ+1個もらったよ🐻ྀི️✨</span>'); }
       else boxOmi.insertAdjacentHTML('beforeend','<span class="again">大吉(とレア)が出ると、スタンプがもらえるよ☁️</span>');
       omiBusy=false; btnOmi.disabled=false; btnOmi.textContent='結果をもう一度見る';
     },1100);
@@ -1168,7 +1168,7 @@ details p+.ban{margin-top:-4px}
     store('mcm_visit',t);
     var j=getDays(), d=new Date().getDate(); if(j.d.indexOf(d)<0) j.d.push(d); store('mcm_days',JSON.stringify(j));
     var up=addStamp(); drawMonth();
-    visitToast('きてくれてありがとう🩵 来訪スタンプ+1🐻');
+    visitToast('きてくれてありがとう🩵 来訪スタンプ+1🐻ྀི️');
   }
   drawMonth();
   setTimeout(dailyVisit,2500);
