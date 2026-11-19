@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261120050252">
+<meta name="meta-build" content="20261120050347">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1242,7 +1242,7 @@ details p+.ban{margin-top:-4px}
     var e=((data&&data.cal)||{})[key]; var box=document.getElementById('calDetail'); if(!e){ box.hidden=true; return; }
     calSel=key;
     var p=key.split('-'), dow=['SUN','MON','TUE','WED','THU','FRI','SAT'][new Date(Date.UTC(+p[0],+p[1]-1,+p[2])).getUTCDay()];
-    var li=''; if(e.e) li+='<li>イベント名:'+esc(e.e)+'</li>'; li+='<li>ランキング:'+esc(String(e.r))+'位</li><li>参加してくれたみんな:ありがとう\ud83e\ude75</li>'; if(e.m) li+='<li>みちゃのひとこと:'+esc(e.m)+'</li>';
+    var li=''; if(e.e) li+='<li>イベント名:'+esc(e.e)+'</li>'; li+='<li>ランキング:'+esc(String(e.r))+'位</li><li>参加してくれたみんな:ありがとう⛩</li>'; if(e.m) li+='<li>みちゃのひとこと:'+esc(e.m)+'</li>';
     box.innerHTML='<p class="cd">'+p[0]+'.'+p[1]+'.'+p[2]+' '+dow+'</p><h3>\ud83c\udfc6 ランキング'+esc(String(e.r))+'位 \ud83c\udfc6</h3><ul>'+li+'</ul>';
     box.hidden=false;
   }
@@ -1266,7 +1266,7 @@ details p+.ban{margin-top:-4px}
   function drawEma(list){
     var w=document.getElementById('emaWall'); if(!w) return;
     if(list) w.scrollLeft=0;
-    if(!list||!list.length){ w.innerHTML='<p class="note" style="margin:0 auto;text-align:center">まだ絵馬はないよ。これから並んでいくよ\ud83e\ude75</p>'; return; }
+    if(!list||!list.length){ w.innerHTML='<p class="note" style="margin:0 auto;text-align:center">まだ絵馬はないよ。これから並んでいくよ⛩</p>'; return; }
     w.innerHTML=list.map(function(x){ return '<div class="emap '+(x.k==='together'?'together':'self')+'"><div class="et"><small>'+(x.k==='together'?'みちゃﾏﾙと叶えたい':'わたしの願い事')+'</small><span>'+esc(x.b)+'</span></div></div>'; }).join('');
   }
   function loadEma(){
@@ -1285,7 +1285,7 @@ details p+.ban{margin-top:-4px}
       var btn=this; btn.disabled=true;
       rpc('michamaru_ema_add',{p_kind:emaKind,p_body:v}).then(function(){
         store('mcm_ema_t',String(Date.now())); t.value=''; document.getElementById('emaCnt').textContent='0';
-        show(tt,'奉納したよ\ud83e\ude75 みちゃﾏﾙが見て、選ばれたら絵馬掛けに並ぶよ');
+        show(tt,'奉納したよ⛩ みちゃﾏﾙが見て、選ばれたら絵馬掛けに並ぶよ');
       }).catch(function(){ show(tt,'いまは奉納できないみたい。あとでもう一度ためしてね\ud83e\udee7'); }).then(function(){ btn.disabled=false; });
     });
   })();
