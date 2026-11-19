@@ -523,6 +523,7 @@ details p+.ban{margin-top:-4px}
     <a href="#rules">お願いごと</a>
     <a href="#message">メッセージ</a>
     <a href="#omikuji">おみくじ</a>
+    <a href="#ema">絵馬</a>
     <a href="#stamp">スタンプ</a>
     <a href="#secret">ひみつの部屋</a>
     <a href="#contact">お仕事・コラボ</a>
@@ -547,6 +548,7 @@ details p+.ban{margin-top:-4px}
       <a class="mt" href="#rules"><b>お願いごと</b><span>みんなで楽しく🩵</span></a>
       <a class="mt" href="#message"><b>匿名メッセージ</b><span><i>名前なしで</i><i>送れるよ🫧</i></span></a>
       <a class="mt" href="#omikuji"><b>おみくじ</b><span><i>みちゃﾏﾙ神社⛩</i> <i>大吉で</i><i>スタンプ+1</i></span></a>
+      <a class="mt" href="#ema"><b>絵馬</b><span><i>願い事を</i><i>奉納してね🪵</i></span></a>
       <a class="mt" href="#stamp"><b>スタンプカード</b><span>あつめてレベルUP✨</span></a>
       <a class="mt" href="#secret"><b>ひみつの部屋</b><span>あつめた人だけ🔒</span></a>
       <a class="mt" href="#contact"><b>お仕事・コラボ</b><span><i>ご依頼は</i><i>XのDMから☁️</i></span></a>
@@ -657,6 +659,10 @@ details p+.ban{margin-top:-4px}
       <button class="btn pink" id="omiBtn" type="button">おみくじをひく</button>
       <p class="note" style="text-align:center"><a href="#stamp">スタンプカードを見る🐻</a></p>
     </div>
+  </section>
+
+  <section id="pg-ema" class="page">
+    <h2>絵馬</h2>
     <div class="card ema" id="emaCard">
       <h3>絵馬を奉納する</h3>
       <p style="margin:0;font-size:14px"><span class="ph">みちゃﾏﾙと叶えたいことでも、</span><span class="ph">自分の願い事でも、</span><span class="ph">好きなほうを書いてね🩵</span></p>
@@ -1183,7 +1189,7 @@ details p+.ban{margin-top:-4px}
   })();
 
   /* ---------- pages (hash routing) ---------- */
-  var routes=['home','profile','news','schedule','calendar','songs','rules','message','omikuji','stamp','secret','contact'];
+  var routes=['home','profile','news','schedule','calendar','songs','rules','message','omikuji','ema','stamp','secret','contact'];
   var HITO=['今日も会いに来てくれてありがとう♡','みちゃのこと、ちゃんと見つけてくれた?','今日も一緒に笑おうね!','無理せず、ゆっくりしていってね☁️','みちゃっこがいるから配信ができるんだよ🩵'], lastH=-1;
   function setHito(){ var i; do{ i=Math.floor(Math.random()*HITO.length); }while(i===lastH&&HITO.length>1); lastH=i; var el=$('#hito'); el.textContent=HITO[i]; el.classList.remove('fadeh'); void el.offsetWidth; el.classList.add('fadeh'); }
   var tabLinks={};
@@ -1201,7 +1207,7 @@ details p+.ban{margin-top:-4px}
     if(r==='home') setHito();
     if(r==='secret') renderSecret();
     if(r==='calendar') renderCal();
-    if(r==='omikuji') loadEma();
+    if(r==='ema') loadEma();
     window.scrollTo(0,0);
   }
   window.addEventListener('hashchange',route);
