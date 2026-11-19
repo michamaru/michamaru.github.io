@@ -700,7 +700,6 @@ details p+.ban{margin-top:-4px}
       <b style="color:var(--blue);display:block;margin-top:14px">ランクの一覧🐻</b>
       <div class="rkwrap"><p class="rkh">MICHAMARU RANK</p><p class="rks">20 STAMPS TO LEVEL UP 🩵</p><div id="ttlList"></div></div>
       <p class="note">カードが1枚そろうたびに、あなたのランクが上がっていくよ✨</p>
-      <p class="note">この試作では、スタンプはこの端末の中にだけ保存されるよ。</p>
     </div>
   </section>
 
@@ -927,7 +926,7 @@ details p+.ban{margin-top:-4px}
     var v=msg.value.trim();
     if(!v){ show($('#msgToast'),'メッセージを書いてから送ってね🫧'); return; }
     inbox.unshift([md(),v]); saveInbox();
-    show($('#msgToast'),'ありがとう🩵 届いたよ!(試作のため、この端末の更新ページにだけ届くよ)');
+    show($('#msgToast'),'ありがとう🩵 届いたよ!');
     msg.value=''; $('#cnt').textContent='0';
   });
 
