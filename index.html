@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261119223650">
+<meta name="meta-build" content="20261119231939">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -323,14 +323,12 @@ footer .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-
 .ema .kinds button{font:inherit;font-size:13px;font-weight:700;border:2px solid #d8ecf8;background:#fff;color:#6f8db8;border-radius:999px;padding:6px 12px;cursor:pointer}
 .ema .kinds button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .ema textarea{width:100%;min-height:76px;border:2px solid #d8ecf8;border-radius:14px;padding:10px 12px;font:inherit;font-size:15px;color:var(--ink);resize:vertical}
-.emawall{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
-.emap{position:relative;background:#fff4e0;border:2px solid #e8cfa4;clip-path:none;border-radius:6px 6px 14px 14px;padding:22px 10px 12px;text-align:center;font-size:13px;line-height:1.6;color:#6b4f2a;box-shadow:0 4px 10px rgba(120,90,40,.12);word-break:break-word}
-.emap::before{content:"";position:absolute;top:7px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#fff;border:2px solid #d9b987}
-.emap::after{content:"";position:absolute;top:-10px;left:50%;width:2px;height:12px;background:#d9b987}
-.emap small{display:block;margin-bottom:4px;font-size:11px;font-weight:700;color:#b58a4d}
-.emap.together{background:#eaf6ff;border-color:#b9dcf5;color:#2f5f93}
-.emap.together small{color:#5b8be0}
-.emap.together::before{border-color:#9ad4f2}.emap.together::after{background:#9ad4f2}
+.emawall{display:grid;grid-template-columns:1fr;gap:6px;margin-top:6px;justify-items:center}
+.emap{position:relative;width:min(100%,300px);aspect-ratio:403/420;background:url(assets/ema.png) center/100% 100% no-repeat;color:#6b4a2a;filter:drop-shadow(0 4px 6px rgba(91,139,224,.18))}
+.emap .et{position:absolute;left:17%;right:17%;top:47%;bottom:15%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:13px;line-height:1.5;word-break:break-word;overflow:hidden}
+.emap small{display:block;margin-bottom:3px;font-size:11px;font-weight:700;border-radius:999px;padding:0 9px}
+.emap.together small{background:#dff0fb;color:#4f86c6}
+.emap.self small{background:#fbe3ec;color:#c0668a}
 /* ---- 累計来訪者 ---- */
 .visit{margin:8px 0 2px;font-size:13px;color:#6f8db8}
 .visit b{font-size:17px;color:var(--blue)}
@@ -729,7 +727,7 @@ details p+.ban{margin-top:-4px}
   <img class="cline" src="assets/cloudline.svg" alt="">
   <div class="visit" id="visit" hidden>累計来訪者 <b id="visN">0</b>人<small>(11/23〜)</small></div>
   <div>© みちゃﾏﾙ</div>
-  <details class="credit"><summary>CREDIT</summary><p>くま・鳥居・神社・おみくじ箱・雲・キラキラ・ハートのイラスト: <a href="https://tsukatte.com/" target="_blank" rel="noopener">ツカッテ</a><br>しゃぼん玉: 甘樫(<a href="https://booth.pm/ja/items/7387531" target="_blank" rel="noopener">BOOTH・かわいい素材屋さん</a>)<br>大きな雲: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
+  <details class="credit"><summary>CREDIT</summary><p>くま・鳥居・神社・絵馬・おみくじ箱・雲・キラキラ・ハートのイラスト: <a href="https://tsukatte.com/" target="_blank" rel="noopener">ツカッテ</a><br>しゃぼん玉: 甘樫(<a href="https://booth.pm/ja/items/7387531" target="_blank" rel="noopener">BOOTH・かわいい素材屋さん</a>)<br>大きな雲: <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>(Google / Apache License 2.0)<br>サイト制作: 湊音ヒロ</p></details>
 </footer>
 
 <div id="lvup" role="dialog" aria-label="レベルアップ">
@@ -1253,7 +1251,7 @@ details p+.ban{margin-top:-4px}
   function drawEma(list){
     var w=document.getElementById('emaWall'); if(!w) return;
     if(!list||!list.length){ w.innerHTML='<p class="note" style="grid-column:1/-1;text-align:center">まだ絵馬はないよ。これから並んでいくよ\ud83e\ude75</p>'; return; }
-    w.innerHTML=list.map(function(x){ return '<div class="emap '+(x.k==='together'?'together':'')+'"><small>'+(x.k==='together'?'みちゃﾏﾙと叶えたい':'わたしの願い事')+'</small>'+esc(x.b)+'</div>'; }).join('');
+    w.innerHTML=list.map(function(x){ return '<div class="emap '+(x.k==='together'?'together':'self')+'"><div class="et"><small>'+(x.k==='together'?'みちゃﾏﾙと叶えたい':'わたしの願い事')+'</small><span>'+esc(x.b)+'</span></div></div>'; }).join('');
   }
   function loadEma(){
     if(emaLoaded) return; emaLoaded=true;

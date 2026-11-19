@@ -2,3 +2,4 @@
 Noto Emoji by Google, Apache License 2.0 (https://github.com/googlefonts/noto-emoji): cloud-soft.svg.
 Client-owned: logo.png, char.png.
 甘樫 (BOOTH「かわいい素材屋さん」 https://booth.pm/ja/items/7387531 , free for commercial use): bubble.svg (bubbles.png trimmed/resized).
+絵馬: ツカッテ https://tsukatte.com/ema-shinto/
