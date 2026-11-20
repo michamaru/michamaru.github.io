@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#5b8be0">
 <title>みちゃﾏﾙの雲のおへや</title>
 <link rel="manifest" href="manifest.json">
-<meta name="meta-build" content="20261120051246">
+<meta name="meta-build" content="20261120121928">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -620,6 +620,19 @@ details p+.ban{margin-top:-4px}
       <div class="toast" id="reqToast" role="status"></div>
       <p class="note"><span class="ph">「リクエスト」を押すと、</span><span class="ph">配信のコメント欄に</span><span class="ph">貼れる文章が</span><span class="ph">コピーされるよ🎵</span></p>
     </div>
+      <div class="card" id="rqCard">
+      <h3 style="margin:0 0 6px;font-family:var(--font-display);color:var(--blue);font-size:17px">歌ってほしい曲をリクエスト</h3>
+      <p style="margin:0;font-size:14px"><span class="ph">リストにない曲でも、</span><span class="ph">歌ってほしい曲を</span><span class="ph">送ってね🎵</span></p>
+      <label for="rqT">曲名(必須)</label>
+      <input class="search" id="rqT" type="text" maxlength="60" placeholder="曲名を入れてね">
+      <label for="rqA">アーティスト</label>
+      <input class="search" id="rqA" type="text" maxlength="60" placeholder="アーティスト名(わかれば)">
+      <label for="rqB">ひとこと</label>
+      <input class="search" id="rqB" type="text" maxlength="100" placeholder="ひとこと(なくてもOK)">
+      <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn pink" id="rqSend" type="button">リクエストを送る</button></div>
+      <div class="toast" id="rqToast" role="status"></div>
+      <p class="note">名前は入らないので、気軽に送ってね🩵 かならず歌えるとは限らないよ。</p>
+    </div>
   </section>
 
   <section id="pg-rules" class="page">
@@ -926,12 +939,22 @@ details p+.ban{margin-top:-4px}
   /* ---------- message / contact ---------- */
   var msg=$('#msg');
   msg.addEventListener('input',function(){ $('#cnt').textContent=msg.value.length; });
+  function sendInbox(kind,t,a,b,toast,done){
+    rpc('michamaru_inbox_add',{p_kind:kind,p_title:t,p_artist:a,p_body:b}).then(function(){ done(); })
+      .catch(function(e){ show(toast,/full/.test(String(e&&e.message))?'いまはいっぱいで送れないみたい…あとでまた来てね☁️':'うまく送れなかったよ…もう一度ためしてね☁️'); })
+      .then(function(){ var bt=toast.parentNode.querySelector('button.btn'); if(bt) bt.disabled=false; });
+  }
   $('#sendMsg').addEventListener('click',function(){
     var v=msg.value.trim();
     if(!v){ show($('#msgToast'),'メッセージを書いてから送ってね🫧'); return; }
-    inbox.unshift([md(),v]); saveInbox();
-    show($('#msgToast'),'ありがとう🩵 届いたよ!');
-    msg.value=''; $('#cnt').textContent='0';
+    this.disabled=true;
+    sendInbox('message','','',v,$('#msgToast'),function(){ show($('#msgToast'),'ありがとう🩵 届いたよ!'); msg.value=''; $('#cnt').textContent='0'; });
+  });
+  $('#rqSend').addEventListener('click',function(){
+    var t=$('#rqT').value.trim(), a=$('#rqA').value.trim(), b=$('#rqB').value.trim();
+    if(!t){ show($('#rqToast'),'曲名を書いてから送ってね🎵'); return; }
+    this.disabled=true;
+    sendInbox('request',t,a,b,$('#rqToast'),function(){ show($('#rqToast'),'リクエストありがとう🩵 届いたよ!'); $('#rqT').value=''; $('#rqA').value=''; $('#rqB').value=''; });
   });
 
   /* ---------- omikuji + stamp ---------- */

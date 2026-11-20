@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="meta-build" content="20261119234531">
+<meta name="meta-build" content="20261120121928">
 <meta name="theme-color" content="#3d6fb8">
 <meta name="robots" content="noindex">
 <title>みちゃﾏﾙ管理</title>
@@ -565,6 +565,7 @@ details p+.ban{margin-top:-4px}
       +'<button class="tile" data-go="songs"><b>歌える曲</b><span>UTAEMOで更新</span></button>'
       +'<button class="tile" data-go="cal"><b>みちゃﾏﾙカレンダー</b><span>ランキング入りを記録</span></button>'
       +'<button class="tile" data-go="ema"><b>絵馬</b><span>届いた願い事を選ぶ</span></button>'
+      +'<button class="tile" data-go="inbox"><b>メッセージ・リクエスト</b><span>匿名メッセージと曲の希望</span></button>'
       +'<button class="tile" data-go="visit"><b>累計来訪者</b><span>11/23からの人数</span></button>'
       +'<button class="tile" data-go="code"><b>配信コード</b><span>スタンプ用の合言葉</span></button>'
       +'<button class="tile" data-go="ring"><b>アイコンリング</b><span>皆勤賞の毎月のプレゼント</span></button>'
@@ -723,10 +724,19 @@ details p+.ban{margin-top:-4px}
     rpc('michamaru_visit',{p_new:false}).then(function(d){ $('#vN').textContent= d&&d.started ? Number(d.n).toLocaleString('ja-JP')+'人' : '11/23から数え始めます'; }).catch(function(){ $('#vN').textContent='読み込めませんでした'; });
   }
   function vInbox(){
-    var h='<div class="card">';
-    h+= inbox.length? inbox.map(function(m,i){return '<div class="arow"><b>'+esc(m[0])+'</b><div class="grow">'+esc(m[1])+'</div><button class="btn small ghost" data-del="'+i+'" type="button">削除</button></div>';}).join('') : '<p class="note" style="margin:0">まだメッセージは届いていません。サイトの「匿名メッセージ」から送ると、ここに届きます。</p>';
-    body.innerHTML=h+'</div>'+demoNote();
-    body.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ inbox.splice(+b.dataset.del,1); saveInbox(); vInbox(); }); });
+    body.innerHTML='<div class="card"><p class="note" style="margin:0">読み込んでいます…</p></div>';
+    if(mode!=='server'){ body.innerHTML='<div class="card"><p class="note" style="margin:0">合言葉でログインした状態でご利用いただけます。</p></div>'; return; }
+    rpc('michamaru_inbox_list',{p_pass:getPass()}).then(function(l){
+      l=l||[];
+      var h='<div class="card"><p class="note" style="margin-top:0">届いた匿名メッセージと、歌ってほしい曲のリクエストです。新しい順に並びます。</p></div><div class="card" style="margin-top:12px">';
+      h+= l.length? l.map(function(x){
+        var d=new Date(x.at), dt=(d.getMonth()+1)+'/'+d.getDate();
+        var main= x.k==='request' ? '<b>'+esc(x.t||'')+'</b>'+(x.a?' / '+esc(x.a):'')+(x.b?'<br><small>'+esc(x.b)+'</small>':'') : esc(x.b||'');
+        return '<div class="arow"><b style="font-size:12px">'+(x.k==='request'?'リクエスト':'メッセージ')+'<br>'+dt+'</b><div class="grow">'+main+'</div><button class="btn small ghost" data-rm="'+x.id+'" type="button">削除</button></div>';
+      }).join('') : '<p class="note" style="margin:0">まだ届いていません。</p>';
+      body.innerHTML=h+'</div><div class="toast" id="iToast" role="status"></div>';
+      body.querySelectorAll('[data-rm]').forEach(function(b){ b.addEventListener('click',function(){ rpc('michamaru_inbox_del',{p_pass:getPass(),p_id:+b.dataset.rm}).then(vInbox).catch(function(){ show($('#iToast'),'削除できませんでした'); }); }); });
+    }).catch(function(){ body.innerHTML='<div class="card"><p class="note" style="margin:0">読み込めませんでした。時間をおいて、もう一度お試しください。</p></div>'; });
   }
   openAd();
 })();
