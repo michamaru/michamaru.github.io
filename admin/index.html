@@ -662,14 +662,20 @@ details p+.ban{margin-top:-4px}
     body.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ data.news.splice(+b.dataset.del,1); save(); vNews(); }); });
   }
   function vWeek(){
-    var h='<div class="card"><p class="note" style="margin-top:0">時間を空にすると「お休み」になります。</p>';
+    var h='<div class="card"><p class="note" style="margin-top:0">日付・時間・内容を自由に変更できます。時間と内容を空にすると「お休み」になります。</p>'
+      +'<div style="margin:10px 0"><button class="btn small ghost" id="wAuto" type="button">今日から7日分の日付にする</button></div>';
     data.week.forEach(function(d,i){
-      h+='<div class="arow"><b style="width:1.6em;color:var(--blue)">'+esc(d[0])+'</b><input type="text" id="wt'+i+'" value="'+esc(d[1])+'" placeholder="21:00" style="width:5.6em"><input type="text" id="wn'+i+'" value="'+esc(d[2])+'" placeholder="内容" class="grow"></div>';
+      h+='<div class="arow"><input type="text" id="wd'+i+'" value="'+esc(d[0])+'" placeholder="23(月)" style="width:5.6em;color:var(--blue);font-weight:700"><input type="text" id="wt'+i+'" value="'+esc(d[1])+'" placeholder="21:00" style="width:5.6em"><input type="text" id="wn'+i+'" value="'+esc(d[2])+'" placeholder="内容" class="grow"></div>';
     });
     h+='<div style="text-align:right;margin-top:14px"><button class="btn" id="wSave" type="button">保存する</button></div></div>';
     body.innerHTML=h+'<div class="toast" id="wToast" role="status"></div>'+demoNote();
+    $('#wAuto').addEventListener('click',function(){
+      var w=['日','月','火','水','木','金','土'], n=new Date();
+      data.week.forEach(function(d,i){ var x=new Date(n.getFullYear(),n.getMonth(),n.getDate()+i); $('#wd'+i).value=x.getDate()+'('+w[x.getDay()]+')'; });
+      show($('#wToast'),'日付を入れました。「保存する」を押すと反映されます。');
+    });
     $('#wSave').addEventListener('click',function(){
-      data.week=data.week.map(function(d,i){ var t=$('#wt'+i).value.trim(), n=$('#wn'+i).value.trim(); return [d[0],t,n]; });
+      data.week=data.week.map(function(d,i){ var dd=$('#wd'+i).value.trim()||d[0], t=$('#wt'+i).value.trim(), n=$('#wn'+i).value.trim(); return [dd,t,n]; });
       save(); show($('#wToast'),'保存しました。サイトにもどると反映されています。');
     });
   }
